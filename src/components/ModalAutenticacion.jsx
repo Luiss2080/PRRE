@@ -196,25 +196,6 @@ export default function ModalAutenticacion({ estaAbierto, alCerrar, pestañaInic
                   />
                 </div>
               </div>
-
-              <div className="form-group">
-                <label className="form-label">Rol del Usuario</label>
-                <div style={{ position: 'relative' }}>
-                  <ShieldCheck 
-                    size={16} 
-                    style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} 
-                  />
-                  <select 
-                    className="form-select" 
-                    value={rol} 
-                    onChange={(e) => setRol(e.target.value)}
-                    style={{ paddingLeft: '2.5rem' }}
-                  >
-                    <option value="Docente">Docente</option>
-                    <option value="Estudiante">Estudiante</option>
-                  </select>
-                </div>
-              </div>
             </>
           )}
 
