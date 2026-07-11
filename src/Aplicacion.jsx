@@ -739,6 +739,7 @@ function ContenidoAplicacion() {
           <ModuloReservas 
             elementoPreseleccionado={recursoPreseleccionado} 
             alLimpiarPreseleccionado={() => setRecursoPreseleccionado(null)} 
+            establecerPestañaActiva={setPestañaActualPortal}
           />
         );
       case 'historial':
