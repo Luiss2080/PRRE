@@ -171,6 +171,7 @@ export default function ModuloRoles() {
                   </tr>
                 ))}
               </tbody>
+            </table>
           </div>
 
           {/* Controles de Paginación */}
