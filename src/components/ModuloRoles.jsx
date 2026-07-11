@@ -102,23 +102,10 @@ export default function ModuloRoles() {
                       </div>
                     </td>
                     <td>
-                      {usuarioIdEditando === user.id ? (
-                        <select 
-                          className="form-select"
-                          style={{ padding: '0.25rem 0.5rem', fontSize: '0.8125rem' }}
-                          value={rolTemporal}
-                          onChange={(e) => setRolTemporal(e.target.value)}
-                        >
-                          <option value="Administrador">Administrador</option>
-                          <option value="Docente">Docente</option>
-                          <option value="Estudiante">Estudiante</option>
-                        </select>
-                      ) : (
-                        <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontWeight: '600' }}>
-                          {obtenerIconoRol(user.rol)}
-                          {user.rol}
-                        </span>
-                      )}
+                      <span style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontWeight: '600' }}>
+                        {obtenerIconoRol(user.rol)}
+                        {user.rol}
+                      </span>
                     </td>
                     <td>
                       {usuarioIdEditando === user.id ? (
