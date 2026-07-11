@@ -1,38 +1,41 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { getUsuarios, saveUsuario, initDB } from '../utils/mockData';
 
+// Contexto global para administrar la autenticación y las sesiones del sistema PRRE
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Initialize DB and load active session on mount
+  // Inicializa la base de datos simulada y carga la sesión activa si existe
   useEffect(() => {
     initDB();
     const savedSession = localStorage.getItem('prre_session');
     if (savedSession) {
       try {
         const user = JSON.parse(savedSession);
-        // Refresh user data from DB in case role/status changed
+        // Recarga la información fresca del usuario desde el LocalStorage
         const users = getUsuarios();
         const freshUser = users.find(u => u.id === user.id);
+        
+        // Verifica que la cuenta continúe existiendo y esté en estado 'Activo'
         if (freshUser && freshUser.estado === 'Activo') {
           setCurrentUser(freshUser);
         } else {
           localStorage.removeItem('prre_session');
         }
       } catch (e) {
-        console.error('Error al cargar la sesión', e);
+        console.error('Error al cargar la sesión activa', e);
         localStorage.removeItem('prre_session');
       }
     }
     setIsLoading(false);
   }, []);
 
+  // Proceso de inicio de sesión con retardo simulado para simular red
   const login = async (email, password) => {
     setIsLoading(true);
-    // Add a tiny artificial delay for realism
     await new Promise(resolve => setTimeout(resolve, 500));
     
     const users = getUsuarios();
@@ -53,12 +56,14 @@ export const AuthProvider = ({ children }) => {
       throw new Error('Esta cuenta ha sido desactivada por el administrador.');
     }
     
+    // Almacena la sesión en estado y LocalStorage
     setCurrentUser(user);
     localStorage.setItem('prre_session', JSON.stringify(user));
     setIsLoading(false);
     return user;
   };
 
+  // Registro de nuevos usuarios institucionales (Docente o Estudiante)
   const register = async (nombre, email, password, rol) => {
     setIsLoading(true);
     await new Promise(resolve => setTimeout(resolve, 600));
@@ -75,10 +80,11 @@ export const AuthProvider = ({ children }) => {
       nombre,
       email,
       password,
-      rol: rol || 'Docente', // Default to Docente if not selected
+      rol: rol || 'Docente',
       estado: 'Activo'
     };
 
+    // Guarda el registro en la base de datos simulada
     const saved = saveUsuario(newUser);
     setCurrentUser(saved);
     localStorage.setItem('prre_session', JSON.stringify(saved));
@@ -86,11 +92,13 @@ export const AuthProvider = ({ children }) => {
     return saved;
   };
 
+  // Cierre de sesión y limpieza de claves en LocalStorage
   const logout = () => {
     setCurrentUser(null);
     localStorage.removeItem('prre_session');
   };
 
+  // Actualización de privilegios y estados por parte de la consola de administrador
   const updateUserRoleAndStatus = (userId, newRol, newEstado) => {
     const users = getUsuarios();
     const userIdx = users.findIndex(u => u.id === userId);
@@ -99,7 +107,7 @@ export const AuthProvider = ({ children }) => {
       users[userIdx].estado = newEstado;
       localStorage.setItem('prre_usuarios', JSON.stringify(users));
       
-      // If the modified user is currently logged in, update their session
+      // Si el usuario modificado es el que está actualmente en sesión, actualiza su token de sesión
       if (currentUser && currentUser.id === userId) {
         if (newEstado === 'Inactivo') {
           logout();
@@ -119,6 +127,7 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
+// Hook de acceso directo para el contexto de autenticación
 export const useAuth = () => {
   const context = useContext(AuthContext);
   if (!context) {
