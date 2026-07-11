@@ -62,8 +62,20 @@ export default function AuthModal({ isOpen, onClose, initialTab = 'login' }) {
   return (
     <div className="modal-overlay">
       <div className="modal-content" style={{ maxWidth: '420px' }}>
-        <div className="modal-header" style={{ borderBottom: 'none', paddingBottom: 0 }}>
-          <h2 className="gradient-text" style={{ fontSize: '1.5rem' }}>
+        {/* LogoPRRE.png brand banner inside modal */}
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: '1.5rem', gap: '0.35rem' }}>
+          <img 
+            src="/LogoPRRE.png" 
+            alt="Logo PRRE" 
+            style={{ width: '56px', height: 'auto', display: 'block', filter: 'drop-shadow(0 2px 8px rgba(0, 229, 255, 0.2))' }} 
+          />
+          <span style={{ fontSize: '0.625rem', fontWeight: '800', color: 'var(--color-brand-cyan-muted)', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+            Portal de Reserva • U.E. Germán Busch B
+          </span>
+        </div>
+
+        <div className="modal-header" style={{ borderBottom: 'none', paddingBottom: 0, paddingTop: '0.5rem' }}>
+          <h2 className="gradient-text" style={{ fontSize: '1.35rem' }}>
             {tab === 'login' ? 'Iniciar Sesión' : 'Crear Cuenta'}
           </h2>
           <button 
