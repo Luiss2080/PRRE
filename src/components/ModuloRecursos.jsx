@@ -21,6 +21,12 @@ export default function ModuloRecursos({ alRedireccionarReserva }) {
   const [recursos, setRecursos] = useState([]);
   const [terminoBusqueda, setTerminoBusqueda] = useState('');
   const [filtroTipo, setFiltroTipo] = useState('Todos');
+  const [paginaActual, setPaginaActual] = useState(1);
+
+  // Reinicia la página actual si cambian los filtros
+  useEffect(() => {
+    setPaginaActual(1);
+  }, [terminoBusqueda, filtroTipo, vistaAdmin]);
   
   // Estados del modal de agregar/editar
   const [modalAbierto, setModalAbierto] = useState(false);
@@ -125,6 +131,10 @@ export default function ModuloRecursos({ alRedireccionarReserva }) {
     const coincideFiltro = filtroTipo === 'Todos' || rec.tipo === filtroTipo;
     return coincideBusqueda && coincideFiltro;
   });
+
+  const itemsPorPagina = 5;
+  const totalPaginas = Math.ceil(recursosFiltrados.length / itemsPorPagina);
+  const recursosPaginados = recursosFiltrados.slice((paginaActual - 1) * itemsPorPagina, paginaActual * itemsPorPagina);
 
   // Retorna la etiqueta de estado correspondiente
   const obtenerInsigniaEstado = (estado) => {
@@ -256,7 +266,7 @@ export default function ModuloRecursos({ alRedireccionarReserva }) {
                   </tr>
                 </thead>
                 <tbody>
-                  {recursosFiltrados.map(rec => (
+                  {recursosPaginados.map(rec => (
                     <tr key={rec.id}>
                       <td style={{ verticalAlign: 'middle', textAlign: 'center' }}>
                         {rec.tipo === 'Dispositivo' ? <Laptop size={16} color="var(--color-brand-cyan-muted)" /> : <BookOpen size={16} color="var(--color-brand-gold)" />}
@@ -303,8 +313,32 @@ export default function ModuloRecursos({ alRedireccionarReserva }) {
                   ))}
                 </tbody>
               </table>
-            )}
           </div>
+
+          {/* Controles de Paginación */}
+          {totalPaginas > 1 && (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1rem', marginTop: '1.5rem', marginBottom: '1.5rem' }}>
+              <button 
+                disabled={paginaActual === 1} 
+                onClick={() => setPaginaActual(prev => Math.max(prev - 1, 1))}
+                className="btn btn-secondary"
+                style={{ padding: '0.4rem 1rem', fontSize: '0.75rem' }}
+              >
+                &larr; Anterior
+              </button>
+              <span style={{ fontSize: '0.8125rem', fontWeight: '700', color: 'var(--text-secondary)' }}>
+                Página {paginaActual} de {totalPaginas}
+              </span>
+              <button 
+                disabled={paginaActual === totalPaginas} 
+                onClick={() => setPaginaActual(prev => Math.min(prev + 1, totalPaginas))}
+                className="btn btn-secondary"
+                style={{ padding: '0.4rem 1rem', fontSize: '0.75rem' }}
+              >
+                Siguiente &rarr;
+              </button>
+            </div>
+          )}
         </>
       )}
 
