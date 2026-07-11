@@ -25,7 +25,7 @@ const ESPACIOS_INICIALES = [
 const USUARIOS_INICIALES = [
   { id: 'user_1', nombre: 'Prof. Luis Sanders', email: 'admin@colegio.edu.bo', rol: 'Administrador', estado: 'Activo', password: 'admin' },
   { id: 'user_2', nombre: 'Profa. María Delgado', email: 'docente@colegio.edu.bo', rol: 'Docente', estado: 'Activo', password: 'user123' },
-  { id: 'user_3', nombre: 'Est. Alejandro Vargas', email: 'estudiante@colegio.edu.bo', rol: 'Estudiante', estado: 'Activo', password: 'user123' }
+  { id: 'user_3', nombre: 'Est. Alejandro Vargas', email: 'estudiante@colegio.edu.bo', rol: 'Docente', estado: 'Activo', password: 'user123' }
 ];
 
 const RESERVAS_INICIALES = [
