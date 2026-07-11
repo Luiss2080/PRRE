@@ -7,7 +7,6 @@ import {
   CalendarCheck2, 
   Clock, 
   ArrowRight,
-  TrendingUp,
   AlertTriangle,
   UserCheck
 } from 'lucide-react';
