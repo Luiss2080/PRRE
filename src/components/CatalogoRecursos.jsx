@@ -1,40 +1,45 @@
 import React, { useState, useEffect } from 'react';
-import { getRecursos } from '../utils/mockData';
-import { Search, Laptop, BookOpen, Layers, Info, Calendar } from 'lucide-react';
+import { getRecursos } from '../utils/datosSimulados';
+import { Search, Laptop, BookOpen, Layers } from 'lucide-react';
 
-export default function CatalogoRecursos({ onReserveClick, isPublic = false }) {
+/**
+ * CatalogoRecursos
+ * Componente que muestra una cuadrícula interactiva de tarjetas con los recursos
+ * educativos disponibles (laptops, proyectores, kits, libros, etc.) del colegio.
+ */
+export default function CatalogoRecursos({ alHacerClicReserva, esPublico = false }) {
   // Estado que almacena la lista completa de recursos escolares
   const [recursos, setRecursos] = useState([]);
   
   // Estado para la barra de búsqueda de texto
-  const [searchTerm, setSearchTerm] = useState('');
+  const [terminoBusqueda, setTerminoBusqueda] = useState('');
   
   // Estado para el filtro por categoría (Dispositivo, Libro, Material)
-  const [filterTipo, setFilterTipo] = useState('Todos');
+  const [filtroTipo, setFiltroTipo] = useState('Todos');
 
   // Función interna para cargar la información de recursos desde la base de datos simulada
-  const loadRecursos = () => {
+  const cargarRecursos = () => {
     setRecursos(getRecursos());
   };
 
   // Carga los recursos al montar el componente y se suscribe al evento global
   // para actualizar el catálogo de forma reactiva cuando haya cambios en el stock.
   useEffect(() => {
-    loadRecursos();
-    window.addEventListener('prre_db_update', loadRecursos);
-    return () => window.removeEventListener('prre_db_update', loadRecursos);
+    cargarRecursos();
+    window.addEventListener('prre_db_update', cargarRecursos);
+    return () => window.removeEventListener('prre_db_update', cargarRecursos);
   }, []);
 
   // Filtra los recursos correspondientes en función de la búsqueda y la categoría seleccionada
-  const filteredRecursos = recursos.filter(rec => {
-    const matchesSearch = rec.nombre.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                          rec.descripcion.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesFilter = filterTipo === 'Todos' || rec.tipo === filterTipo;
-    return matchesSearch && matchesFilter;
+  const recursosFiltrados = recursos.filter(rec => {
+    const coincideBusqueda = rec.nombre.toLowerCase().includes(terminoBusqueda.toLowerCase()) || 
+                            rec.descripcion.toLowerCase().includes(terminoBusqueda.toLowerCase());
+    const coincideFiltro = filtroTipo === 'Todos' || rec.tipo === filtroTipo;
+    return coincideBusqueda && coincideFiltro;
   });
 
   // Retorna el icono Lucide correspondiente al tipo de recurso
-  const getTipoIcon = (tipo) => {
+  const obtenerIconoTipo = (tipo) => {
     switch (tipo) {
       case 'Dispositivo': return <Laptop size={28} color="white" />;
       case 'Libro': return <BookOpen size={28} color="white" />;
@@ -43,7 +48,7 @@ export default function CatalogoRecursos({ onReserveClick, isPublic = false }) {
   };
 
   // Devuelve la clase CSS del gradiente superior según el tipo
-  const getTipoColorClass = (tipo) => {
+  const obtenerClaseColorTipo = (tipo) => {
     switch (tipo) {
       case 'Dispositivo': return 'gradient-cyan';
       case 'Libro': return 'gradient-gold';
@@ -52,7 +57,7 @@ export default function CatalogoRecursos({ onReserveClick, isPublic = false }) {
   };
 
   // Renderiza la plaqueta (badge) de estado físico del recurso
-  const getStatusBadge = (estado) => {
+  const obtenerInsigniaEstado = (estado) => {
     switch (estado) {
       case 'Excelente': return <span className="badge badge-success">Excelente</span>;
       case 'Bueno': return <span className="badge badge-info">Bueno</span>;
@@ -82,8 +87,8 @@ export default function CatalogoRecursos({ onReserveClick, isPublic = false }) {
             type="text" 
             placeholder="Buscar laptops, proyectores, libros de consulta..." 
             className="search-input"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            value={terminoBusqueda}
+            onChange={(e) => setTerminoBusqueda(e.target.value)}
           />
         </div>
 
@@ -92,15 +97,15 @@ export default function CatalogoRecursos({ onReserveClick, isPublic = false }) {
           {['Todos', 'Dispositivo', 'Libro', 'Material'].map(t => (
             <button
               key={t}
-              onClick={() => setFilterTipo(t)}
+              onClick={() => setFiltroTipo(t)}
               className="btn"
               style={{
                 padding: '0.45rem 1rem',
                 fontSize: '0.8125rem',
-                backgroundColor: filterTipo === t ? 'var(--color-brand-cyan-muted)' : 'var(--bg-primary)',
-                color: filterTipo === t ? 'white' : 'var(--text-primary)',
-                border: filterTipo === t ? 'none' : '1px solid var(--border-color)',
-                boxShadow: filterTipo === t ? 'var(--shadow-glow-cyan)' : 'none'
+                backgroundColor: filtroTipo === t ? 'var(--color-brand-cyan-muted)' : 'var(--bg-primary)',
+                color: filtroTipo === t ? 'white' : 'var(--text-primary)',
+                border: filtroTipo === t ? 'none' : '1px solid var(--border-color)',
+                boxShadow: filtroTipo === t ? 'var(--shadow-glow-cyan)' : 'none'
               }}
             >
               {t === 'Todos' ? 'Todos' : (t === 'Dispositivo' ? 'Dispositivos' : (t === 'Libro' ? 'Libros' : 'Materiales'))}
@@ -110,7 +115,7 @@ export default function CatalogoRecursos({ onReserveClick, isPublic = false }) {
       </div>
 
       {/* Cuadrícula de Tarjetas del Catálogo */}
-      {filteredRecursos.length === 0 ? (
+      {recursosFiltrados.length === 0 ? (
         <div style={{ textAlign: 'center', padding: '4rem 1rem', color: 'var(--text-muted)' }}>
           No se encontraron recursos disponibles que coincidan con la búsqueda.
         </div>
@@ -123,10 +128,10 @@ export default function CatalogoRecursos({ onReserveClick, isPublic = false }) {
             animation: 'fadeIn 0.4s ease-out'
           }}
         >
-          {filteredRecursos.map(rec => {
-            const isOutOfStock = rec.cantidadDisponible === 0;
-            const isMaintenance = rec.estado === 'Mantenimiento';
-            const disableReserve = isOutOfStock || isMaintenance;
+          {recursosFiltrados.map(rec => {
+            const sinStock = rec.cantidadDisponible === 0;
+            const enMantenimiento = rec.estado === 'Mantenimiento';
+            const deshabilitarReserva = sinStock || enMantenimiento;
 
             return (
               <div 
@@ -142,45 +147,45 @@ export default function CatalogoRecursos({ onReserveClick, isPublic = false }) {
                 }}
               >
                 {/* Cabecera visual de la tarjeta con gradientes */}
-                <div style={cardHeaderStyle(rec.tipo)}>
-                  <div style={iconCircleStyle}>
-                    {getTipoIcon(rec.tipo)}
+                <div style={estiloCabeceraTarjeta(rec.tipo)}>
+                  <div style={estiloCirculoIcono}>
+                    {obtenerIconoTipo(rec.tipo)}
                   </div>
-                  <span style={typeBadgeStyle}>{rec.tipo}</span>
+                  <span style={estiloInsigniaTipo}>{rec.tipo}</span>
                 </div>
 
                 {/* Cuerpo de la Tarjeta */}
                 <div style={{ padding: '1.25rem 1.25rem 0.5rem 1.25rem', flexGrow: 1 }}>
-                  <h3 style={cardTitleStyle} title={rec.nombre}>{rec.nombre}</h3>
-                  <div style={{ display: 'flex', justifyBetween: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                    {getStatusBadge(rec.estado)}
+                  <h3 style={estiloTituloTarjeta} title={rec.nombre}>{rec.nombre}</h3>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                    {obtenerInsigniaEstado(rec.estado)}
                     <span style={{ fontSize: '0.75rem', fontWeight: '700', color: 'var(--text-muted)' }}>ID: {rec.id}</span>
                   </div>
-                  <p style={cardDescStyle}>{rec.descripcion || 'Sin descripción adicional.'}</p>
+                  <p style={estiloDescripcionTarjeta}>{rec.descripcion || 'Sin descripción adicional.'}</p>
                 </div>
 
                 {/* Telemetría de Stock y Barra de Progreso */}
                 <div style={{ padding: '0 1.25rem 1rem 1.25rem' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', marginBottom: '0.35rem', fontWeight: '700' }}>
                     <span style={{ color: 'var(--text-secondary)' }}>Stock Disponible</span>
-                    <span style={{ color: isOutOfStock ? 'var(--color-danger)' : 'var(--color-success)' }}>
+                    <span style={{ color: sinStock ? 'var(--color-danger)' : 'var(--color-success)' }}>
                       {rec.cantidadDisponible} / {rec.cantidadTotal} uds.
                     </span>
                   </div>
-                  <div style={progressContainerStyle}>
+                  <div style={estiloContenedorProgreso}>
                     <div 
                       style={{ 
-                        ...progressBarStyle, 
+                        ...estiloBarraProgreso, 
                         width: `${(rec.cantidadDisponible / rec.cantidadTotal) * 100}%`,
-                        backgroundColor: isOutOfStock ? 'var(--color-danger)' : 'var(--color-success)'
+                        backgroundColor: sinStock ? 'var(--color-danger)' : 'var(--color-success)'
                       }} 
                     />
                   </div>
                 </div>
 
                 {/* Pie de Página de la Tarjeta - Botones de Reservas */}
-                <div style={cardActionFooterStyle}>
-                  {isPublic ? (
+                <div style={estiloPieAccionesTarjeta}>
+                  {esPublico ? (
                     <button 
                       onClick={() => alert('Por favor, inicie sesión o cree una cuenta para realizar reservas.')}
                       className="btn btn-secondary w-full"
@@ -190,12 +195,12 @@ export default function CatalogoRecursos({ onReserveClick, isPublic = false }) {
                     </button>
                   ) : (
                     <button 
-                      onClick={() => onReserveClick && onReserveClick(rec)}
+                      onClick={() => alHacerClicReserva && alHacerClicReserva(rec)}
                       className={`btn w-full ${rec.tipo === 'Dispositivo' ? 'btn-primary' : 'btn-accent'}`}
                       style={{ fontSize: '0.8125rem' }}
-                      disabled={disableReserve}
+                      disabled={deshabilitarReserva}
                     >
-                      {isMaintenance ? 'En Mantenimiento' : (isOutOfStock ? 'Sin Stock Disponible' : 'Reservar Ahora')}
+                      {enMantenimiento ? 'En Mantenimiento' : (sinStock ? 'Sin Stock Disponible' : 'Reservar Ahora')}
                     </button>
                   )}
                 </div>
@@ -209,10 +214,10 @@ export default function CatalogoRecursos({ onReserveClick, isPublic = false }) {
 }
 
 // Estilos en línea para las Tarjetas del Catálogo
-const cardHeaderStyle = (tipo) => {
-  const isDevice = tipo === 'Dispositivo';
+const estiloCabeceraTarjeta = (tipo) => {
+  const esDispositivo = tipo === 'Dispositivo';
   return {
-    background: isDevice 
+    background: esDispositivo 
       ? 'linear-gradient(135deg, rgba(0, 229, 255, 0.1) 0%, rgba(0, 119, 182, 0.15) 100%)'
       : 'linear-gradient(135deg, rgba(255, 159, 28, 0.1) 0%, rgba(217, 119, 6, 0.15) 100%)',
     height: '110px',
@@ -225,7 +230,7 @@ const cardHeaderStyle = (tipo) => {
   };
 };
 
-const iconCircleStyle = {
+const estiloCirculoIcono = {
   width: '54px',
   height: '54px',
   borderRadius: '50%',
@@ -238,7 +243,7 @@ const iconCircleStyle = {
   marginBottom: '0.5rem',
 };
 
-const typeBadgeStyle = {
+const estiloInsigniaTipo = {
   fontSize: '0.625rem',
   fontWeight: '800',
   textTransform: 'uppercase',
@@ -246,7 +251,7 @@ const typeBadgeStyle = {
   color: 'var(--text-muted)',
 };
 
-const cardTitleStyle = {
+const estiloTituloTarjeta = {
   fontSize: '1rem',
   fontWeight: '800',
   marginBottom: '0.5rem',
@@ -256,7 +261,7 @@ const cardTitleStyle = {
   textOverflow: 'ellipsis',
 };
 
-const cardDescStyle = {
+const estiloDescripcionTarjeta = {
   fontSize: '0.8125rem',
   color: 'var(--text-secondary)',
   lineHeight: '1.5',
@@ -268,7 +273,7 @@ const cardDescStyle = {
   marginBottom: '1rem',
 };
 
-const progressContainerStyle = {
+const estiloContenedorProgreso = {
   width: '100%',
   height: '6px',
   backgroundColor: 'rgba(0, 0, 0, 0.05)',
@@ -276,13 +281,13 @@ const progressContainerStyle = {
   overflow: 'hidden',
 };
 
-const progressBarStyle = {
+const estiloBarraProgreso = {
   height: '100%',
   borderRadius: '10px',
   transition: 'width 0.5s ease',
 };
 
-const cardActionFooterStyle = {
+const estiloPieAccionesTarjeta = {
   padding: '1rem 1.25rem 1.25rem 1.25rem',
   borderTop: '1px solid var(--border-color)',
   backgroundColor: 'rgba(0,0,0,0.01)',
