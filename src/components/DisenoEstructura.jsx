@@ -27,7 +27,7 @@ import {
  */
 export default function DisenoEstructura({ children, pestañaActual, establecerPestañaActiva }) {
   const { usuarioActual, cerrarSesion } = useAutenticacion();
-  const { tema, alternarTema, esOscuro } = useTema();
+  const { alternarTema, esOscuro } = useTema();
   const [menuLateralAbierto, setMenuLateralAbierto] = useState(false);
   const [mostrarMenuPerfil, setMostrarMenuPerfil] = useState(false);
 
@@ -360,7 +360,6 @@ const estiloSubtituloLogo = {
 
 const estiloAlternarTemaEncabezado = {
   background: 'none',
-  border: 'none',
   cursor: 'pointer',
   padding: '0.5rem',
   borderRadius: '50%',
@@ -403,7 +402,6 @@ const estiloPuntoNotificacionRojo = {
 
 const estiloBotonPerfilEncabezado = {
   background: 'none',
-  border: 'none',
   display: 'flex',
   alignItems: 'center',
   gap: '0.75rem',
