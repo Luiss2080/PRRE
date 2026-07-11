@@ -13,6 +13,7 @@ export default function ModuloRoles() {
   const { usuarioActual, actualizarRolYEstadoUsuario } = useAutenticacion();
   const [usuarios, setUsuarios] = useState([]);
   const [usuarioIdEditando, setUsuarioIdEditando] = useState(null);
+  const [paginaActual, setPaginaActual] = useState(1);
   
   // Estados temporales de edición
   const [rolTemporal, setRolTemporal] = useState('');
@@ -76,6 +77,10 @@ export default function ModuloRoles() {
     { modulo: 'Roles y Permisos', operacion: 'Gestionar Usuarios y Cuentas', admin: true, docente: false, estudiante: false },
   ];
 
+  const itemsPorPagina = 5;
+  const totalPaginas = Math.ceil(usuarios.length / itemsPorPagina);
+  const usuariosPaginados = usuarios.slice((paginaActual - 1) * itemsPorPagina, paginaActual * itemsPorPagina);
+
   return (
     <div>
       <div className="grid-cols-2" style={{ gap: '2rem' }}>
@@ -93,7 +98,7 @@ export default function ModuloRoles() {
                 </tr>
               </thead>
               <tbody>
-                {usuarios.map(user => (
+                {usuariosPaginados.map(user => (
                   <tr key={user.id}>
                     <td>
                       <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -168,8 +173,32 @@ export default function ModuloRoles() {
                   </tr>
                 ))}
               </tbody>
-            </table>
           </div>
+
+          {/* Controles de Paginación */}
+          {totalPaginas > 1 && (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.75rem', marginTop: '1.25rem' }}>
+              <button 
+                disabled={paginaActual === 1} 
+                onClick={() => setPaginaActual(prev => Math.max(prev - 1, 1))}
+                className="btn btn-secondary"
+                style={{ padding: '0.35rem 0.85rem', fontSize: '0.75rem' }}
+              >
+                &larr; Ant.
+              </button>
+              <span style={{ fontSize: '0.75rem', fontWeight: '700', color: 'var(--text-secondary)' }}>
+                {paginaActual} / {totalPaginas}
+              </span>
+              <button 
+                disabled={paginaActual === totalPaginas} 
+                onClick={() => setPaginaActual(prev => Math.min(prev + 1, totalPaginas))}
+                className="btn btn-secondary"
+                style={{ padding: '0.35rem 0.85rem', fontSize: '0.75rem' }}
+              >
+                Sig. &rarr;
+              </button>
+            </div>
+          )}
         </div>
 
         {/* Matriz de Permisos */}
