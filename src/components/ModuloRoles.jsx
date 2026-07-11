@@ -57,24 +57,22 @@ export default function ModuloRoles() {
   const obtenerIconoRol = (rol) => {
     switch (rol) {
       case 'Administrador': return <ShieldAlert size={16} style={{ color: 'var(--color-brand-gold)' }} />;
-      case 'Docente': return <ShieldCheck size={16} style={{ color: 'var(--color-brand-cyan)' }} />;
-      case 'Estudiante': return <Shield size={16} style={{ color: 'var(--text-muted)' }} />;
       default: return null;
     }
   };
 
   // Matriz de permisos del sistema PRRE
   const matrizPermisos = [
-    { modulo: 'Recursos', operacion: 'Crear / Editar / Eliminar', admin: true, docente: false, estudiante: false },
-    { modulo: 'Recursos', operacion: 'Visualizar Disponibilidad', admin: true, docente: true, estudiante: true },
-    { modulo: 'Espacios', operacion: 'Crear / Editar / Eliminar', admin: true, docente: false, estudiante: false },
-    { modulo: 'Espacios', operacion: 'Visualizar Disponibilidad', admin: true, docente: true, estudiante: true },
-    { modulo: 'Reservas', operacion: 'Aprobar / Rechazar Solicitudes', admin: true, docente: false, estudiante: false },
-    { modulo: 'Reservas', operacion: 'Solicitar Reservas', admin: true, docente: true, estudiante: true },
-    { modulo: 'Reservas', operacion: 'Cancelar Propias Reservas', admin: true, docente: true, estudiante: true },
-    { modulo: 'Historial', operacion: 'Ver Registro Completo (Global)', admin: true, docente: false, estudiante: false },
-    { modulo: 'Historial', operacion: 'Ver Historial Propio', admin: true, docente: true, estudiante: true },
-    { modulo: 'Roles y Permisos', operacion: 'Gestionar Usuarios y Cuentas', admin: true, docente: false, estudiante: false },
+    { modulo: 'Recursos', operacion: 'Crear / Editar / Eliminar', admin: true, docente: false },
+    { modulo: 'Recursos', operacion: 'Visualizar Disponibilidad', admin: true, docente: true },
+    { modulo: 'Espacios', operacion: 'Crear / Editar / Eliminar', admin: true, docente: false },
+    { modulo: 'Espacios', operacion: 'Visualizar Disponibilidad', admin: true, docente: true },
+    { modulo: 'Reservas', operacion: 'Aprobar / Rechazar Solicitudes', admin: true, docente: false },
+    { modulo: 'Reservas', operacion: 'Solicitar Reservas', admin: true, docente: true },
+    { modulo: 'Reservas', operacion: 'Cancelar Propias Reservas', admin: true, docente: true },
+    { modulo: 'Historial', operacion: 'Ver Registro Completo (Global)', admin: true, docente: false },
+    { modulo: 'Historial', operacion: 'Ver Historial Propio', admin: true, docente: true },
+    { modulo: 'Roles y Permisos', operacion: 'Gestionar Usuarios y Cuentas', admin: true, docente: false },
   ];
 
   const itemsPorPagina = 5;
@@ -211,8 +209,7 @@ export default function ModuloRoles() {
                   <th>Módulo</th>
                   <th>Operación</th>
                   <th style={{ textAlign: 'center', width: '50px' }}>Admin</th>
-                  <th style={{ textAlign: 'center', width: '50px' }}>Doc</th>
-                  <th style={{ textAlign: 'center', width: '50px' }}>Est</th>
+                  <th style={{ textAlign: 'center', width: '50px' }}>Docente</th>
                 </tr>
               </thead>
               <tbody>
@@ -223,19 +220,6 @@ export default function ModuloRoles() {
                     <td style={{ textAlign: 'center' }}>
                       <Check size={16} color="var(--color-success)" style={{ margin: '0 auto', display: 'block' }} />
                     </td>
-                    <td style={{ textAlign: 'center' }}>
-                      {p.docente ? (
-                        <Check size={16} color="var(--color-success)" style={{ margin: '0 auto', display: 'block' }} />
-                      ) : (
-                        <X size={16} color="var(--color-danger)" style={{ margin: '0 auto', display: 'block' }} />
-                      )}
-                    </td>
-                    <td style={{ textAlign: 'center' }}>
-                      {p.estudiante ? (
-                        <Check size={16} color="var(--color-success)" style={{ margin: '0 auto', display: 'block' }} />
-                      ) : (
-                        <X size={16} color="var(--color-danger)" style={{ margin: '0 auto', display: 'block' }} />
-                      )}
                     </td>
                   </tr>
                 ))}
