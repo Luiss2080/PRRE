@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useAutenticacion } from '../context/ContextoAutenticacion';
 import { getReservas } from '../utils/datosSimulados';
 import { 
   Search, 
