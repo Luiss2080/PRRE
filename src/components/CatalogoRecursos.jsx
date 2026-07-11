@@ -47,14 +47,7 @@ export default function CatalogoRecursos({ alHacerClicReserva, esPublico = false
     }
   };
 
-  // Devuelve la clase CSS del gradiente superior según el tipo
-  const obtenerClaseColorTipo = (tipo) => {
-    switch (tipo) {
-      case 'Dispositivo': return 'gradient-cyan';
-      case 'Libro': return 'gradient-gold';
-      default: return 'gradient-indigo';
-    }
-  };
+
 
   // Renderiza la plaqueta (badge) de estado físico del recurso
   const obtenerInsigniaEstado = (estado) => {
