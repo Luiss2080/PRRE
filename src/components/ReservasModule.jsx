@@ -57,9 +57,9 @@ export default function ReservasModule({ preselectedItem, onClearPreselected }) 
     return () => window.removeEventListener('prre_db_update', loadData);
   }, []);
 
-  // Preselection logic when redirected from resources catalog
+  // Preselection logic when redirected from resources or spaces catalog
   useEffect(() => {
-    if (preselectedItem && recursos.length > 0) {
+    if (preselectedItem && (recursos.length > 0 || espacios.length > 0)) {
       const type = preselectedItem.tipoRecurso || 'recurso';
       setTipoRecurso(type);
       setItemId(preselectedItem.id);
@@ -78,7 +78,7 @@ export default function ReservasModule({ preselectedItem, onClearPreselected }) 
       setModalOpen(true);
       if (onClearPreselected) onClearPreselected();
     }
-  }, [preselectedItem, recursos]);
+  }, [preselectedItem, recursos, espacios]);
 
   // Set initial item when switching types or opening modal
   useEffect(() => {
