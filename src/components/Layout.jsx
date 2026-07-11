@@ -609,9 +609,6 @@ if (typeof document !== 'undefined') {
   const style = document.createElement('style');
   style.textContent = `
     @media (max-width: 1024px) {
-      .mobile-only-nav {
-        display: block !important;
-      }
       .body-wrapper {
         padding-left: 0 !important;
       }
