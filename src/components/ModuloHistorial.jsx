@@ -26,7 +26,7 @@ import {
  */
 export default function ModuloHistorial() {
   const { usuarioActual } = useAutenticacion();
-  const esAdmin = usuarioActual?.rol === 'Administrador';
+
 
   const [reservas, setReservas] = useState([]);
   

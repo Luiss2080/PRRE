@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAutenticacion } from '../context/ContextoAutenticacion';
-import { X, Mail, Lock, User, ShieldCheck } from 'lucide-react';
+import { X, Mail, Lock, User } from 'lucide-react';
 
 /**
  * ModalAutenticacion
