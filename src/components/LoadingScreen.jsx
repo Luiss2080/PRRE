@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
 
 export default function LoadingScreen({ onFinish }) {
+  // Estado que controla la animación de desvanecimiento (fade out) de la pantalla de carga
   const [fadeOut, setFadeOut] = useState(false);
 
+  // Al montar la pantalla de carga, espera 1.8 segundos y luego activa la transición de fade out.
+  // 500ms después, finaliza por completo y llama a la función de callback onFinish.
   useEffect(() => {
     const timer = setTimeout(() => {
       setFadeOut(true);
@@ -18,7 +21,7 @@ export default function LoadingScreen({ onFinish }) {
   return (
     <div style={containerStyle(fadeOut)}>
       <div style={contentStyle}>
-        {/* LogoPRRE.png integrated in loading screen */}
+        {/* Contenedor del logotipo U.E. Germán Busch B con efecto de resplandor neón */}
         <div style={logoWrapperStyle}>
           <img 
             src="/LogoPRRE.png" 
@@ -27,13 +30,16 @@ export default function LoadingScreen({ onFinish }) {
           />
         </div>
 
+        {/* Título de la aplicación con degradado metálico cian/naranja */}
         <h1 style={titleStyle}>PRRE</h1>
         <p style={subtitleStyle}>Portal de Reserva de Recursos Educativos</p>
         
+        {/* Plaqueta institucional con el nombre del colegio */}
         <div style={schoolBadgeStyle}>
           <span>U. E. GERMÁN BUSCH B</span>
         </div>
 
+        {/* Barra de progreso de carga animada */}
         <div style={loaderContainerStyle}>
           <div style={loaderBarStyle}></div>
         </div>
@@ -42,14 +48,14 @@ export default function LoadingScreen({ onFinish }) {
   );
 }
 
-// Inline Styles for Loading Screen
+// Estilos en línea para la Pantalla de Carga (Modo Oscuro Fijo)
 const containerStyle = (fadeOut) => ({
   position: 'fixed',
   top: 0,
   left: 0,
   right: 0,
   bottom: 0,
-  backgroundColor: '#05080e', // Obsidian deep black
+  backgroundColor: '#05080e', // Fondo negro obsidiana profundo
   color: '#ffffff',
   display: 'flex',
   flexDirection: 'column',
@@ -135,13 +141,18 @@ const loaderBarStyle = {
   boxShadow: '0 0 10px #00e5ff',
 };
 
-// Injection of keyframes
+// Inyección dinámica de animaciones CSS en la cabecera del documento
 if (typeof document !== 'undefined') {
   const styleTag = document.createElement('style');
   styleTag.textContent = `
     @keyframes pulseLogo {
       0%, 100% { transform: scale(1); filter: drop-shadow(0 0 15px rgba(0, 229, 255, 0.3)); }
       50% { transform: scale(1.05); filter: drop-shadow(0 0 30px rgba(255, 159, 28, 0.45)); }
+    }
+    @keyframes loadingProgress {
+      0% { left: -100%; width: 30%; }
+      50% { width: 40%; }
+      100% { left: 100%; width: 30%; }
     }
   `;
   document.head.appendChild(styleTag);
