@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
 import LoadingScreen from './components/LoadingScreen';
@@ -11,6 +11,7 @@ import ReservasModule from './components/ReservasModule';
 import HistorialModule from './components/HistorialModule';
 import RolesModule from './components/RolesModule';
 import CatalogoRecursos from './components/CatalogoRecursos';
+import { getEspacios } from './utils/mockData';
 import { 
   Laptop, 
   Calendar, 
@@ -32,7 +33,8 @@ import {
   AlertTriangle,
   X,
   UserCheck,
-  CheckCircle
+  CheckCircle,
+  Menu
 } from 'lucide-react';
 
 function AppContent() {
@@ -62,6 +64,22 @@ function AppContent() {
   const [contactMsg, setContactMsg] = useState('');
   const [contactSuccess, setContactSuccess] = useState(false);
 
+  // Public Spaces state variable (Crash Fix)
+  const [publicEspacios, setPublicEspacios] = useState([]);
+  
+  // Mobile public navigation drawer state
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Load public spaces on mount and listen for DB updates
+  useEffect(() => {
+    setPublicEspacios(getEspacios());
+    const handleUpdate = () => {
+      setPublicEspacios(getEspacios());
+    };
+    window.addEventListener('prre_db_update', handleUpdate);
+    return () => window.removeEventListener('prre_db_update', handleUpdate);
+  }, []);
+
   const toggleFaq = (index) => {
     setFaqOpenIndex(faqOpenIndex === index ? null : index);
   };
@@ -78,9 +96,15 @@ function AppContent() {
     }, 800);
   };
 
-  // Redirect Docente/Estudiante to booking form with item selected
+  // Redirect Docente/Estudiante to booking form with resource selected
   const handleReserveRedirect = (recurso) => {
     setPreselectedResource({ ...recurso, tipoRecurso: 'recurso' });
+    setCurrentTab('reservas');
+  };
+
+  // Redirect Docente/Estudiante to booking form with space selected
+  const handleReserveRedirectSpace = (espacio) => {
+    setPreselectedResource({ ...espacio, tipoRecurso: 'espacio' });
     setCurrentTab('reservas');
   };
 
@@ -144,7 +168,7 @@ function AppContent() {
                 </div>
               </section>
 
-              {/* Statistics highlight Strip (Completeness Addition) */}
+              {/* Statistics highlight Strip */}
               <section style={statsStripStyle}>
                 <div style={statsStripGridStyle} className="grid-cols-4">
                   <div style={statsStripItemStyle}>
@@ -166,7 +190,7 @@ function AppContent() {
                 </div>
               </section>
 
-              {/* Step-by-Step reservation guide (Completeness Addition) */}
+              {/* Step-by-Step reservation guide */}
               <section style={guideSectionStyle}>
                 <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
                   <h2 className="text-center" style={{ fontSize: '1.75rem', marginBottom: '2.5rem' }}>
@@ -198,7 +222,7 @@ function AppContent() {
                     </div>
 
                     <div style={guideItemStyle}>
-                      <div style={guideNumberStyle} style={{ ...guideNumberStyle, backgroundColor: 'var(--color-success)' }}>
+                      <div style={{ ...guideNumberStyle, backgroundColor: 'var(--color-success)' }}>
                         <CheckCircle size={24} color="white" />
                       </div>
                       <h4 style={{ marginBottom: '0.5rem', fontWeight: '800' }}>¡Todo Listo!</h4>
@@ -297,7 +321,7 @@ function AppContent() {
             </div>
           );
 
-        // --- PUBLIC CATALOG VIEW (GORGEOUS CARDS IMPLEMENTATION) ---
+        // --- PUBLIC CATALOG VIEW ---
         case 'catalogo':
           return (
             <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '2rem 1rem' }}>
@@ -307,12 +331,11 @@ function AppContent() {
                   Revisa el listado activo de guías, laptops, kits y proyectores de la escuela. Para reservar, inicia sesión con tu cuenta institucional.
                 </p>
               </div>
-              {/* Render the card-based catalog directly */}
               <CatalogoRecursos isPublic={true} />
             </div>
           );
 
-        // --- PUBLIC SPACES VIEW (Read Only) ---
+        // --- PUBLIC SPACES VIEW ---
         case 'espacios':
           return (
             <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '2rem 1rem' }}>
@@ -327,6 +350,7 @@ function AppContent() {
                 <table className="custom-table">
                   <thead>
                     <tr>
+                      <th style={{ width: '40px' }}></th>
                       <th>Espacio Escolar</th>
                       <th>Ubicación</th>
                       <th>Tipo</th>
@@ -338,6 +362,9 @@ function AppContent() {
                   <tbody>
                     {publicEspacios.map(esp => (
                       <tr key={esp.id}>
+                        <td style={{ verticalAlign: 'middle', textAlign: 'center' }}>
+                          {esp.tipo === 'Físico' ? <MapPin size={16} color="var(--color-brand-cyan-muted)" /> : <Globe size={16} color="var(--color-brand-gold)" />}
+                        </td>
                         <td style={{ fontWeight: '700' }}>{esp.nombre}</td>
                         <td>{esp.ubicacion}</td>
                         <td><span style={{ fontWeight: '600' }}>{esp.tipo}</span></td>
@@ -356,7 +383,7 @@ function AppContent() {
             </div>
           );
 
-        // --- FAQ ACORDION VIEW ---
+        // --- FAQ ACCORDION VIEW ---
         case 'faq':
           const faqs = [
             { q: '¿Quiénes pueden utilizar el portal PRRE?', a: 'El préstamo está habilitado exclusivamente para el plantel docente y los estudiantes activos de secundaria de la U.E. Germán Busch B.' },
@@ -374,7 +401,7 @@ function AppContent() {
 
               <div className="faq-container">
                 {faqs.map((faq, idx) => (
-                  <div key={idx} className="faq-item">
+                  <div key={idx} className="faq-item" style={{ transition: 'all 0.3s ease' }}>
                     <button 
                       onClick={() => toggleFaq(idx)} 
                       className="faq-question-btn"
@@ -383,7 +410,7 @@ function AppContent() {
                       {faqOpenIndex === idx ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
                     </button>
                     {faqOpenIndex === idx && (
-                      <div className="faq-answer-panel">
+                      <div className="faq-answer-panel" style={{ animation: 'slideInDownFaq 0.25s ease-out' }}>
                         {faq.a}
                       </div>
                     )}
@@ -506,7 +533,7 @@ function AppContent() {
 
     return (
       <div style={landingWrapperStyle}>
-        {/* Public Announcement Bar (Completeness Addition) */}
+        {/* Public Announcement Bar */}
         {showAnnouncement && (
           <div style={announcementBarStyle}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', justifyContent: 'center', flexGrow: 1, padding: '0 1rem' }}>
@@ -524,6 +551,16 @@ function AppContent() {
         {/* Navigation Bar */}
         <header style={landingHeaderStyle}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+            {/* Mobile Hamburger Toggle Button */}
+            <button 
+              onClick={() => setMobileMenuOpen(true)}
+              className="public-mobile-toggle"
+              style={publicMobileToggleStyle}
+              title="Abrir Menú"
+            >
+              <Menu size={20} />
+            </button>
+
             <Logo size={36} />
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               <span style={landingLogoTextStyle}>PRRE</span>
@@ -624,6 +661,64 @@ function AppContent() {
           onClose={() => setAuthModalOpen(false)} 
           initialTab={authTab} 
         />
+
+        {/* Mobile Navigation Drawer Overlay (Completeness Support) */}
+        {mobileMenuOpen && (
+          <>
+            <div 
+              onClick={() => setMobileMenuOpen(false)}
+              style={mobileMenuBackdropStyle}
+            />
+            <div style={mobileMenuDrawerStyle}>
+              <div style={mobileMenuDrawerHeaderStyle}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                  <Logo size={28} />
+                  <span style={{ fontWeight: '800', fontSize: '0.9375rem', color: 'var(--text-primary)' }}>Menú Público</span>
+                </div>
+                <button onClick={() => setMobileMenuOpen(false)} style={mobileMenuCloseButtonStyle}>
+                  <X size={20} />
+                </button>
+              </div>
+              
+              <nav style={mobileMenuNavStyle}>
+                {[
+                  { id: 'inicio', label: 'Inicio' },
+                  { id: 'nosotros', label: 'Sobre el Portal' },
+                  { id: 'catalogo', label: 'Catálogo de Recursos' },
+                  { id: 'espacios', label: 'Aulas & Espacios' },
+                  { id: 'faq', label: 'Preguntas Frecuentes' },
+                  { id: 'contacto', label: 'Contacto' }
+                ].map(item => (
+                  <button
+                    key={item.id}
+                    onClick={() => {
+                      setLandingTab(item.id);
+                      setMobileMenuOpen(false);
+                    }}
+                    style={mobileMenuNavLinkStyle(landingTab === item.id)}
+                  >
+                    {item.label}
+                  </button>
+                ))}
+              </nav>
+              
+              <div style={{ padding: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.75rem', borderTop: '1px solid var(--border-color)', marginTop: 'auto' }}>
+                <button 
+                  onClick={() => { setAuthTab('login'); setAuthModalOpen(true); setMobileMenuOpen(false); }}
+                  className="btn btn-secondary w-full"
+                >
+                  Iniciar Sesión
+                </button>
+                <button 
+                  onClick={() => { setAuthTab('register'); setAuthModalOpen(true); setMobileMenuOpen(false); }}
+                  className="btn btn-primary w-full"
+                >
+                  Crear Cuenta
+                </button>
+              </div>
+            </div>
+          </>
+        )}
       </div>
     );
   }
@@ -636,7 +731,7 @@ function AppContent() {
       case 'recursos':
         return <RecursosModule onReserveRedirect={handleReserveRedirect} />;
       case 'espacios':
-        return <EspaciosModule />;
+        return <EspaciosModule onReserveRedirect={handleReserveRedirectSpace} />;
       case 'reservas':
         return (
           <ReservasModule 
@@ -895,3 +990,100 @@ const guideNumberStyle = {
   marginBottom: '1rem',
   boxShadow: '0 4px 10px rgba(0, 229, 255, 0.25)',
 };
+
+/* Mobile Responsive Drawer Overlay Styles */
+const mobileMenuBackdropStyle = {
+  position: 'fixed',
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  backgroundColor: 'rgba(5, 8, 16, 0.45)',
+  backdropFilter: 'blur(4px)',
+  zIndex: 1400,
+};
+
+const mobileMenuDrawerStyle = {
+  position: 'fixed',
+  top: 0,
+  right: 0,
+  bottom: 0,
+  width: '280px',
+  backgroundColor: 'var(--bg-secondary-solid)',
+  borderLeft: '1px solid var(--border-color)',
+  boxShadow: 'var(--shadow-lg)',
+  zIndex: 1500,
+  display: 'flex',
+  flexDirection: 'column',
+  animation: 'slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+};
+
+const mobileMenuDrawerHeaderStyle = {
+  padding: '1.25rem 1.5rem',
+  borderBottom: '1px solid var(--border-color)',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+};
+
+const mobileMenuCloseButtonStyle = {
+  background: 'none',
+  border: 'none',
+  color: 'var(--text-primary)',
+  cursor: 'pointer',
+  display: 'flex',
+  alignItems: 'center',
+};
+
+const mobileMenuNavStyle = {
+  padding: '1.5rem 1rem',
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '0.35rem',
+};
+
+const mobileMenuNavLinkStyle = (isActive) => ({
+  width: '100%',
+  padding: '0.75rem 1rem',
+  borderRadius: 'var(--border-radius-sm)',
+  background: isActive ? 'rgba(0, 229, 255, 0.08)' : 'none',
+  border: 'none',
+  color: isActive ? 'var(--color-brand-cyan-muted)' : 'var(--text-primary)',
+  textAlign: 'left',
+  fontWeight: '700',
+  fontSize: '0.875rem',
+  cursor: 'pointer',
+  transition: 'all 0.2s ease',
+});
+
+const publicMobileToggleStyle = {
+  background: 'none',
+  border: 'none',
+  color: 'var(--text-primary)',
+  cursor: 'pointer',
+  padding: '0.35rem',
+  borderRadius: 'var(--border-radius-sm)',
+  display: 'none',
+  alignItems: 'center',
+};
+
+// Add responsive media query styles dynamically
+if (typeof document !== 'undefined') {
+  const style = document.createElement('style');
+  style.textContent = `
+    @media (max-width: 1024px) {
+      .public-mobile-toggle {
+        display: flex !important;
+      }
+    }
+    @keyframes slideInRight {
+      from { transform: translateX(100%); }
+      to { transform: translateX(0); }
+    }
+    @keyframes slideInDownFaq {
+      from { transform: translateY(-10px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+  `;
+  document.head.appendChild(style);
+}
