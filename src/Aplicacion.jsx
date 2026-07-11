@@ -24,7 +24,6 @@ import {
   Phone, 
   MapPin, 
   Globe, 
-  BookOpen, 
   Send, 
   CheckCircle, 
   Menu,
@@ -40,7 +39,7 @@ import {
  */
 function ContenidoAplicacion() {
   const { estaAutenticado, usuarioActual } = useAutenticacion();
-  const { tema, alternarTema, esOscuro } = useTema();
+  const { alternarTema, esOscuro } = useTema();
   
   const [mostrarPantallaCarga, setMostrarPantallaCarga] = useState(true);
   const [modalAutenticacionAbierto, setModalAutenticacionAbierto] = useState(false);
@@ -63,7 +62,6 @@ function ContenidoAplicacion() {
   const [nombreContacto, setNombreContacto] = useState('');
   const [emailContacto, setEmailContacto] = useState('');
   const [mensajeContacto, setMensajeContacto] = useState('');
-  const [contactoExitoso, setContactoExitoso] = useState(false);
 
   // Estado para listar los espacios públicos
   const [espaciosPublicos, setEspaciosPublicos] = useState([]);
@@ -87,9 +85,7 @@ function ContenidoAplicacion() {
 
   const alEnviarContacto = (e) => {
     e.preventDefault();
-    setContactoExitoso(true);
     setTimeout(() => {
-      setContactoExitoso(false);
       setNombreContacto('');
       setEmailContacto('');
       setMensajeContacto('');
@@ -815,7 +811,6 @@ const estiloTextoLogoLanding = {
 
 const estiloAlternarTemaLanding = {
   background: 'none',
-  border: 'none',
   cursor: 'pointer',
   padding: '0.5rem',
   borderRadius: '50%',
