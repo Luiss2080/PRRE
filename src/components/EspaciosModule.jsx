@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { getEspacios, saveSpace, deleteSpace } from '../utils/mockData';
 import { Plus, Edit2, Trash2, Search, X, MapPin, Monitor, Globe } from 'lucide-react';
 
-export default function EspaciosModule() {
+export default function EspaciosModule({ onReserveRedirect }) {
   const { currentUser } = useAuth();
   const isAdmin = currentUser?.rol === 'Administrador';
 
@@ -189,6 +189,7 @@ export default function EspaciosModule() {
                 <th>Estado</th>
                 <th>Descripción</th>
                 {isAdmin && <th style={{ textAlign: 'center', width: '100px' }}>Acciones</th>}
+                {!isAdmin && <th style={{ textAlign: 'center', width: '130px' }}>Reservar</th>}
               </tr>
             </thead>
             <tbody>
@@ -231,6 +232,18 @@ export default function EspaciosModule() {
                           <Trash2 size={14} />
                         </button>
                       </div>
+                    </td>
+                  )}
+                  {!isAdmin && (
+                    <td style={{ textAlign: 'center' }}>
+                      <button
+                        onClick={() => onReserveRedirect && onReserveRedirect(esp)}
+                        className="btn btn-primary"
+                        style={{ padding: '0.4rem 0.85rem', fontSize: '0.75rem', fontWeight: '750' }}
+                        disabled={esp.estado === 'Mantenimiento' || esp.estado === 'Ocupado'}
+                      >
+                        {esp.estado === 'Mantenimiento' ? 'Mantenimiento' : (esp.estado === 'Ocupado' ? 'Ocupado' : 'Reservar Aula')}
+                      </button>
                     </td>
                   )}
                 </tr>
