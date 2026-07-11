@@ -24,7 +24,7 @@ import {
  * Los usuarios normales envían solicitudes que entran en estado "Pendiente". Los administradores
  * pueden aprobar, rechazar o finalizar reservas directamente, gestionando el flujo del stock institucional.
  */
-export default function ModuloReservas({ elementoPreseleccionado, alLimpiarPreseleccionado }) {
+export default function ModuloReservas({ elementoPreseleccionado, alLimpiarPreseleccionado, establecerPestañaActiva }) {
   const { usuarioActual } = useAutenticacion();
   const esAdmin = usuarioActual?.rol === 'Administrador';
 
@@ -232,6 +232,16 @@ export default function ModuloReservas({ elementoPreseleccionado, alLimpiarPrese
            res.motivo.toLowerCase().includes(terminoBusqueda.toLowerCase());
   });
 
+  const [paginaActual, setPaginaActual] = useState(1);
+
+  useEffect(() => {
+    setPaginaActual(1);
+  }, [terminoBusqueda]);
+
+  const itemsPorPagina = 5;
+  const totalPaginas = Math.ceil(reservasFiltradas.length / itemsPorPagina);
+  const reservasPaginadas = reservasFiltradas.slice((paginaActual - 1) * itemsPorPagina, paginaActual * itemsPorPagina);
+
   const obtenerInsigniaEstado = (estado) => {
     switch (estado) {
       case 'Aprobada': return <span className="badge badge-success">Aprobada</span>;
@@ -271,10 +281,25 @@ export default function ModuloReservas({ elementoPreseleccionado, alLimpiarPrese
           />
         </div>
 
-        <button onClick={alAbrirModalAgregar} className="btn btn-primary">
-          <Plus size={18} />
-          <span>Nueva Solicitud</span>
-        </button>
+        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+          {establecerPestañaActiva && (
+            <button 
+              onClick={() => {
+                if (alLimpiarPreseleccionado) alLimpiarPreseleccionado();
+                establecerPestañaActiva(elementoPreseleccionado?.tipoRecurso === 'espacio' ? 'espacios' : 'recursos');
+              }} 
+              className="btn btn-secondary"
+              style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', padding: '0.5rem 1rem' }}
+            >
+              &larr; Volver
+            </button>
+          )}
+
+          <button onClick={alAbrirModalAgregar} className="btn btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', padding: '0.5rem 1.25rem' }}>
+            <Plus size={18} />
+            <span>Nueva Solicitud</span>
+          </button>
+        </div>
       </div>
 
       {/* Tabla de Reservas */}
@@ -298,7 +323,7 @@ export default function ModuloReservas({ elementoPreseleccionado, alLimpiarPrese
               </tr>
             </thead>
             <tbody>
-              {reservasFiltradas.map(res => (
+              {reservasPaginadas.map(res => (
                 <tr key={res.id}>
                   <td style={{ fontWeight: '700' }}>
                     <div style={{ display: 'flex', flexDirection: 'column' }}>
@@ -402,6 +427,31 @@ export default function ModuloReservas({ elementoPreseleccionado, alLimpiarPrese
         )}
       </div>
 
+      {/* Controles de Paginación */}
+      {totalPaginas > 1 && (
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1rem', marginTop: '1.5rem', marginBottom: '1.5rem' }}>
+          <button 
+            disabled={paginaActual === 1} 
+            onClick={() => setPaginaActual(prev => Math.max(prev - 1, 1))}
+            className="btn btn-secondary"
+            style={{ padding: '0.4rem 1rem', fontSize: '0.75rem' }}
+          >
+            &larr; Anterior
+          </button>
+          <span style={{ fontSize: '0.8125rem', fontWeight: '700', color: 'var(--text-secondary)' }}>
+            Página {paginaActual} de {totalPaginas}
+          </span>
+          <button 
+            disabled={paginaActual === totalPaginas} 
+            onClick={() => setPaginaActual(prev => Math.min(prev + 1, totalPaginas))}
+            className="btn btn-secondary"
+            style={{ padding: '0.4rem 1rem', fontSize: '0.75rem' }}
+          >
+            Siguiente &rarr;
+          </button>
+        </div>
+      )}
+
       {/* Modal de Solicitud de Reserva */}
       {modalAbierto && (
         <div className="modal-overlay">
@@ -473,17 +523,23 @@ export default function ModuloReservas({ elementoPreseleccionado, alLimpiarPrese
                     required
                   >
                     {tipoRecurso === 'recurso' ? (
-                      recursos.map(r => (
-                        <option key={r.id} value={r.id}>
-                          {r.nombre} (Stock Disp: {r.cantidadDisponible})
-                        </option>
-                      ))
+                      recursos.map(r => {
+                        const inactivo = r.cantidadDisponible === 0 || r.estado === 'Mantenimiento';
+                        return (
+                          <option key={r.id} value={r.id} disabled={inactivo}>
+                            {r.nombre} {r.estado === 'Mantenimiento' ? '[MANTENIMIENTO]' : (r.cantidadDisponible === 0 ? '[SIN STOCK]' : `(Disponible: ${r.cantidadDisponible})`)}
+                          </option>
+                        );
+                      })
                     ) : (
-                      espacios.map(e => (
-                        <option key={e.id} value={e.id}>
-                          {e.nombre} ({e.estado} • Capacidad: {e.capacidad} pers.)
-                        </option>
-                      ))
+                      espacios.map(e => {
+                        const inactivo = e.estado === 'Mantenimiento' || (e.estado === 'Ocupado' && !esAdmin);
+                        return (
+                          <option key={e.id} value={e.id} disabled={inactivo}>
+                            {e.nombre} {e.estado === 'Mantenimiento' ? '[MANTENIMIENTO]' : (e.estado === 'Ocupado' ? '[OCUPADO]' : `(Capacidad: ${e.capacidad} pers.)`)}
+                          </option>
+                        );
+                      })
                     )}
                   </select>
                 </div>
