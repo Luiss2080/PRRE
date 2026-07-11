@@ -25,7 +25,6 @@ import {
  * 2. Vista Cronograma: Agenda visual interactiva para ver quién reservó qué, en qué tiempos y qué está ocupado.
  */
 export default function ModuloHistorial() {
-  const { usuarioActual } = useAutenticacion();
 
 
   const [reservas, setReservas] = useState([]);
