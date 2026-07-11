@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAutenticacion } from '../context/ContextoAutenticacion';
 import { getUsuarios, deleteUsuario } from '../utils/datosSimulados';
-import { Shield, ShieldAlert, ShieldCheck, UserMinus, Check, X } from 'lucide-react';
+import { ShieldAlert, UserMinus, Check, X } from 'lucide-react';
 
 /**
  * ModuloRoles

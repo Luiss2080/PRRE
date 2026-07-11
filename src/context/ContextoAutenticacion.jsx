@@ -69,7 +69,7 @@ export const ProveedorAutenticacion = ({ children }) => {
   };
 
   // Registro de nuevos usuarios institucionales (Docente o Estudiante)
-  const registrar = async (nombre, email, password, rol) => {
+  const registrar = async (nombre, email, password, _rol) => {
     setCargando(true);
     await new Promise(resolve => setTimeout(resolve, 600));
 
