@@ -311,6 +311,7 @@ export default function ModuloRecursos({ alRedireccionarReserva }) {
                       </td>
                     </tr>
                   ))}
+                </tbody>
               </table>
             )}
           </div>
