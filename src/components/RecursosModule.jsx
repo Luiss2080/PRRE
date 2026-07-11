@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { getRecursos, saveRecurso, deleteRecurso } from '../utils/mockData';
-import { Plus, Edit2, Trash2, Search, X, Laptop, BookOpen, Layers, MoreHorizontal } from 'lucide-react';
+import CatalogoRecursos from './CatalogoRecursos';
+import { Plus, Edit2, Trash2, Search, X, Laptop, BookOpen, Layers, Eye, Table } from 'lucide-react';
 
-export default function RecursosModule() {
+export default function RecursosModule({ onReserveRedirect }) {
   const { currentUser } = useAuth();
   const isAdmin = currentUser?.rol === 'Administrador';
+
+  // Toggle view for admin: 'table' or 'catalog'
+  const [adminView, setAdminView] = useState('table');
 
   const [recursos, setRecursos] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -23,7 +27,6 @@ export default function RecursosModule() {
   const [descripcion, setDescripcion] = useState('');
   const [formError, setFormError] = useState('');
 
-  // Load resources
   const loadRecursos = () => {
     setRecursos(getRecursos());
   };
@@ -67,12 +70,8 @@ export default function RecursosModule() {
       return;
     }
 
-    // Determine cantidadDisponible
     let cantidadDisponible = cantidadTotal;
     if (editingRecurso) {
-      // If we are editing, adjust available stock.
-      // E.g. we might have reserved items: reservedCount = total - available.
-      // If new total is less than reservedCount, we throw error.
       const reservedCount = editingRecurso.cantidadTotal - editingRecurso.cantidadDisponible;
       if (cantidadTotal < reservedCount) {
         setFormError(`No puedes reducir el total por debajo de los recursos reservados (${reservedCount} reservados).`);
@@ -95,7 +94,9 @@ export default function RecursosModule() {
     loadRecursos();
     setModalOpen(false);
     
-    // Dispatch custom event to notify Dashboard if loaded
+    // Notify Dashboard
+    window.dispatchEvent(new Event('prre_db_update'));
+    // Notify Catalogo components
     window.dispatchEvent(new Event('prre_db_update'));
   };
 
@@ -107,7 +108,6 @@ export default function RecursosModule() {
     }
   };
 
-  // Filtered list
   const filteredRecursos = recursos.filter(rec => {
     const matchesSearch = rec.nombre.toLowerCase().includes(searchTerm.toLowerCase()) || 
                           rec.descripcion.toLowerCase().includes(searchTerm.toLowerCase());
@@ -119,22 +119,19 @@ export default function RecursosModule() {
     switch (estado) {
       case 'Excelente': return <span className="badge badge-success">Excelente</span>;
       case 'Bueno': return <span className="badge badge-info">Bueno</span>;
-      case 'Mantenimiento': return <span className="badge badge-warning">En Mantenimiento</span>;
+      case 'Mantenimiento': return <span className="badge badge-warning">Mantenimiento</span>;
       default: return <span className="badge">{estado}</span>;
     }
   };
 
-  const getTipoIcon = (tipo) => {
-    switch (tipo) {
-      case 'Dispositivo': return <Laptop size={16} style={{ color: 'var(--color-brand-cyan)' }} />;
-      case 'Libro': return <BookOpen size={16} style={{ color: 'var(--color-brand-gold)' }} />;
-      default: return <Layers size={16} style={{ color: 'var(--text-muted)' }} />;
-    }
-  };
+  // If user is not Admin, they only see the Card Catalog by default
+  if (!isAdmin) {
+    return <CatalogoRecursos onReserveClick={onReserveRedirect} isPublic={false} />;
+  }
 
   return (
     <div>
-      {/* Module Actions Header */}
+      {/* Admin layout view selectors */}
       <div 
         style={{ 
           display: 'flex', 
@@ -145,36 +142,42 @@ export default function RecursosModule() {
           gap: '1rem'
         }}
       >
-        <div style={{ display: 'flex', gap: '0.75rem', flexGrow: 1, maxWidth: '600px' }}>
-          {/* Search */}
-          <div className="search-container" style={{ flexGrow: 1, maxWidth: 'none' }}>
-            <Search size={16} className="search-icon" />
-            <input 
-              type="text" 
-              placeholder="Buscar recurso..." 
-              className="search-input" 
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
-          </div>
-
-          {/* Type Filter */}
-          <select 
-            className="form-select" 
-            style={{ width: '160px', padding: '0.625rem 1rem' }}
-            value={filterTipo}
-            onChange={(e) => setFilterTipo(e.target.value)}
+        {/* Toggle between admin CRUD table and Card Catalog */}
+        <div style={{ display: 'flex', gap: '0.375rem', backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border-color)', padding: '0.25rem', borderRadius: 'var(--border-radius-sm)' }}>
+          <button 
+            onClick={() => setAdminView('table')}
+            className="btn"
+            style={{ 
+              padding: '0.45rem 1rem', 
+              fontSize: '0.8125rem', 
+              backgroundColor: adminView === 'table' ? 'var(--color-brand-cyan-muted)' : 'transparent',
+              color: adminView === 'table' ? 'white' : 'var(--text-secondary)',
+              border: 'none',
+              boxShadow: adminView === 'table' ? 'var(--shadow-glow-cyan)' : 'none'
+            }}
           >
-            <option value="Todos">Todos los tipos</option>
-            <option value="Dispositivo">Dispositivos</option>
-            <option value="Libro">Libros</option>
-            <option value="Material">Materiales</option>
-            <option value="Otro">Otros</option>
-          </select>
+            <Table size={14} style={{ marginRight: '0.25rem' }} />
+            <span>Vista Tabla (CRUD)</span>
+          </button>
+          <button 
+            onClick={() => setAdminView('catalog')}
+            className="btn"
+            style={{ 
+              padding: '0.45rem 1rem', 
+              fontSize: '0.8125rem', 
+              backgroundColor: adminView === 'catalog' ? 'var(--color-brand-cyan-muted)' : 'transparent',
+              color: adminView === 'catalog' ? 'white' : 'var(--text-secondary)',
+              border: 'none',
+              boxShadow: adminView === 'catalog' ? 'var(--shadow-glow-cyan)' : 'none'
+            }}
+          >
+            <Eye size={14} style={{ marginRight: '0.25rem' }} />
+            <span>Vista Catálogo</span>
+          </button>
         </div>
 
-        {/* Add Button (Admin only) */}
-        {isAdmin && (
+        {/* Add Button */}
+        {adminView === 'table' && (
           <button onClick={handleOpenAddModal} className="btn btn-primary">
             <Plus size={18} />
             <span>Agregar Recurso</span>
@@ -182,78 +185,116 @@ export default function RecursosModule() {
         )}
       </div>
 
-      {/* Resources Table */}
-      <div className="table-container">
-        {filteredRecursos.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '3rem 1rem', color: 'var(--text-muted)' }}>
-            No se encontraron recursos que coincidan con la búsqueda.
+      {/* Render selected view */}
+      {adminView === 'catalog' ? (
+        <CatalogoRecursos onReserveClick={onReserveRedirect} isPublic={false} />
+      ) : (
+        <>
+          {/* Filters for Admin Table */}
+          <div 
+            style={{ 
+              display: 'flex', 
+              gap: '0.75rem', 
+              marginBottom: '1.25rem', 
+              flexWrap: 'wrap' 
+            }}
+          >
+            <div className="search-container" style={{ flexGrow: 1, maxWidth: '500px' }}>
+              <Search size={16} className="search-icon" />
+              <input 
+                type="text" 
+                placeholder="Buscar recursos (nombre, descripción)..." 
+                className="search-input" 
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+
+            <select 
+              className="form-select" 
+              style={{ width: '160px' }}
+              value={filterTipo}
+              onChange={(e) => setFilterTipo(e.target.value)}
+            >
+              <option value="Todos">Todos los tipos</option>
+              <option value="Dispositivo">Dispositivos</option>
+              <option value="Libro">Libros</option>
+              <option value="Material">Materiales</option>
+            </select>
           </div>
-        ) : (
-          <table className="custom-table">
-            <thead>
-              <tr>
-                <th style={{ width: '40px' }}></th>
-                <th>Nombre</th>
-                <th>Tipo</th>
-                <th style={{ textAlign: 'center' }}>Stock Total</th>
-                <th style={{ textAlign: 'center' }}>Disponible</th>
-                <th>Estado</th>
-                <th>Descripción</th>
-                {isAdmin && <th style={{ textAlign: 'center', width: '100px' }}>Acciones</th>}
-              </tr>
-            </thead>
-            <tbody>
-              {filteredRecursos.map(rec => (
-                <tr key={rec.id}>
-                  <td style={{ verticalAlign: 'middle', textAlign: 'center' }}>
-                    {getTipoIcon(rec.tipo)}
-                  </td>
-                  <td style={{ fontWeight: '700' }}>{rec.nombre}</td>
-                  <td>{rec.tipo}</td>
-                  <td style={{ textAlign: 'center', fontWeight: '600' }}>{rec.cantidadTotal}</td>
-                  <td style={{ textAlign: 'center' }}>
-                    <span 
-                      style={{ 
-                        fontWeight: '700', 
-                        color: rec.cantidadDisponible === 0 ? 'var(--color-danger)' : 
-                               (rec.cantidadDisponible === rec.cantidadTotal ? 'var(--color-success)' : 'var(--color-brand-cyan)')
-                      }}
-                    >
-                      {rec.cantidadDisponible}
-                    </span>
-                  </td>
-                  <td>{getStatusBadge(rec.estado)}</td>
-                  <td style={{ color: 'var(--text-secondary)', maxWidth: '280px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={rec.descripcion}>
-                    {rec.descripcion || 'Sin descripción.'}
-                  </td>
-                  {isAdmin && (
-                    <td style={{ textAlign: 'center' }}>
-                      <div style={{ display: 'inline-flex', gap: '0.5rem' }}>
-                        <button 
-                          onClick={() => handleOpenEditModal(rec)} 
-                          className="btn btn-secondary" 
-                          style={{ padding: '0.375rem', borderRadius: '4px' }} 
-                          title="Editar"
+
+          {/* Resources Table */}
+          <div className="table-container">
+            {filteredRecursos.length === 0 ? (
+              <div style={{ textAlign: 'center', padding: '3rem 1rem', color: 'var(--text-muted)' }}>
+                No se encontraron recursos registrados.
+              </div>
+            ) : (
+              <table className="custom-table">
+                <thead>
+                  <tr>
+                    <th style={{ width: '40px' }}></th>
+                    <th>Nombre</th>
+                    <th>Tipo</th>
+                    <th style={{ textAlign: 'center' }}>Stock Total</th>
+                    <th style={{ textAlign: 'center' }}>Disponible</th>
+                    <th>Estado</th>
+                    <th>Descripción</th>
+                    <th style={{ textAlign: 'center', width: '100px' }}>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredRecursos.map(rec => (
+                    <tr key={rec.id}>
+                      <td style={{ verticalAlign: 'middle', textAlign: 'center' }}>
+                        {rec.tipo === 'Dispositivo' ? <Laptop size={16} color="var(--color-brand-cyan-muted)" /> : <BookOpen size={16} color="var(--color-brand-gold)" />}
+                      </td>
+                      <td style={{ fontWeight: '700' }}>{rec.nombre}</td>
+                      <td>{rec.tipo}</td>
+                      <td style={{ textAlign: 'center', fontWeight: '600' }}>{rec.cantidadTotal}</td>
+                      <td style={{ textAlign: 'center' }}>
+                        <span 
+                          style={{ 
+                            fontWeight: '700', 
+                            color: rec.cantidadDisponible === 0 ? 'var(--color-danger)' : 
+                                   (rec.cantidadDisponible === rec.cantidadTotal ? 'var(--color-success)' : 'var(--color-brand-cyan-muted)')
+                          }}
                         >
-                          <Edit2 size={14} />
-                        </button>
-                        <button 
-                          onClick={() => handleDelete(rec.id)} 
-                          className="btn btn-danger" 
-                          style={{ padding: '0.375rem', borderRadius: '4px' }} 
-                          title="Eliminar"
-                        >
-                          <Trash2 size={14} />
-                        </button>
-                      </div>
-                    </td>
-                  )}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </div>
+                          {rec.cantidadDisponible}
+                        </span>
+                      </td>
+                      <td>{getStatusBadge(rec.estado)}</td>
+                      <td style={{ color: 'var(--text-secondary)', maxWidth: '280px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={rec.descripcion}>
+                        {rec.descripcion || 'Sin descripción.'}
+                      </td>
+                      <td style={{ textAlign: 'center' }}>
+                        <div style={{ display: 'inline-flex', gap: '0.5rem' }}>
+                          <button 
+                            onClick={() => handleOpenEditModal(rec)} 
+                            className="btn btn-secondary" 
+                            style={{ padding: '0.375rem', borderRadius: '4px' }} 
+                            title="Editar"
+                          >
+                            <Edit2 size={14} />
+                          </button>
+                          <button 
+                            onClick={() => handleDelete(rec.id)} 
+                            className="btn btn-danger" 
+                            style={{ padding: '0.375rem', borderRadius: '4px' }} 
+                            title="Eliminar"
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </div>
+        </>
+      )}
 
       {/* CRUD Add/Edit Modal */}
       {modalOpen && (
@@ -312,7 +353,6 @@ export default function RecursosModule() {
                       <option value="Dispositivo">Dispositivo</option>
                       <option value="Libro">Libro</option>
                       <option value="Material">Material</option>
-                      <option value="Otro">Otro</option>
                     </select>
                   </div>
 

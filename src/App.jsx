@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
 import LoadingScreen from './components/LoadingScreen';
@@ -10,7 +10,7 @@ import EspaciosModule from './components/EspaciosModule';
 import ReservasModule from './components/ReservasModule';
 import HistorialModule from './components/HistorialModule';
 import RolesModule from './components/RolesModule';
-import { getRecursos, getEspacios } from './utils/mockData';
+import CatalogoRecursos from './components/CatalogoRecursos';
 import { 
   Laptop, 
   Calendar, 
@@ -28,7 +28,11 @@ import {
   Layers,
   Send,
   HelpCircle,
-  FileText
+  FileText,
+  AlertTriangle,
+  X,
+  UserCheck,
+  CheckCircle
 } from 'lucide-react';
 
 function AppContent() {
@@ -43,11 +47,11 @@ function AppContent() {
   const [currentTab, setCurrentTab] = useState('dashboard'); // System Tab (Logged In)
   const [landingTab, setLandingTab] = useState('inicio'); // Public Web Tab (Logged Out)
 
-  // Public Catalog & Spaces States
-  const [publicRecursos, setPublicRecursos] = useState([]);
-  const [publicEspacios, setPublicEspacios] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [filterTipo, setFilterTipo] = useState('Todos');
+  // Redirect / Preselection states
+  const [preselectedResource, setPreselectedResource] = useState(null);
+
+  // Announcement Banner state
+  const [showAnnouncement, setShowAnnouncement] = useState(true);
 
   // FAQ Accordion State
   const [faqOpenIndex, setFaqOpenIndex] = useState(null);
@@ -57,13 +61,6 @@ function AppContent() {
   const [contactEmail, setContactEmail] = useState('');
   const [contactMsg, setContactMsg] = useState('');
   const [contactSuccess, setContactSuccess] = useState(false);
-
-  useEffect(() => {
-    if (!showLoading) {
-      setPublicRecursos(getRecursos());
-      setPublicEspacios(getEspacios());
-    }
-  }, [showLoading, landingTab]);
 
   const toggleFaq = (index) => {
     setFaqOpenIndex(faqOpenIndex === index ? null : index);
@@ -79,6 +76,12 @@ function AppContent() {
       setContactMsg('');
       alert('¡Mensaje enviado con éxito! Nos pondremos en contacto con usted a la brevedad.');
     }, 800);
+  };
+
+  // Redirect Docente/Estudiante to booking form with item selected
+  const handleReserveRedirect = (recurso) => {
+    setPreselectedResource({ ...recurso, tipoRecurso: 'recurso' });
+    setCurrentTab('reservas');
   };
 
   // 1. Loading Screen
@@ -122,7 +125,7 @@ function AppContent() {
                   <p style={heroSubtitleStyle}>
                     Un entorno tecnológico estandarizado diseñado en cooperación con las Escuelas Populares Don Bosco (EPDB) para optimizar el préstamo de laptops, proyectores, laboratorios y aulas virtuales.
                   </p>
-                  <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+                  <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '2.5rem' }}>
                     <button 
                       onClick={() => { setAuthTab('login'); setAuthModalOpen(true); }}
                       className="btn btn-primary"
@@ -137,6 +140,72 @@ function AppContent() {
                     >
                       Crear Cuenta Institucional
                     </button>
+                  </div>
+                </div>
+              </section>
+
+              {/* Statistics highlight Strip (Completeness Addition) */}
+              <section style={statsStripStyle}>
+                <div style={statsStripGridStyle} className="grid-cols-4">
+                  <div style={statsStripItemStyle}>
+                    <span style={statsStripNumberStyle}>120+</span>
+                    <span style={statsStripLabelStyle}>Usuarios Activos</span>
+                  </div>
+                  <div style={statsStripItemStyle}>
+                    <span style={statsStripNumberStyle}>50+</span>
+                    <span style={statsStripLabelStyle}>Equipos Tecnológicos</span>
+                  </div>
+                  <div style={statsStripItemStyle}>
+                    <span style={statsStripNumberStyle}>5</span>
+                    <span style={statsStripLabelStyle}>Laboratorios y Aulas</span>
+                  </div>
+                  <div style={statsStripItemStyle}>
+                    <span style={statsStripNumberStyle}>98%</span>
+                    <span style={statsStripLabelStyle}>Tasa de Aprobación</span>
+                  </div>
+                </div>
+              </section>
+
+              {/* Step-by-Step reservation guide (Completeness Addition) */}
+              <section style={guideSectionStyle}>
+                <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+                  <h2 className="text-center" style={{ fontSize: '1.75rem', marginBottom: '2.5rem' }}>
+                    ¿Cómo solicitar tu reserva en <span style={{ color: 'var(--color-brand-cyan-muted)' }}>3 simples pasos</span>?
+                  </h2>
+                  <div className="grid-cols-4" style={{ gap: '2rem' }}>
+                    <div style={guideItemStyle}>
+                      <div style={guideNumberStyle}>1</div>
+                      <h4 style={{ marginBottom: '0.5rem', fontWeight: '800' }}>Registra tu cuenta</h4>
+                      <p style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)' }}>
+                        Crea una cuenta institucional con tu correo institucional y contraseña de acceso.
+                      </p>
+                    </div>
+
+                    <div style={guideItemStyle}>
+                      <div style={guideNumberStyle}>2</div>
+                      <h4 style={{ marginBottom: '0.5rem', fontWeight: '800' }}>Selecciona tu recurso</h4>
+                      <p style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)' }}>
+                        Explora el catálogo en tarjetas y presiona "Reservar Ahora" en el recurso o espacio de interés.
+                      </p>
+                    </div>
+
+                    <div style={guideItemStyle}>
+                      <div style={guideNumberStyle}>3</div>
+                      <h4 style={{ marginBottom: '0.5rem', fontWeight: '800' }}>Recibe y Utiliza</h4>
+                      <p style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)' }}>
+                        Una vez aprobada la reserva, asiste al laboratorio o recoge el dispositivo móvil en la administración.
+                      </p>
+                    </div>
+
+                    <div style={guideItemStyle}>
+                      <div style={guideNumberStyle} style={{ ...guideNumberStyle, backgroundColor: 'var(--color-success)' }}>
+                        <CheckCircle size={24} color="white" />
+                      </div>
+                      <h4 style={{ marginBottom: '0.5rem', fontWeight: '800' }}>¡Todo Listo!</h4>
+                      <p style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)' }}>
+                        Al concluir la sesión, el equipo vuelve automáticamente al stock de disponibilidad.
+                      </p>
+                    </div>
                   </div>
                 </div>
               </section>
@@ -228,86 +297,18 @@ function AppContent() {
             </div>
           );
 
-        // --- PUBLIC CATALOG VIEW (Read Only) ---
+        // --- PUBLIC CATALOG VIEW (GORGEOUS CARDS IMPLEMENTATION) ---
         case 'catalogo':
-          const catalogRecursos = publicRecursos.filter(r => {
-            const matchesSearch = r.nombre.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                                  r.descripcion.toLowerCase().includes(searchTerm.toLowerCase());
-            const matchesFilter = filterTipo === 'Todos' || r.tipo === filterTipo;
-            return matchesSearch && matchesFilter;
-          });
-
           return (
             <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '2rem 1rem' }}>
-              <div className="glass-card" style={{ marginBottom: '1.5rem', padding: '1.5rem' }}>
-                <h2 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>Consulta Pública de Recursos</h2>
-                <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', marginBottom: '1.5rem' }}>
-                  Cualquier miembro de la comunidad puede verificar el stock y estado de los recursos de la escuela. Para reservar, debes iniciar sesión con tu cuenta institucional.
+              <div className="glass-card" style={{ marginBottom: '2rem', padding: '1.5rem' }}>
+                <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>Catálogo Oficial de Recursos Educativos</h2>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>
+                  Revisa el listado activo de guías, laptops, kits y proyectores de la escuela. Para reservar, inicia sesión con tu cuenta institucional.
                 </p>
-
-                <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-                  <div className="search-container" style={{ flexGrow: 1, maxWidth: 'none' }}>
-                    <Search size={16} className="search-icon" />
-                    <input 
-                      type="text" 
-                      placeholder="Buscar laptops, proyectores, kits..." 
-                      className="search-input" 
-                      value={searchTerm}
-                      onChange={(e) => setSearchTerm(e.target.value)}
-                    />
-                  </div>
-                  <select 
-                    className="form-select" 
-                    style={{ width: '170px' }}
-                    value={filterTipo}
-                    onChange={(e) => setFilterTipo(e.target.value)}
-                  >
-                    <option value="Todos">Todos los tipos</option>
-                    <option value="Dispositivo">Dispositivos</option>
-                    <option value="Libro">Libros</option>
-                    <option value="Material">Materiales</option>
-                  </select>
-                </div>
               </div>
-
-              <div className="table-container">
-                <table className="custom-table">
-                  <thead>
-                    <tr>
-                      <th style={{ width: '40px' }}></th>
-                      <th>Recurso Educativo</th>
-                      <th>Tipo</th>
-                      <th style={{ textAlign: 'center' }}>Stock Total</th>
-                      <th style={{ textAlign: 'center' }}>Disponible Hoy</th>
-                      <th>Estado Físico</th>
-                      <th>Descripción</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {catalogRecursos.map(rec => (
-                      <tr key={rec.id}>
-                        <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>
-                          {rec.tipo === 'Dispositivo' ? <Laptop size={16} color="var(--color-brand-cyan-muted)" /> : <BookOpen size={16} color="var(--color-brand-gold)" />}
-                        </td>
-                        <td style={{ fontWeight: '700' }}>{rec.nombre}</td>
-                        <td>{rec.tipo}</td>
-                        <td style={{ textAlign: 'center', fontWeight: '600' }}>{rec.cantidadTotal}</td>
-                        <td style={{ textAlign: 'center' }}>
-                          <span style={{ fontWeight: '800', color: rec.cantidadDisponible > 0 ? 'var(--color-success)' : 'var(--color-danger)' }}>
-                            {rec.cantidadDisponible} de {rec.cantidadTotal}
-                          </span>
-                        </td>
-                        <td>
-                          <span className={`badge ${rec.estado === 'Excelente' ? 'badge-success' : (rec.estado === 'Bueno' ? 'badge-info' : 'badge-warning')}`}>
-                            {rec.estado}
-                          </span>
-                        </td>
-                        <td style={{ color: 'var(--text-secondary)', fontSize: '0.8125rem' }}>{rec.descripcion}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+              {/* Render the card-based catalog directly */}
+              <CatalogoRecursos isPublic={true} />
             </div>
           );
 
@@ -318,7 +319,7 @@ function AppContent() {
               <div className="glass-card" style={{ marginBottom: '1.5rem', padding: '1.5rem' }}>
                 <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>Aulas Temáticas y Laboratorios</h2>
                 <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>
-                  Lista de laboratorios de informática, laboratorios científicos y aulas virtuales disponibles para clases prácticas y talleres grupales.
+                  Lista de laboratorios de informática, laboratorios científicos y auditorios disponibles para clases prácticas y talleres grupales.
                 </p>
               </div>
 
@@ -505,6 +506,21 @@ function AppContent() {
 
     return (
       <div style={landingWrapperStyle}>
+        {/* Public Announcement Bar (Completeness Addition) */}
+        {showAnnouncement && (
+          <div style={announcementBarStyle}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', justifyContent: 'center', flexGrow: 1, padding: '0 1rem' }}>
+              <AlertTriangle size={16} />
+              <span>
+                <b>Aviso:</b> El sábado 12 de julio se realizará el mantenimiento preventivo anual de las laptops HP ProBook. Tomar previsiones.
+              </span>
+            </div>
+            <button onClick={() => setShowAnnouncement(false)} style={announcementCloseButtonStyle}>
+              <X size={16} />
+            </button>
+          </div>
+        )}
+
         {/* Navigation Bar */}
         <header style={landingHeaderStyle}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
@@ -520,37 +536,37 @@ function AppContent() {
           {/* Public Views Header Navigation Options */}
           <nav className="header-nav">
             <button 
-              onClick={() => { setLandingTab('inicio'); setSearchTerm(''); }}
+              onClick={() => setLandingTab('inicio')}
               className={`header-nav-link ${landingTab === 'inicio' ? 'active' : ''}`}
             >
               Inicio
             </button>
             <button 
-              onClick={() => { setLandingTab('nosotros'); setSearchTerm(''); }}
+              onClick={() => setLandingTab('nosotros')}
               className={`header-nav-link ${landingTab === 'nosotros' ? 'active' : ''}`}
             >
               Sobre el Portal
             </button>
             <button 
-              onClick={() => { setLandingTab('catalogo'); setSearchTerm(''); }}
+              onClick={() => setLandingTab('catalogo')}
               className={`header-nav-link ${landingTab === 'catalogo' ? 'active' : ''}`}
             >
               Catálogo de Recursos
             </button>
             <button 
-              onClick={() => { setLandingTab('espacios'); setSearchTerm(''); }}
+              onClick={() => setLandingTab('espacios')}
               className={`header-nav-link ${landingTab === 'espacios' ? 'active' : ''}`}
             >
               Aulas & Espacios
             </button>
             <button 
-              onClick={() => { setLandingTab('faq'); setSearchTerm(''); }}
+              onClick={() => setLandingTab('faq')}
               className={`header-nav-link ${landingTab === 'faq' ? 'active' : ''}`}
             >
               Preguntas Frecuentes
             </button>
             <button 
-              onClick={() => { setLandingTab('contacto'); setSearchTerm(''); }}
+              onClick={() => setLandingTab('contacto')}
               className={`header-nav-link ${landingTab === 'contacto' ? 'active' : ''}`}
             >
               Contacto
@@ -618,11 +634,16 @@ function AppContent() {
       case 'dashboard':
         return <Dashboard setCurrentTab={setCurrentTab} />;
       case 'recursos':
-        return <RecursosModule />;
+        return <RecursosModule onReserveRedirect={handleReserveRedirect} />;
       case 'espacios':
         return <EspaciosModule />;
       case 'reservas':
-        return <ReservasModule />;
+        return (
+          <ReservasModule 
+            preselectedItem={preselectedResource} 
+            onClearPreselected={() => setPreselectedResource(null)} 
+          />
+        );
       case 'historial':
         return <HistorialModule />;
       case 'roles':
@@ -701,7 +722,7 @@ const landingThemeToggleButtonStyle = {
 };
 
 const heroSectionStyle = {
-  padding: '6rem 2rem 4rem 2rem',
+  padding: '5rem 2rem 4rem 2rem',
   textAlign: 'center',
   flexGrow: 1,
   display: 'flex',
@@ -780,4 +801,97 @@ const landingFooterStyle = {
   fontSize: '0.8125rem',
   color: 'var(--text-secondary)',
   borderTop: '1px solid var(--border-color)'
+};
+
+/* Additional Style Components (Completeness Additions) */
+const announcementBarStyle = {
+  backgroundColor: '#FF9F1C',
+  color: '#070B13',
+  fontSize: '0.8125rem',
+  fontWeight: '700',
+  padding: '0.5rem 1.5rem',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  boxShadow: '0 2px 10px rgba(255, 159, 28, 0.2)',
+  position: 'relative',
+  zIndex: 1100,
+};
+
+const announcementCloseButtonStyle = {
+  background: 'none',
+  border: 'none',
+  cursor: 'pointer',
+  color: '#070B13',
+  display: 'flex',
+  alignItems: 'center',
+  padding: '0.125rem',
+};
+
+const statsStripStyle = {
+  backgroundColor: 'var(--bg-secondary)',
+  borderTop: '1px solid var(--border-color)',
+  borderBottom: '1px solid var(--border-color)',
+  padding: '2rem 1rem',
+};
+
+const statsStripGridStyle = {
+  maxWidth: '1000px',
+  margin: '0 auto',
+  gap: '1.5rem',
+  textAlign: 'center',
+};
+
+const statsStripItemStyle = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+};
+
+const statsStripNumberStyle = {
+  fontSize: '2rem',
+  fontWeight: '900',
+  color: 'var(--color-brand-cyan-muted)',
+  letterSpacing: '-0.02em',
+  lineHeight: '1',
+  marginBottom: '0.25rem',
+  filter: 'drop-shadow(0 2px 8px rgba(0, 229, 255, 0.15))'
+};
+
+const statsStripLabelStyle = {
+  fontSize: '0.8125rem',
+  color: 'var(--text-secondary)',
+  fontWeight: '600',
+};
+
+const guideSectionStyle = {
+  padding: '5rem 2rem',
+  backgroundColor: 'var(--bg-primary)',
+};
+
+const guideItemStyle = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  textAlign: 'center',
+  padding: '1.5rem',
+  backgroundColor: 'var(--bg-secondary)',
+  border: '1px solid var(--border-color)',
+  borderRadius: 'var(--border-radius-md)',
+  boxShadow: 'var(--shadow-sm)',
+};
+
+const guideNumberStyle = {
+  width: '44px',
+  height: '44px',
+  borderRadius: '50%',
+  backgroundColor: 'var(--color-brand-cyan-muted)',
+  color: 'white',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  fontSize: '1.25rem',
+  fontWeight: '800',
+  marginBottom: '1rem',
+  boxShadow: '0 4px 10px rgba(0, 229, 255, 0.25)',
 };

@@ -21,7 +21,7 @@ import {
   Search
 } from 'lucide-react';
 
-export default function ReservasModule() {
+export default function ReservasModule({ preselectedItem, onClearPreselected }) {
   const { currentUser } = useAuth();
   const isAdmin = currentUser?.rol === 'Administrador';
 
@@ -56,6 +56,29 @@ export default function ReservasModule() {
     window.addEventListener('prre_db_update', loadData);
     return () => window.removeEventListener('prre_db_update', loadData);
   }, []);
+
+  // Preselection logic when redirected from resources catalog
+  useEffect(() => {
+    if (preselectedItem && recursos.length > 0) {
+      const type = preselectedItem.tipoRecurso || 'recurso';
+      setTipoRecurso(type);
+      setItemId(preselectedItem.id);
+      setCantidad(1);
+      
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      const dateStr = tomorrow.toISOString().substring(0, 10);
+      setFechaInicio(dateStr);
+      setFechaFin(dateStr);
+      setHoraInicio('08:00');
+      setHoraFin('09:30');
+      setMotivo('');
+      setFormError('');
+      
+      setModalOpen(true);
+      if (onClearPreselected) onClearPreselected();
+    }
+  }, [preselectedItem, recursos]);
 
   // Set initial item when switching types or opening modal
   useEffect(() => {
