@@ -1,11 +1,11 @@
-// Mock Database for PRRE using LocalStorage
+// Base de datos simulada (Mock DB) para el portal PRRE utilizando LocalStorage
 
 const KEY_RECURSOS = 'prre_recursos';
 const KEY_ESPACIOS = 'prre_espacios';
 const KEY_RESERVAS = 'prre_reservas';
 const KEY_USUARIOS = 'prre_usuarios';
 
-// Initial Mock Data
+// Datos iniciales por defecto para el sistema
 const INITIAL_RECURSOS = [
   { id: 'rec_1', nombre: 'Proyector Epson PowerLite', tipo: 'Dispositivo', cantidadTotal: 5, cantidadDisponible: 5, estado: 'Excelente', descripcion: 'Proyector multimedia con entrada HDMI y control remoto.' },
   { id: 'rec_2', nombre: 'Laptop HP ProBook 440', tipo: 'Dispositivo', cantidadTotal: 20, cantidadDisponible: 20, estado: 'Excelente', descripcion: 'Laptops para clases prácticas, Intel Core i5, 8GB RAM.' },
@@ -51,26 +51,10 @@ const INITIAL_RESERVAS = [
     itemName: 'Laboratorio de Computación A',
     usuarioId: 'user_2',
     usuarioNombre: 'Profa. María Delgado',
-    fechaInicio: '2026-07-13',
-    fechaFin: '2026-07-13',
+    fechaInicio: '2026-07-15',
+    fechaFin: '2026-07-15',
     horaInicio: '10:00',
     horaFin: '11:30',
-    cantidad: 1,
-    motivo: 'Evaluación práctica de programación en HTML',
-    estado: 'Pendiente',
-    fechaCreacion: '2026-07-10 14:30'
-  },
-  {
-    id: 'res_3',
-    tipoRecurso: 'recurso',
-    itemId: 'rec_2',
-    itemName: 'Laptop HP ProBook 440',
-    usuarioId: 'user_3',
-    usuarioNombre: 'Est. Alejandro Vargas',
-    fechaInicio: '2026-07-09',
-    fechaFin: '2026-07-09',
-    horaInicio: '14:00',
-    horaFin: '16:00',
     cantidad: 1,
     motivo: 'Proyecto grupal de investigación histórica',
     estado: 'Finalizada',
@@ -78,6 +62,7 @@ const INITIAL_RESERVAS = [
   }
 ];
 
+// Inicializa las llaves en LocalStorage si están vacías
 export const initDB = () => {
   if (!localStorage.getItem(KEY_RECURSOS)) {
     localStorage.setItem(KEY_RECURSOS, JSON.stringify(INITIAL_RECURSOS));
@@ -93,11 +78,11 @@ export const initDB = () => {
   }
 };
 
-// Generic helper methods
+// Métodos auxiliares de serialización genéricos
 const getItems = (key) => JSON.parse(localStorage.getItem(key)) || [];
 const saveItems = (key, items) => localStorage.setItem(key, JSON.stringify(items));
 
-// RECURSOS CRUD
+// CRUD de Recursos
 export const getRecursos = () => getItems(KEY_RECURSOS);
 export const saveRecurso = (recurso) => {
   const recursos = getRecursos();
@@ -118,7 +103,7 @@ export const deleteRecurso = (id) => {
   saveItems(KEY_RECURSOS, recursos);
 };
 
-// ESPACIOS CRUD
+// CRUD de Aulas y Espacios
 export const getEspacios = () => getItems(KEY_ESPACIOS);
 export const saveSpace = (espacio) => {
   const espacios = getEspacios();
@@ -139,7 +124,7 @@ export const deleteSpace = (id) => {
   saveItems(KEY_ESPACIOS, espacios);
 };
 
-// USUARIOS CRUD
+// CRUD de Usuarios
 export const getUsuarios = () => getItems(KEY_USUARIOS);
 export const saveUsuario = (usuario) => {
   const usuarios = getUsuarios();
@@ -161,7 +146,7 @@ export const deleteUsuario = (id) => {
   saveItems(KEY_USUARIOS, usuarios);
 };
 
-// RESERVAS CRUD & Logic
+// Lógica de Transacciones y CRUD de Reservas
 export const getReservas = () => getItems(KEY_RESERVAS);
 export const saveReservation = (reserva) => {
   const reservas = getReservas();
@@ -172,7 +157,8 @@ export const saveReservation = (reserva) => {
     const idx = reservas.findIndex(r => r.id === reserva.id);
     if (idx !== -1) {
       const oldReserva = reservas[idx];
-      // If status is changing to "Aprobada" or "Finalizada" and was pending, adjust resource availability
+      
+      // Si la reserva cambia a aprobada, reduce el stock disponible del recurso
       if (reserva.estado === 'Aprobada' && oldReserva.estado !== 'Aprobada' && reserva.tipoRecurso === 'recurso') {
         const recIdx = recursos.findIndex(r => r.id === reserva.itemId);
         if (recIdx !== -1) {
@@ -180,7 +166,8 @@ export const saveReservation = (reserva) => {
           saveItems(KEY_RECURSOS, recursos);
         }
       }
-      // If status is changing to "Cancelada" or "Rechazada" or "Finalizada" and was approved, restore stock
+      
+      // Si la reserva se cancela, rechaza o finaliza, devuelve las unidades al stock disponible
       if ((reserva.estado === 'Cancelada' || reserva.estado === 'Rechazada' || reserva.estado === 'Finalizada') && 
           oldReserva.estado === 'Aprobada' && reserva.tipoRecurso === 'recurso') {
         const recIdx = recursos.findIndex(r => r.id === reserva.itemId);
@@ -190,7 +177,7 @@ export const saveReservation = (reserva) => {
         }
       }
       
-      // Update space status if applicable
+      // Si es un aula, actualiza el estado de disponibilidad física del laboratorio
       if (reserva.tipoRecurso === 'espacio') {
         const espIdx = espacios.findIndex(e => e.id === reserva.itemId);
         if (espIdx !== -1) {
@@ -202,15 +189,15 @@ export const saveReservation = (reserva) => {
           saveItems(KEY_ESPACIOS, espacios);
         }
       }
-
+      
       reservas[idx] = reserva;
     }
   } else {
-    // Creating a new reservation
+    // Creación de una solicitud de reserva
     reserva.id = 'res_' + Date.now();
     reserva.fechaCreacion = new Date().toISOString().replace('T', ' ').substring(0, 16);
     
-    // Set item name cache
+    // Asigna el nombre del recurso/aula para optimizar listados
     if (reserva.tipoRecurso === 'recurso') {
       const item = recursos.find(r => r.id === reserva.itemId);
       reserva.itemName = item ? item.nombre : 'Recurso Desconocido';
@@ -219,7 +206,7 @@ export const saveReservation = (reserva) => {
       reserva.itemName = item ? item.nombre : 'Espacio Desconocido';
     }
 
-    // Default status: Docentes/Estudiantes start as "Pendiente". Admin starts as "Aprobada" immediately.
+    // Los docentes/alumnos empiezan como "Pendiente" y el admin se aprueba inmediatamente
     if (reserva.estado === 'Aprobada') {
       if (reserva.tipoRecurso === 'recurso') {
         const recIdx = recursos.findIndex(r => r.id === reserva.itemId);
@@ -242,6 +229,7 @@ export const saveReservation = (reserva) => {
   return reserva;
 };
 
+// Elimina una reserva y devuelve stock si estaba aprobada y no devuelta
 export const deleteReservation = (id) => {
   const reservas = getReservas();
   const resIdx = reservas.findIndex(r => r.id === id);
