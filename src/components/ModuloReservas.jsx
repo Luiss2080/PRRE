@@ -81,7 +81,7 @@ export default function ModuloReservas({ elementoPreseleccionado, alLimpiarPrese
       setModalAbierto(true);
       if (alLimpiarPreseleccionado) alLimpiarPreseleccionado();
     }
-  }, [elementoPreseleccionado, recursos, espacios]);
+  }, [elementoPreseleccionado, recursos, espacios, alLimpiarPreseleccionado]);
 
   // Asigna el primer elemento por defecto al cambiar de tipo de recurso o al abrir el modal
   useEffect(() => {
