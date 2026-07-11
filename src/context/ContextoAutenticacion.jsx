@@ -85,7 +85,7 @@ export const ProveedorAutenticacion = ({ children }) => {
       nombre,
       email,
       password,
-      rol: rol || 'Docente',
+      rol: 'Docente',
       estado: 'Activo'
     };
 
