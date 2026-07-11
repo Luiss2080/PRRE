@@ -186,8 +186,8 @@ export default function Layout({ children, currentTab, setCurrentTab }) {
                 </button>
               </div>
 
-              {/* Mobile Navigation List (Visible only on small screens inside sidebar) */}
-              <div className="mobile-only-nav" style={{ display: 'none', padding: '1rem 0.5rem', borderBottom: '1px solid rgba(255, 255, 255, 0.08)' }}>
+              {/* Sidebar Navigation Menu (Always visible when sidebar is open) */}
+              <div className="sidebar-nav-menu" style={{ display: 'block', padding: '1rem 0.5rem', borderBottom: '1px solid rgba(255, 255, 255, 0.08)' }}>
                 <span style={sidebarSectionTitleStyle}>Navegación</span>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', marginTop: '0.5rem' }}>
                   {filteredMenuItems.map(item => {
