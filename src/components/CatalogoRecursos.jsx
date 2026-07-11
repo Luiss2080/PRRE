@@ -17,6 +17,14 @@ export default function CatalogoRecursos({ alHacerClicReserva, esPublico = false
   // Estado para el filtro por categoría (Dispositivo, Libro, Material)
   const [filtroTipo, setFiltroTipo] = useState('Todos');
 
+  // Estado para la paginación
+  const [paginaActual, setPaginaActual] = useState(1);
+
+  // Reinicia la página actual si cambia la búsqueda o el filtro
+  useEffect(() => {
+    setPaginaActual(1);
+  }, [terminoBusqueda, filtroTipo]);
+
   // Función interna para cargar la información de recursos desde la base de datos simulada
   const cargarRecursos = () => {
     setRecursos(getRecursos());
@@ -37,6 +45,10 @@ export default function CatalogoRecursos({ alHacerClicReserva, esPublico = false
     const coincideFiltro = filtroTipo === 'Todos' || rec.tipo === filtroTipo;
     return coincideBusqueda && coincideFiltro;
   });
+
+  const itemsPorPagina = 6;
+  const totalPaginas = Math.ceil(recursosFiltrados.length / itemsPorPagina);
+  const recursosPaginados = recursosFiltrados.slice((paginaActual - 1) * itemsPorPagina, paginaActual * itemsPorPagina);
 
   // Retorna el icono Lucide correspondiente al tipo de recurso
   const obtenerIconoTipo = (tipo) => {
@@ -121,7 +133,7 @@ export default function CatalogoRecursos({ alHacerClicReserva, esPublico = false
             animation: 'fadeIn 0.4s ease-out'
           }}
         >
-          {recursosFiltrados.map(rec => {
+          {recursosPaginados.map(rec => {
             const sinStock = rec.cantidadDisponible === 0;
             const enMantenimiento = rec.estado === 'Mantenimiento';
             const deshabilitarReserva = sinStock || enMantenimiento;
@@ -200,6 +212,31 @@ export default function CatalogoRecursos({ alHacerClicReserva, esPublico = false
               </div>
             );
           })}
+        </div>
+      )}
+
+      {/* Controles de Paginación */}
+      {totalPaginas > 1 && (
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1rem', marginTop: '2.5rem' }}>
+          <button 
+            disabled={paginaActual === 1} 
+            onClick={() => setPaginaActual(prev => Math.max(prev - 1, 1))}
+            className="btn btn-secondary"
+            style={{ padding: '0.5rem 1.25rem', fontSize: '0.8125rem' }}
+          >
+            &larr; Anterior
+          </button>
+          <span style={{ fontSize: '0.875rem', fontWeight: '700', color: 'var(--text-secondary)' }}>
+            Página {paginaActual} de {totalPaginas}
+          </span>
+          <button 
+            disabled={paginaActual === totalPaginas} 
+            onClick={() => setPaginaActual(prev => Math.min(prev + 1, totalPaginas))}
+            className="btn btn-secondary"
+            style={{ padding: '0.5rem 1.25rem', fontSize: '0.8125rem' }}
+          >
+            Siguiente &rarr;
+          </button>
         </div>
       )}
     </div>
