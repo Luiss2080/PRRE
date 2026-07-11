@@ -629,3 +629,94 @@ h1, h2, h3, h4, h5, h6 {
   transform: translateY(-50%);
   color: var(--text-muted);
 }
+
+/* --- Redesign specific classes for public standard multi-view website --- */
+
+/* FAQ Accordion Styling */
+.faq-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.faq-item {
+  border-radius: var(--border-radius-md);
+  border: 1px solid var(--border-color);
+  background-color: var(--bg-secondary);
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.faq-item:hover {
+  border-color: var(--color-brand-cyan-muted);
+}
+
+.faq-question-btn {
+  width: 100%;
+  padding: 1.25rem 1.5rem;
+  background: none;
+  border: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  text-align: left;
+  color: var(--text-primary);
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.faq-answer-panel {
+  padding: 0 1.5rem 1.25rem 1.5rem;
+  color: var(--text-secondary);
+  font-size: 0.9375rem;
+  line-height: 1.6;
+  border-top: 1px solid transparent;
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* Contact layout classes */
+.contact-layout {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+@media (max-width: 768px) {
+  .contact-layout {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+.contact-card-info {
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, rgba(0, 229, 255, 0.03) 100%);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-md);
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.contact-info-item {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.contact-icon-wrapper {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--border-radius-sm);
+  background-color: rgba(0, 229, 255, 0.1);
+  color: var(--color-brand-cyan-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}

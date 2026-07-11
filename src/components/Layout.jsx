@@ -47,52 +47,18 @@ export default function Layout({ children, currentTab, setCurrentTab }) {
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen);
   const closeSidebar = () => setSidebarOpen(false);
 
-  // High Fidelity SVG Shield Logo representing U.E. Germán Busch B 1993 epdb
-  const ShieldLogo = ({ size = 36 }) => (
-    <svg 
-      width={size} 
-      height={size * 1.15} 
-      viewBox="0 0 100 120" 
-      fill="none" 
-      xmlns="http://www.w3.org/2000/svg"
-      style={{ filter: 'drop-shadow(0 2px 8px rgba(0, 229, 255, 0.2))' }}
-    >
-      {/* Outer Shield Border */}
-      <path d="M50 5 L90 20 V65 C90 90 50 115 50 115 C50 115 10 90 10 65 V20 L50 5 Z" fill="#070B13" stroke="#FF9F1C" strokeWidth="4" />
-      
-      {/* Left section (Gold gradient) */}
-      <path d="M50 5 L10 20 V65 C10 82.5 28 99.5 45 109 C48 102 50 92 50 80 V5 Z" fill="url(#leftGold)" opacity="0.95" />
-      
-      {/* Bottom-right section (Vibrant Blue) */}
-      <path d="M50 80 C50 92 52 102 55 109 C72 99.5 90 82.5 90 65 V20 L50 5 V80 Z" fill="#0077B6" opacity="0.85" />
-      
-      {/* Central Portrait (Sky blue circle + silhouette) */}
-      <circle cx="50" cy="50" r="22" fill="#00B4D8" stroke="#FF9F1C" strokeWidth="2.5" />
-      
-      {/* Silhouette of military officer */}
-      <path d="M50 38 C53 38 55 40 55 43 C55 47 53 50 50 50 C47 50 45 47 45 43 C45 40 47 38 50 38 Z" fill="#070B13" />
-      <path d="M36 65 C36 57 42 53 50 53 C58 53 64 57 64 65 H36 Z" fill="#070B13" />
-      <circle cx="50" cy="59" r="2" fill="#FF9F1C" />
-      
-      {/* Top book with feather */}
-      <path d="M38 18 C38 16 44 15 50 17 C56 15 62 16 62 18 V26 C62 24 56 23 50 25 C44 23 38 24 38 26 V18 Z" fill="#FF9F1C" />
-      <path d="M54 13 L60 21" stroke="#E65F00" strokeWidth="1.5" strokeLinecap="round" />
-      
-      {/* EPDB lettering logo at the bottom */}
-      <g transform="translate(28, 85)">
-        <text x="0" y="15" fill="#EF4444" fontFamily="system-ui, sans-serif" fontSize="18" fontWeight="900">e</text>
-        <text x="11" y="15" fill="#FF9F1C" fontFamily="system-ui, sans-serif" fontSize="18" fontWeight="900">p</text>
-        <text x="23" y="15" fill="#3B82F6" fontFamily="system-ui, sans-serif" fontSize="18" fontWeight="900">d</text>
-        <text x="35" y="15" fill="#10B981" fontFamily="system-ui, sans-serif" fontSize="18" fontWeight="900">b</text>
-      </g>
-
-      <defs>
-        <linearGradient id="leftGold" x1="10" y1="5" x2="50" y2="109" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#FF9F1C" />
-          <stop offset="100%" stopColor="#D97706" />
-        </linearGradient>
-      </defs>
-    </svg>
+  // LogoImage component using LogoPRRE.png
+  const LogoImage = ({ size = 32 }) => (
+    <img 
+      src="/LogoPRRE.png" 
+      alt="Logo PRRE U.E. Germán Busch B" 
+      style={{ 
+        width: `${size}px`, 
+        height: 'auto', 
+        display: 'block',
+        filter: 'drop-shadow(0 2px 8px rgba(0, 229, 255, 0.2))' 
+      }} 
+    />
   );
 
   return (
@@ -106,7 +72,7 @@ export default function Layout({ children, currentTab, setCurrentTab }) {
           </button>
           
           <div style={logoContainerStyle}>
-            <ShieldLogo size={32} />
+            <LogoImage size={32} />
             <div style={titleWrapperStyle}>
               <span style={logoTextStyle}>PRRE</span>
               <span style={logoSubtitleStyle}>Portal de Reserva</span>
@@ -134,7 +100,7 @@ export default function Layout({ children, currentTab, setCurrentTab }) {
 
         {/* Right side controls */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
-          {/* Theme Switcher Toggle (Vibrant sun/moon toggle button in header) */}
+          {/* Theme Switcher Toggle */}
           <button 
             onClick={toggleTheme} 
             style={headerThemeToggleStyle} 
@@ -209,9 +175,9 @@ export default function Layout({ children, currentTab, setCurrentTab }) {
               {/* Drawer header */}
               <div style={sidebarDrawerHeaderStyle}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <ShieldLogo size={24} />
+                  <LogoImage size={24} />
                   <div>
-                    <h3 style={{ fontSize: '0.9375rem', fontWeight: '800' }}>U.E. Germán Busch B</h3>
+                    <h3 style={{ fontSize: '0.875rem', fontWeight: '850' }}>U.E. Germán Busch B</h3>
                     <span style={{ fontSize: '0.6875rem', color: 'var(--color-brand-cyan-muted)', fontWeight: '700' }}>Panel del Operador</span>
                   </div>
                 </div>
@@ -309,8 +275,12 @@ export default function Layout({ children, currentTab, setCurrentTab }) {
 
           {/* Footer */}
           <footer style={footerStyle}>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
+              <LogoImage size={24} />
+              <b>PRRE</b>
+            </div>
             <div>
-              <b>PRRE</b> - Portal de Reserva de Recursos Educativos • Escuela Alternativa EPDB
+              Portal de Reserva de Recursos Educativos • Escuela Alternativa EPDB
             </div>
             <div>
               &copy; 2026 U.E. Germán Busch B • Todos los derechos reservados.
@@ -446,7 +416,7 @@ const headerAvatarStyle = {
   width: '32px',
   height: '32px',
   borderRadius: '50%',
-  backgroundColor: '#00B4D8',
+  backgroundColor: '#00b4d8',
   color: 'white',
   display: 'flex',
   alignItems: 'center',

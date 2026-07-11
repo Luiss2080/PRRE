@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ThemeProvider, useTheme } from './context/ThemeContext';
 import LoadingScreen from './components/LoadingScreen';
@@ -10,7 +10,26 @@ import EspaciosModule from './components/EspaciosModule';
 import ReservasModule from './components/ReservasModule';
 import HistorialModule from './components/HistorialModule';
 import RolesModule from './components/RolesModule';
-import { Laptop, Calendar, ShieldCheck, Sun, Moon } from 'lucide-react';
+import { getRecursos, getEspacios } from './utils/mockData';
+import { 
+  Laptop, 
+  Calendar, 
+  ShieldCheck, 
+  Sun, 
+  Moon, 
+  ChevronDown, 
+  ChevronUp, 
+  Mail, 
+  Phone, 
+  MapPin, 
+  Globe, 
+  BookOpen, 
+  Info,
+  Layers,
+  Send,
+  HelpCircle,
+  FileText
+} from 'lucide-react';
 
 function AppContent() {
   const { isAuthenticated, currentUser } = useAuth();
@@ -19,78 +38,527 @@ function AppContent() {
   const [showLoading, setShowLoading] = useState(true);
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [authTab, setAuthTab] = useState('login');
-  const [currentTab, setCurrentTab] = useState('dashboard');
+  
+  // Tab states
+  const [currentTab, setCurrentTab] = useState('dashboard'); // System Tab (Logged In)
+  const [landingTab, setLandingTab] = useState('inicio'); // Public Web Tab (Logged Out)
 
-  const ShieldLogo = ({ size = 36 }) => (
-    <svg 
-      width={size} 
-      height={size * 1.15} 
-      viewBox="0 0 100 120" 
-      fill="none" 
-      xmlns="http://www.w3.org/2000/svg"
-      style={{ filter: 'drop-shadow(0 2px 8px rgba(0, 229, 255, 0.2))' }}
-    >
-      {/* Outer Shield Border */}
-      <path d="M50 5 L90 20 V65 C90 90 50 115 50 115 C50 115 10 90 10 65 V20 L50 5 Z" fill="#070B13" stroke="#FF9F1C" strokeWidth="4" />
-      
-      {/* Left section (Gold gradient) */}
-      <path d="M50 5 L10 20 V65 C10 82.5 28 99.5 45 109 C48 102 50 92 50 80 V5 Z" fill="url(#landingGold)" opacity="0.95" />
-      
-      {/* Bottom-right section (Vibrant Blue) */}
-      <path d="M50 80 C50 92 52 102 55 109 C72 99.5 90 82.5 90 65 V20 L50 5 V80 Z" fill="#0077B6" opacity="0.85" />
-      
-      {/* Central Portrait (Sky blue circle + silhouette) */}
-      <circle cx="50" cy="50" r="22" fill="#00B4D8" stroke="#FF9F1C" strokeWidth="2.5" />
-      
-      {/* Silhouette of military officer */}
-      <path d="M50 38 C53 38 55 40 55 43 C55 47 53 50 50 50 C47 50 45 47 45 43 C45 40 47 38 50 38 Z" fill="#070B13" />
-      <path d="M36 65 C36 57 42 53 50 53 C58 53 64 57 64 65 H36 Z" fill="#070B13" />
-      <circle cx="50" cy="59" r="2" fill="#FF9F1C" />
-      
-      {/* Top book with feather */}
-      <path d="M38 18 C38 16 44 15 50 17 C56 15 62 16 62 18 V26 C62 24 56 23 50 25 C44 23 38 24 38 26 V18 Z" fill="#FF9F1C" />
-      <path d="M54 13 L60 21" stroke="#E65F00" strokeWidth="1.5" strokeLinecap="round" />
-      
-      {/* EPDB lettering logo at the bottom */}
-      <g transform="translate(28, 85)">
-        <text x="0" y="15" fill="#EF4444" fontFamily="system-ui, sans-serif" fontSize="18" fontWeight="900">e</text>
-        <text x="11" y="15" fill="#FF9F1C" fontFamily="system-ui, sans-serif" fontSize="18" fontWeight="900">p</text>
-        <text x="23" y="15" fill="#3B82F6" fontFamily="system-ui, sans-serif" fontSize="18" fontWeight="900">d</text>
-        <text x="35" y="15" fill="#10B981" fontFamily="system-ui, sans-serif" fontSize="18" fontWeight="900">b</text>
-      </g>
+  // Public Catalog & Spaces States
+  const [publicRecursos, setPublicRecursos] = useState([]);
+  const [publicEspacios, setPublicEspacios] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterTipo, setFilterTipo] = useState('Todos');
 
-      <defs>
-        <linearGradient id="landingGold" x1="10" y1="5" x2="50" y2="109" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#FF9F1C" />
-          <stop offset="100%" stopColor="#D97706" />
-        </linearGradient>
-      </defs>
-    </svg>
-  );
+  // FAQ Accordion State
+  const [faqOpenIndex, setFaqOpenIndex] = useState(null);
+
+  // Contact Form State
+  const [contactName, setContactName] = useState('');
+  const [contactEmail, setContactEmail] = useState('');
+  const [contactMsg, setContactMsg] = useState('');
+  const [contactSuccess, setContactSuccess] = useState(false);
+
+  useEffect(() => {
+    if (!showLoading) {
+      setPublicRecursos(getRecursos());
+      setPublicEspacios(getEspacios());
+    }
+  }, [showLoading, landingTab]);
+
+  const toggleFaq = (index) => {
+    setFaqOpenIndex(faqOpenIndex === index ? null : index);
+  };
+
+  const handleContactSubmit = (e) => {
+    e.preventDefault();
+    setContactSuccess(true);
+    setTimeout(() => {
+      setContactSuccess(false);
+      setContactName('');
+      setContactEmail('');
+      setContactMsg('');
+      alert('¡Mensaje enviado con éxito! Nos pondremos en contacto con usted a la brevedad.');
+    }, 800);
+  };
 
   // 1. Loading Screen
   if (showLoading) {
     return <LoadingScreen onFinish={() => setShowLoading(false)} />;
   }
 
+  // Logo component pointing to LogoPRRE.png
+  const Logo = ({ size = 32 }) => (
+    <img 
+      src="/LogoPRRE.png" 
+      alt="Logo PRRE U.E. Germán Busch B" 
+      style={{ 
+        width: `${size}px`, 
+        height: 'auto', 
+        display: 'block',
+        filter: 'drop-shadow(0 2px 8px rgba(0, 229, 255, 0.2))' 
+      }} 
+    />
+  );
+
   // 2. Landing Presentation Page (If Not Logged In)
   if (!isAuthenticated) {
+    
+    // Renders the selected public view content
+    const renderPublicTab = () => {
+      switch (landingTab) {
+        // --- INICIO VIEW ---
+        case 'inicio':
+          return (
+            <>
+              {/* Hero Banner */}
+              <section style={heroSectionStyle}>
+                <div style={heroContentStyle}>
+                  <div style={heroBadgeStyle}>
+                    PORTAL DE RESERVAS • U. E. GERMÁN BUSCH B
+                  </div>
+                  <h1 style={heroTitleStyle}>
+                    PRRE: <span className="gradient-text">Portal de Reserva</span> de Recursos Educativos
+                  </h1>
+                  <p style={heroSubtitleStyle}>
+                    Un entorno tecnológico estandarizado diseñado en cooperación con las Escuelas Populares Don Bosco (EPDB) para optimizar el préstamo de laptops, proyectores, laboratorios y aulas virtuales.
+                  </p>
+                  <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
+                    <button 
+                      onClick={() => { setAuthTab('login'); setAuthModalOpen(true); }}
+                      className="btn btn-primary"
+                      style={{ padding: '0.85rem 2.05rem', fontSize: '1rem' }}
+                    >
+                      Acceder al Portal
+                    </button>
+                    <button 
+                      onClick={() => { setAuthTab('register'); setAuthModalOpen(true); }}
+                      className="btn btn-secondary"
+                      style={{ padding: '0.85rem 2.05rem', fontSize: '1rem' }}
+                    >
+                      Crear Cuenta Institucional
+                    </button>
+                  </div>
+                </div>
+              </section>
+
+              {/* Summary Features Section */}
+              <section style={featuresSectionStyle}>
+                <div className="grid-cols-4" style={{ maxWidth: '1200px', margin: '0 auto', gap: '1.5rem' }}>
+                  <div className="glass-card text-center glow-card-cyan" style={featureCardStyle}>
+                    <div style={featureIconContainerStyle('var(--color-brand-cyan-muted)')}>
+                      <Laptop size={24} color="white" />
+                    </div>
+                    <h3 style={{ marginBottom: '0.5rem', fontSize: '1.125rem' }}>Recursos de Clases</h3>
+                    <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
+                      Revisa la disponibilidad de proyectores multimedia, laptops HP y kits de robótica.
+                    </p>
+                  </div>
+
+                  <div className="glass-card text-center glow-card-gold" style={featureCardStyle}>
+                    <div style={featureIconContainerStyle('var(--color-brand-gold)')}>
+                      <Calendar size={24} color="white" />
+                    </div>
+                    <h3 style={{ marginBottom: '0.5rem', fontSize: '1.125rem' }}>Aulas & Laboratorios</h3>
+                    <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
+                      Agenda el laboratorio de computación, el laboratorio de física o auditorio sin cruces de horarios.
+                    </p>
+                  </div>
+
+                  <div className="glass-card text-center glow-card-cyan" style={featureCardStyle}>
+                    <div style={featureIconContainerStyle('var(--color-success)')}>
+                      <ShieldCheck size={24} color="white" />
+                    </div>
+                    <h3 style={{ marginBottom: '0.5rem', fontSize: '1.125rem' }}>Perfiles Jerárquicos</h3>
+                    <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
+                      Roles específicos para estudiantes y docentes con flujos de reserva simplificados.
+                    </p>
+                  </div>
+
+                  <div className="glass-card text-center glow-card-gold" style={featureCardStyle}>
+                    <div style={featureIconContainerStyle('#6366F1')}>
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    </div>
+                    <h3 style={{ marginBottom: '0.5rem', fontSize: '1.125rem' }}>Control de Stock</h3>
+                    <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
+                      Algoritmo automatizado que descuenta unidades del inventario activo tras aprobar una reserva.
+                    </p>
+                  </div>
+                </div>
+              </section>
+            </>
+          );
+
+        // --- SOBRE NOSOTROS VIEW ---
+        case 'nosotros':
+          return (
+            <div style={{ maxWidth: '900px', margin: '0 auto', padding: '2rem 1rem' }}>
+              <div className="glass-card" style={{ padding: '2.5rem' }}>
+                <h2 className="gradient-text" style={{ fontSize: '2rem', marginBottom: '1.5rem' }}>Nuestra Institución</h2>
+                
+                <p style={{ color: 'var(--text-secondary)', lineHeight: '1.7', marginBottom: '1.25rem', fontSize: '1.05rem' }}>
+                  La <b>Unidad Educativa Germán Busch B</b> fue fundada en <b>1993</b> con el firme propósito de impartir educación técnico-humanística de primer nivel a la juventud del departamento. Afiliada a las <b>Escuelas Populares Don Bosco (EPDB)</b>, la institución prioriza la enseñanza de las tecnologías de la información, electrónica, física aplicada y robótica industrial.
+                </p>
+
+                <div 
+                  style={{ 
+                    display: 'flex', 
+                    gap: '1.5rem', 
+                    backgroundColor: 'rgba(0, 229, 255, 0.03)', 
+                    border: '1px solid var(--border-color)', 
+                    padding: '1.5rem', 
+                    borderRadius: 'var(--border-radius-md)',
+                    alignItems: 'center',
+                    marginBottom: '1.5rem'
+                  }}
+                >
+                  <Logo size={70} />
+                  <div>
+                    <h4 style={{ fontSize: '1rem', fontWeight: '800', marginBottom: '0.25rem', color: 'var(--color-brand-cyan-muted)' }}>Misión del Portal PRRE</h4>
+                    <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', lineHeight: '1.6' }}>
+                      Brindar un canal digital transparente y organizado para que docentes y estudiantes accedan con equidad y de manera ordenada al material educativo y laboratorios de la escuela, previniendo choques de agenda y prolongando el ciclo de vida del equipamiento mediante reportes de mantenimiento.
+                    </p>
+                  </div>
+                </div>
+
+                <h3 style={{ fontSize: '1.25rem', marginBottom: '0.75rem', marginTop: '2rem' }}>Cooperación EPDB</h3>
+                <p style={{ color: 'var(--text-secondary)', lineHeight: '1.7', fontSize: '0.95rem' }}>
+                  Bajo la metodología salesiana, fomentamos que la tecnología esté al alcance de todos. El portal PRRE es parte de la iniciativa de transformación digital escolar impulsada por el convenio de Escuelas Populares Don Bosco para modernizar la administración de recursos didácticos en Bolivia.
+                </p>
+              </div>
+            </div>
+          );
+
+        // --- PUBLIC CATALOG VIEW (Read Only) ---
+        case 'catalogo':
+          const catalogRecursos = publicRecursos.filter(r => {
+            const matchesSearch = r.nombre.toLowerCase().includes(searchTerm.toLowerCase()) || 
+                                  r.descripcion.toLowerCase().includes(searchTerm.toLowerCase());
+            const matchesFilter = filterTipo === 'Todos' || r.tipo === filterTipo;
+            return matchesSearch && matchesFilter;
+          });
+
+          return (
+            <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '2rem 1rem' }}>
+              <div className="glass-card" style={{ marginBottom: '1.5rem', padding: '1.5rem' }}>
+                <h2 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>Consulta Pública de Recursos</h2>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', marginBottom: '1.5rem' }}>
+                  Cualquier miembro de la comunidad puede verificar el stock y estado de los recursos de la escuela. Para reservar, debes iniciar sesión con tu cuenta institucional.
+                </p>
+
+                <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
+                  <div className="search-container" style={{ flexGrow: 1, maxWidth: 'none' }}>
+                    <Search size={16} className="search-icon" />
+                    <input 
+                      type="text" 
+                      placeholder="Buscar laptops, proyectores, kits..." 
+                      className="search-input" 
+                      value={searchTerm}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                    />
+                  </div>
+                  <select 
+                    className="form-select" 
+                    style={{ width: '170px' }}
+                    value={filterTipo}
+                    onChange={(e) => setFilterTipo(e.target.value)}
+                  >
+                    <option value="Todos">Todos los tipos</option>
+                    <option value="Dispositivo">Dispositivos</option>
+                    <option value="Libro">Libros</option>
+                    <option value="Material">Materiales</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="table-container">
+                <table className="custom-table">
+                  <thead>
+                    <tr>
+                      <th style={{ width: '40px' }}></th>
+                      <th>Recurso Educativo</th>
+                      <th>Tipo</th>
+                      <th style={{ textAlign: 'center' }}>Stock Total</th>
+                      <th style={{ textAlign: 'center' }}>Disponible Hoy</th>
+                      <th>Estado Físico</th>
+                      <th>Descripción</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {catalogRecursos.map(rec => (
+                      <tr key={rec.id}>
+                        <td style={{ textAlign: 'center', verticalAlign: 'middle' }}>
+                          {rec.tipo === 'Dispositivo' ? <Laptop size={16} color="var(--color-brand-cyan-muted)" /> : <BookOpen size={16} color="var(--color-brand-gold)" />}
+                        </td>
+                        <td style={{ fontWeight: '700' }}>{rec.nombre}</td>
+                        <td>{rec.tipo}</td>
+                        <td style={{ textAlign: 'center', fontWeight: '600' }}>{rec.cantidadTotal}</td>
+                        <td style={{ textAlign: 'center' }}>
+                          <span style={{ fontWeight: '800', color: rec.cantidadDisponible > 0 ? 'var(--color-success)' : 'var(--color-danger)' }}>
+                            {rec.cantidadDisponible} de {rec.cantidadTotal}
+                          </span>
+                        </td>
+                        <td>
+                          <span className={`badge ${rec.estado === 'Excelente' ? 'badge-success' : (rec.estado === 'Bueno' ? 'badge-info' : 'badge-warning')}`}>
+                            {rec.estado}
+                          </span>
+                        </td>
+                        <td style={{ color: 'var(--text-secondary)', fontSize: '0.8125rem' }}>{rec.descripcion}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          );
+
+        // --- PUBLIC SPACES VIEW (Read Only) ---
+        case 'espacios':
+          return (
+            <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '2rem 1rem' }}>
+              <div className="glass-card" style={{ marginBottom: '1.5rem', padding: '1.5rem' }}>
+                <h2 style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>Aulas Temáticas y Laboratorios</h2>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem' }}>
+                  Lista de laboratorios de informática, laboratorios científicos y aulas virtuales disponibles para clases prácticas y talleres grupales.
+                </p>
+              </div>
+
+              <div className="table-container">
+                <table className="custom-table">
+                  <thead>
+                    <tr>
+                      <th>Espacio Escolar</th>
+                      <th>Ubicación</th>
+                      <th>Tipo</th>
+                      <th style={{ textAlign: 'center' }}>Capacidad</th>
+                      <th>Estado</th>
+                      <th>Descripción</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {publicEspacios.map(esp => (
+                      <tr key={esp.id}>
+                        <td style={{ fontWeight: '700' }}>{esp.nombre}</td>
+                        <td>{esp.ubicacion}</td>
+                        <td><span style={{ fontWeight: '600' }}>{esp.tipo}</span></td>
+                        <td style={{ textAlign: 'center', fontWeight: '700' }}>{esp.capacidad} alumnos</td>
+                        <td>
+                          <span className={`badge ${esp.estado === 'Disponible' ? 'badge-success' : (esp.estado === 'Ocupado' ? 'badge-danger' : 'badge-warning')}`}>
+                            {esp.estado}
+                          </span>
+                        </td>
+                        <td style={{ color: 'var(--text-secondary)', fontSize: '0.8125rem' }}>{esp.descripcion}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          );
+
+        // --- FAQ ACORDION VIEW ---
+        case 'faq':
+          const faqs = [
+            { q: '¿Quiénes pueden utilizar el portal PRRE?', a: 'El préstamo está habilitado exclusivamente para el plantel docente y los estudiantes activos de secundaria de la U.E. Germán Busch B.' },
+            { q: '¿Con cuánta anticipación debo reservar un espacio?', a: 'Se recomienda reservar los laboratorios científicos y salas de computación con un mínimo de 24 horas de anticipación. Para proyectores portátiles o guías de estudio, se pueden solicitar hasta con 2 horas de anticipación siempre que haya stock.' },
+            { q: '¿Qué sucede si daño o pierdo un recurso prestado?', a: 'Debes informar de inmediato al Administrador de Tecnologías en la dirección del colegio. El equipo se catalogará en estado de "Mantenimiento" y se evaluará el reporte de incidencias conforme al reglamento interno.' },
+            { q: '¿Cómo obtengo mi cuenta del portal?', a: 'Haz clic en "Crear Cuenta" en la cabecera e ingresa tu correo institucional. Se te asignará automáticamente el rol correspondiente (Docente o Estudiante) y podrás iniciar solicitudes inmediatamente.' }
+          ];
+
+          return (
+            <div style={{ maxWidth: '800px', margin: '0 auto', padding: '3rem 1rem' }}>
+              <div className="text-center" style={{ marginBottom: '2rem' }}>
+                <h2 className="gradient-text" style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>Preguntas Frecuentes</h2>
+                <p style={{ color: 'var(--text-secondary)', fontSize: '0.9375rem' }}>Resuelve tus dudas sobre las normas de uso, tiempos de devolución y stock de equipos.</p>
+              </div>
+
+              <div className="faq-container">
+                {faqs.map((faq, idx) => (
+                  <div key={idx} className="faq-item">
+                    <button 
+                      onClick={() => toggleFaq(idx)} 
+                      className="faq-question-btn"
+                    >
+                      <span>{faq.q}</span>
+                      {faqOpenIndex === idx ? <ChevronUp size={16} /> : <ChevronDown size={16} />}
+                    </button>
+                    {faqOpenIndex === idx && (
+                      <div className="faq-answer-panel">
+                        {faq.a}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          );
+
+        // --- CONTACT VIEW ---
+        case 'contacto':
+          return (
+            <div style={{ maxWidth: '1100px', margin: '0 auto', padding: '3rem 1rem' }}>
+              <div className="text-center" style={{ marginBottom: '3rem' }}>
+                <h2 className="gradient-text" style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>Centro de Contacto PRRE</h2>
+                <p style={{ color: 'var(--text-secondary)' }}>¿Tiene algún problema con su cuenta institucional o desea reportar un desperfecto? Escríbanos.</p>
+              </div>
+
+              <div className="contact-layout">
+                {/* Form Card */}
+                <div className="glass-card">
+                  <h3 style={{ fontSize: '1.25rem', marginBottom: '1.25rem' }}>Enviar Mensaje</h3>
+                  <form onSubmit={handleContactSubmit}>
+                    <div className="form-group">
+                      <label className="form-label">Nombre Completo</label>
+                      <input 
+                        type="text" 
+                        className="form-input" 
+                        placeholder="Ej. María Quiroga" 
+                        value={contactName}
+                        onChange={(e) => setContactName(e.target.value)}
+                        required
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label">Correo Institucional</label>
+                      <input 
+                        type="email" 
+                        className="form-input" 
+                        placeholder="m.quiroga@colegio.edu.bo" 
+                        value={contactEmail}
+                        onChange={(e) => setContactEmail(e.target.value)}
+                        required
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label">Detalle de la consulta / Reporte</label>
+                      <textarea 
+                        className="form-textarea" 
+                        placeholder="Escriba aquí los detalles..." 
+                        rows="4"
+                        value={contactMsg}
+                        onChange={(e) => setContactMsg(e.target.value)}
+                        required
+                      />
+                    </div>
+                    <button type="submit" className="btn btn-primary w-full" style={{ gap: '0.5rem' }}>
+                      <Send size={16} />
+                      <span>Enviar Formulario</span>
+                    </button>
+                  </form>
+                </div>
+
+                {/* Info Card */}
+                <div className="contact-card-info">
+                  <h3 style={{ fontSize: '1.25rem', color: 'var(--text-primary)' }}>Oficina de Administración</h3>
+                  
+                  <div className="contact-info-item">
+                    <div className="contact-icon-wrapper">
+                      <MapPin size={18} />
+                    </div>
+                    <div>
+                      <span style={{ fontWeight: '700', fontSize: '0.875rem', display: 'block' }}>Dirección Física</span>
+                      <span style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)' }}>
+                        Bloque Administrativo, Planta Baja, Oficina de Soporte TI. Miraflores, La Paz.
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="contact-info-item">
+                    <div className="contact-icon-wrapper">
+                      <Phone size={18} />
+                    </div>
+                    <div>
+                      <span style={{ fontWeight: '700', fontSize: '0.875rem', display: 'block' }}>Línea Telefónica</span>
+                      <span style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)' }}>2-224455 (Ext. 104)</span>
+                    </div>
+                  </div>
+
+                  <div className="contact-info-item">
+                    <div className="contact-icon-wrapper">
+                      <Mail size={18} />
+                    </div>
+                    <div>
+                      <span style={{ fontWeight: '700', fontSize: '0.875rem', display: 'block' }}>Correo de Soporte</span>
+                      <span style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)' }}>ti.soporte@colegio.edu.bo</span>
+                    </div>
+                  </div>
+
+                  <div className="contact-info-item">
+                    <div className="contact-icon-wrapper">
+                      <Globe size={18} />
+                    </div>
+                    <div>
+                      <span style={{ fontWeight: '700', fontSize: '0.875rem', display: 'block' }}>Plataforma EPDB</span>
+                      <a href="https://www.epdb.org.bo" target="_blank" rel="noopener noreferrer" style={{ fontSize: '0.8125rem', color: 'var(--color-brand-cyan-muted)', textDecoration: 'none', fontWeight: '600' }}>
+                        www.epdb.org.bo
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+
+        default:
+          return null;
+      }
+    };
+
     return (
       <div style={landingWrapperStyle}>
         {/* Navigation Bar */}
         <header style={landingHeaderStyle}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
-            <ShieldLogo size={36} />
+            <Logo size={36} />
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               <span style={landingLogoTextStyle}>PRRE</span>
-              <span style={{ fontSize: '0.625rem', color: 'var(--text-muted)', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              <span style={{ fontSize: '0.625rem', color: 'var(--text-muted)', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                 U.E. GERMAN BUSCH B
               </span>
             </div>
           </div>
 
+          {/* Public Views Header Navigation Options */}
+          <nav className="header-nav">
+            <button 
+              onClick={() => { setLandingTab('inicio'); setSearchTerm(''); }}
+              className={`header-nav-link ${landingTab === 'inicio' ? 'active' : ''}`}
+            >
+              Inicio
+            </button>
+            <button 
+              onClick={() => { setLandingTab('nosotros'); setSearchTerm(''); }}
+              className={`header-nav-link ${landingTab === 'nosotros' ? 'active' : ''}`}
+            >
+              Sobre el Portal
+            </button>
+            <button 
+              onClick={() => { setLandingTab('catalogo'); setSearchTerm(''); }}
+              className={`header-nav-link ${landingTab === 'catalogo' ? 'active' : ''}`}
+            >
+              Catálogo de Recursos
+            </button>
+            <button 
+              onClick={() => { setLandingTab('espacios'); setSearchTerm(''); }}
+              className={`header-nav-link ${landingTab === 'espacios' ? 'active' : ''}`}
+            >
+              Aulas & Espacios
+            </button>
+            <button 
+              onClick={() => { setLandingTab('faq'); setSearchTerm(''); }}
+              className={`header-nav-link ${landingTab === 'faq' ? 'active' : ''}`}
+            >
+              Preguntas Frecuentes
+            </button>
+            <button 
+              onClick={() => { setLandingTab('contacto'); setSearchTerm(''); }}
+              className={`header-nav-link ${landingTab === 'contacto' ? 'active' : ''}`}
+            >
+              Contacto
+            </button>
+          </nav>
+
+          {/* Authentication & Theme Controls */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            {/* Theme Toggle */}
             <button 
               onClick={toggleTheme} 
               style={landingThemeToggleButtonStyle} 
@@ -115,89 +583,22 @@ function AppContent() {
           </div>
         </header>
 
-        {/* Hero Section */}
-        <section style={heroSectionStyle}>
-          <div style={heroContentStyle}>
-            <div style={heroBadgeStyle}>
-              PORTAL DE RESERVAS • U. E. GERMÁN BUSCH B
-            </div>
-            <h1 style={heroTitleStyle}>
-              PRRE: <span className="gradient-text">Portal de Reserva</span> de Recursos Educativos
-            </h1>
-            <p style={heroSubtitleStyle}>
-              Un entorno tecnológico y estandarizado diseñado para gestionar reservas de laboratorios, proyectores, computadoras y material didáctico. Diseñado para optimizar los procesos de enseñanza y aprendizaje.
-            </p>
-            <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-              <button 
-                onClick={() => { setAuthTab('login'); setAuthModalOpen(true); }}
-                className="btn btn-primary"
-                style={{ padding: '0.85rem 2rem', fontSize: '1rem' }}
-              >
-                Acceder al Portal
-              </button>
-              <button 
-                onClick={() => { setAuthTab('register'); setAuthModalOpen(true); }}
-                className="btn btn-secondary"
-                style={{ padding: '0.85rem 2rem', fontSize: '1rem' }}
-              >
-                Crear Cuenta
-              </button>
-            </div>
-          </div>
-        </section>
-
-        {/* Features Section */}
-        <section style={featuresSectionStyle}>
-          <div className="grid-cols-4" style={{ maxWidth: '1200px', margin: '0 auto', gap: '1.5rem' }}>
-            <div className="glass-card text-center glow-card-cyan" style={featureCardStyle}>
-              <div style={featureIconContainerStyle('var(--color-brand-cyan-muted)')}>
-                <Laptop size={24} color="white" />
-              </div>
-              <h3 style={{ marginBottom: '0.5rem', fontSize: '1.125rem' }}>Recursos Tecnológicos</h3>
-              <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
-                Revisa la disponibilidad de proyectores multimedia, portátiles HP, kits Arduino y tabletas.
-              </p>
-            </div>
-
-            <div className="glass-card text-center glow-card-gold" style={featureCardStyle}>
-              <div style={featureIconContainerStyle('var(--color-brand-gold)')}>
-                <Calendar size={24} color="white" />
-              </div>
-              <h3 style={{ marginBottom: '0.5rem', fontSize: '1.125rem' }}>Espacios Temáticos</h3>
-              <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
-                Agenda de laboratorios de computación, ciencias físicas/químicas o auditorios de forma nítida.
-              </p>
-            </div>
-
-            <div className="glass-card text-center glow-card-cyan" style={featureCardStyle}>
-              <div style={featureIconContainerStyle('var(--color-success)')}>
-                <ShieldCheck size={24} color="white" />
-              </div>
-              <h3 style={{ marginBottom: '0.5rem', fontSize: '1.125rem' }}>Control Operativo</h3>
-              <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
-                Estructura de perfiles para Estudiantes, Docentes y Administradores con bitácora de auditoría.
-              </p>
-            </div>
-
-            <div className="glass-card text-center glow-card-gold" style={featureCardStyle}>
-              <div style={featureIconContainerStyle('#6366F1')}>
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-              </div>
-              <h3 style={{ marginBottom: '0.5rem', fontSize: '1.125rem' }}>Disponibilidad Activa</h3>
-              <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
-                Algoritmo de cálculo de stock en tiempo real que previene cruces de horarios y sobreventa.
-              </p>
-            </div>
-          </div>
-        </section>
+        {/* Public View Body */}
+        <main style={{ flexGrow: 1 }}>
+          {renderPublicTab()}
+        </main>
 
         {/* Footer */}
         <footer style={landingFooterStyle}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
+            <Logo size={24} />
+            <b>Portal PRRE</b>
+          </div>
           <div>
-            <b>Portal PRRE</b> • U. E. Germán Busch B • Convenio EPDB
+            U. E. Germán Busch B • Convenio Escuelas Populares Don Bosco (EPDB)
           </div>
           <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
-            &copy; 2026 Reservas Educativas. Desarrollado en cooperación con Escuelas Populares Don Bosco.
+            &copy; 2026 Reservas Educativas. Todos los derechos reservados.
           </div>
         </footer>
 
@@ -265,20 +666,20 @@ const landingHeaderStyle = {
   display: 'flex',
   justifyContent: 'space-between',
   alignItems: 'center',
-  padding: '0 2rem',
+  padding: '0 1.5rem',
   backgroundColor: 'var(--bg-secondary)',
   backdropFilter: 'blur(20px)',
   WebkitBackdropFilter: 'blur(20px)',
   borderBottom: '1px solid var(--border-color)',
   position: 'sticky',
   top: 0,
-  zIndex: 100,
+  zIndex: 1000,
   boxShadow: 'var(--shadow-sm)'
 };
 
 const landingLogoTextStyle = {
-  fontSize: '1.6rem',
-  fontWeight: '900',
+  fontSize: '1.35rem',
+  fontWeight: '800',
   letterSpacing: '0.05em',
   background: 'linear-gradient(135deg, var(--color-brand-cyan), var(--color-brand-gold))',
   WebkitBackgroundClip: 'text',
