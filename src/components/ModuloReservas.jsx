@@ -11,10 +11,8 @@ import {
   Plus, 
   Check, 
   X, 
-  Calendar, 
   Clock, 
   Info, 
-  Play, 
   Search,
   AlertCircle
 } from 'lucide-react';
@@ -299,10 +297,7 @@ export default function ModuloReservas({ elementoPreseleccionado, alLimpiarPrese
             )}
 
             <button 
-              onClick={() => {
-                setErrorFormulario('');
-                setModalAbierto(true);
-              }}
+              onClick={alAbrirModalAgregar}
               className="btn btn-primary"
               style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
             >
