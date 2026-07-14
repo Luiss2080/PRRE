@@ -489,12 +489,6 @@ export default function ModuloReservas({ elementoPreseleccionado, alLimpiarPrese
           </p>
         </div>
       </div>
-    </div>
-  );
-};
-
-  return (
-    <div>
       {/* Modal de Solicitud de Reserva */}
       {modalAbierto && (
         <div className="modal-overlay">
