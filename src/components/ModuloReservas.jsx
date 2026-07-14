@@ -15,7 +15,8 @@ import {
   Clock, 
   Info, 
   Play, 
-  Search
+  Search,
+  AlertCircle
 } from 'lucide-react';
 
 /**
@@ -258,200 +259,242 @@ export default function ModuloReservas({ elementoPreseleccionado, alLimpiarPrese
     : espacios.find(e => e.id === itemId);
 
   return (
-    <div>
-      {/* Controles de cabecera */}
-      <div 
-        style={{ 
-          display: 'flex', 
-          justifyContent: 'space-between', 
-          alignItems: 'center', 
-          marginBottom: '1.5rem',
-          flexWrap: 'wrap',
-          gap: '1rem'
-        }}
-      >
-        <div className="search-container" style={{ flexGrow: 1, maxWidth: '400px' }}>
-          <Search size={16} className="search-icon" />
-          <input 
-            type="text" 
-            placeholder="Buscar por recurso, solicitante, motivo..." 
-            className="search-input" 
-            value={terminoBusqueda}
-            onChange={(e) => setTerminoBusqueda(e.target.value)}
-          />
-        </div>
+    <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', width: '100%', alignItems: 'start' }}>
+      {/* Columna Izquierda (65% de ancho) */}
+      <div style={{ flex: '1 1 65%', minWidth: '320px', display: 'flex', flexDirection: 'column' }}>
+        {/* Controles de cabecera */}
+        <div 
+          style={{ 
+            display: 'flex', 
+            justifyContent: 'space-between', 
+            alignItems: 'center', 
+            marginBottom: '1.5rem',
+            flexWrap: 'wrap',
+            gap: '1rem'
+          }}
+        >
+          <div className="search-container" style={{ flexGrow: 1, maxWidth: '400px' }}>
+            <Search size={16} className="search-icon" />
+            <input 
+              type="text" 
+              placeholder="Buscar por recurso, solicitante, motivo..." 
+              className="search-input" 
+              value={terminoBusqueda}
+              onChange={(e) => setTerminoBusqueda(e.target.value)}
+            />
+          </div>
 
-        <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
-          {establecerPestañaActiva && (
+          <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+            {establecerPestañaActiva && (
+              <button 
+                onClick={() => {
+                  if (alLimpiarPreseleccionado) alLimpiarPreseleccionado();
+                  establecerPestañaActiva(elementoPreseleccionado?.tipoRecurso === 'espacio' ? 'espacios' : 'recursos');
+                }} 
+                className="btn btn-secondary"
+                style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.8125rem' }}
+              >
+                Volver al catálogo
+              </button>
+            )}
+
             <button 
               onClick={() => {
-                if (alLimpiarPreseleccionado) alLimpiarPreseleccionado();
-                establecerPestañaActiva(elementoPreseleccionado?.tipoRecurso === 'espacio' ? 'espacios' : 'recursos');
-              }} 
-              className="btn btn-secondary"
-              style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', padding: '0.5rem 1rem' }}
+                setErrorFormulario('');
+                setModalAbierto(true);
+              }}
+              className="btn btn-primary"
+              style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
             >
-              &larr; Volver
+              <Plus size={16} />
+              <span>Nueva Reserva</span>
             </button>
-          )}
-
-          <button onClick={alAbrirModalAgregar} className="btn btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', padding: '0.5rem 1.25rem' }}>
-            <Plus size={18} />
-            <span>Nueva Solicitud</span>
-          </button>
-        </div>
-      </div>
-
-      {/* Tabla de Reservas */}
-      <div className="table-container">
-        {reservasFiltradas.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '3rem 1rem', color: 'var(--text-muted)' }}>
-            No tienes solicitudes de reserva registradas.
           </div>
-        ) : (
-          <table className="custom-table">
-            <thead>
-              <tr>
-                <th>Recurso/Espacio</th>
-                {esAdmin && <th>Solicitante</th>}
-                <th>Fechas</th>
-                <th>Horario</th>
-                <th style={{ textAlign: 'center' }}>Cantidad</th>
-                <th>Estado</th>
-                <th>Justificación</th>
-                <th style={{ textAlign: 'center', width: '220px' }}>Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {reservasPaginadas.map(res => (
-                <tr key={res.id}>
-                  <td style={{ fontWeight: '700' }}>
-                    <div style={{ display: 'flex', flexDirection: 'column' }}>
-                      <span>{res.itemName}</span>
-                      <span style={{ fontSize: '0.6875rem', color: 'var(--text-muted)', textTransform: 'uppercase', fontWeight: '500' }}>
-                        {res.tipoRecurso === 'recurso' ? 'Recurso' : 'Espacio'}
+        </div>
+
+        {/* Tabla de registros */}
+        <div className="table-container">
+          {reservasFiltradas.length === 0 ? (
+            <div style={{ textAlign: 'center', padding: '3rem 1rem', color: 'var(--text-muted)' }}>
+              No se encontraron reservas registradas.
+            </div>
+          ) : (
+            <table className="custom-table">
+              <thead>
+                <tr>
+                  <th style={{ width: '60px' }}>ID</th>
+                  <th>Ítem Reservado</th>
+                  <th>Solicitado por</th>
+                  <th>Fecha de Préstamo</th>
+                  <th>Horario</th>
+                  <th style={{ textAlign: 'center' }}>Cantidad</th>
+                  <th>Estado</th>
+                  <th style={{ textAlign: 'center' }}>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {reservasPaginadas.map(res => (
+                  <tr key={res.id}>
+                    <td style={{ fontWeight: '700' }}>{res.id}</td>
+                    <td>
+                      <span style={{ fontWeight: '750', color: 'var(--text-primary)' }}>{res.itemName}</span>
+                      <span style={{ display: 'block', fontSize: '0.6875rem', color: 'var(--text-muted)' }}>
+                        Tipo: {res.tipoRecurso === 'recurso' ? 'Recurso didáctico' : 'Aula/Espacio'}
                       </span>
-                    </div>
-                  </td>
-                  {esAdmin && <td style={{ fontWeight: '600' }}>{res.usuarioNombre}</td>}
-                  <td>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem' }}>
-                      <Calendar size={14} className="text-muted" />
-                      <span>
-                        {res.fechaInicio === res.fechaFin ? res.fechaInicio : `${res.fechaInicio} al ${res.fechaFin}`}
+                    </td>
+                    <td>
+                      <span style={{ fontWeight: '600' }}>{res.usuarioNombre}</span>
+                    </td>
+                    <td style={{ color: 'var(--text-secondary)' }}>{res.fechaInicio}</td>
+                    <td style={{ color: 'var(--text-secondary)' }}>
+                      <span style={{ display: 'inline-flex', alignItems: 'center', gap: '0.25rem', fontWeight: '500' }}>
+                        <Clock size={12} />
+                        {res.horaInicio} - {res.horaFin}
                       </span>
-                    </div>
-                  </td>
-                  <td>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem' }}>
-                      <Clock size={14} className="text-muted" />
-                      <span>{res.horaInicio} - {res.horaFin}</span>
-                    </div>
-                  </td>
-                  <td style={{ textAlign: 'center', fontWeight: '600' }}>
-                    {res.tipoRecurso === 'recurso' ? `${res.cantidad} ud.` : '-'}
-                  </td>
-                  <td>{obtenerInsigniaEstado(res.estado)}</td>
-                  <td style={{ color: 'var(--text-secondary)', maxWidth: '200px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={res.motivo}>
-                    {res.motivo}
-                  </td>
-                  <td style={{ textAlign: 'center' }}>
-                    <div style={{ display: 'flex', gap: '0.375rem', justifyContent: 'center' }}>
-                      {/* Acciones de Administrador sobre reservas pendientes */}
-                      {esAdmin && res.estado === 'Pendiente' && (
-                        <>
+                    </td>
+                    <td style={{ textAlign: 'center', fontWeight: '700' }}>{res.cantidad}</td>
+                    <td>{obtenerInsigniaEstado(res.estado)}</td>
+                    <td style={{ textAlign: 'center' }}>
+                      <div style={{ display: 'inline-flex', gap: '0.35rem' }}>
+                        {/* Aprobación/Rechazo sólo para administradores */}
+                        {esAdmin && res.estado === 'Pendiente' && (
+                          <>
+                            <button 
+                              onClick={() => alAprobar(res)} 
+                              className="btn btn-success" 
+                              style={{ padding: '0.375rem', borderRadius: '4px' }}
+                              title="Aprobar reserva"
+                            >
+                              <Check size={14} />
+                            </button>
+                            <button 
+                              onClick={() => alRechazar(res)} 
+                              className="btn btn-danger" 
+                              style={{ padding: '0.375rem', borderRadius: '4px' }}
+                              title="Rechazar reserva"
+                            >
+                              <X size={14} />
+                            </button>
+                          </>
+                        )}
+
+                        {/* Finalizar una reserva aprobada */}
+                        {esAdmin && res.estado === 'Aprobada' && (
                           <button 
-                            onClick={() => alAprobar(res)} 
-                            className="btn btn-primary" 
+                            onClick={() => alFinalizar(res)} 
+                            className="btn btn-info" 
                             style={{ padding: '0.375rem 0.625rem', fontSize: '0.75rem' }}
-                            title="Aprobar"
+                            title="Finalizar préstamo"
                           >
                             <Check size={14} />
-                            <span>Aprobar</span>
+                            <span>Concluir</span>
                           </button>
+                        )}
+
+                        {/* Cancelar reserva propia para docentes */}
+                        {!esAdmin && (res.estado === 'Pendiente' || res.estado === 'Aprobada') && (
                           <button 
-                            onClick={() => alRechazar(res)} 
-                            className="btn btn-danger" 
+                            onClick={() => alCancelar(res)} 
+                            className="btn btn-secondary" 
                             style={{ padding: '0.375rem 0.625rem', fontSize: '0.75rem' }}
-                            title="Rechazar"
+                            title="Cancelar reserva"
                           >
                             <X size={14} />
-                            <span>Rechazar</span>
+                            <span>Cancelar</span>
                           </button>
-                        </>
-                      )}
+                        )}
 
-                      {/* Finalización de reserva (Solo Administrador) */}
-                      {esAdmin && res.estado === 'Aprobada' && (
-                        <button 
-                          onClick={() => alFinalizar(res)} 
-                          className="btn btn-secondary" 
-                          style={{ padding: '0.375rem 0.625rem', fontSize: '0.75rem', color: 'var(--color-success)', borderColor: 'rgba(16, 185, 129, 0.3)' }}
-                          title="Finalizar préstamo"
-                        >
-                          <Play size={14} style={{ transform: 'rotate(90deg)' }} />
-                          <span>Concluir</span>
-                        </button>
-                      )}
+                        {/* Eliminar registro definitivo para reservas concluidas o inactivas */}
+                        {(res.estado === 'Finalizada' || res.estado === 'Cancelada' || res.estado === 'Rechazada') && (
+                          <button 
+                            onClick={() => alEliminar(res.id)} 
+                            className="btn btn-secondary" 
+                            style={{ padding: '0.375rem', borderRadius: '4px' }}
+                            title="Eliminar registro"
+                          >
+                            <X size={14} style={{ color: 'var(--color-danger)' }} />
+                          </button>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
 
-                      {/* Cancelación de reserva por usuario común */}
-                      {(res.estado === 'Pendiente' || (res.estado === 'Aprobada' && !esAdmin)) && (
-                        <button 
-                          onClick={() => alCancelar(res)} 
-                          className="btn btn-secondary" 
-                          style={{ padding: '0.375rem 0.625rem', fontSize: '0.75rem' }}
-                          title="Cancelar reserva"
-                        >
-                          <X size={14} />
-                          <span>Cancelar</span>
-                        </button>
-                      )}
-
-                      {/* Eliminar registro definitivo para reservas concluidas o inactivas */}
-                      {(res.estado === 'Finalizada' || res.estado === 'Cancelada' || res.estado === 'Rechazada') && (
-                        <button 
-                          onClick={() => alEliminar(res.id)} 
-                          className="btn btn-secondary" 
-                          style={{ padding: '0.375rem', borderRadius: '4px' }}
-                          title="Eliminar registro"
-                        >
-                          <X size={14} style={{ color: 'var(--color-danger)' }} />
-                        </button>
-                      )}
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        {/* Controles de Paginación */}
+        {totalPaginas > 1 && (
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1rem', marginTop: '1.5rem', marginBottom: '1.5rem' }}>
+            <button 
+              disabled={paginaActual === 1} 
+              onClick={() => setPaginaActual(prev => Math.max(prev - 1, 1))}
+              className="btn btn-secondary"
+              style={{ padding: '0.4rem 1rem', fontSize: '0.75rem' }}
+            >
+              &larr; Anterior
+            </button>
+            <span style={{ fontSize: '0.8125rem', fontWeight: '700', color: 'var(--text-secondary)' }}>
+              Página {paginaActual} de {totalPaginas}
+            </span>
+            <button 
+              disabled={paginaActual === totalPaginas} 
+              onClick={() => setPaginaActual(prev => Math.min(prev + 1, totalPaginas))}
+              className="btn btn-secondary"
+              style={{ padding: '0.4rem 1rem', fontSize: '0.75rem' }}
+            >
+              Siguiente &rarr;
+            </button>
+          </div>
         )}
       </div>
 
-      {/* Controles de Paginación */}
-      {totalPaginas > 1 && (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1rem', marginTop: '1.5rem', marginBottom: '1.5rem' }}>
-          <button 
-            disabled={paginaActual === 1} 
-            onClick={() => setPaginaActual(prev => Math.max(prev - 1, 1))}
-            className="btn btn-secondary"
-            style={{ padding: '0.4rem 1rem', fontSize: '0.75rem' }}
-          >
-            &larr; Anterior
-          </button>
-          <span style={{ fontSize: '0.8125rem', fontWeight: '700', color: 'var(--text-secondary)' }}>
-            Página {paginaActual} de {totalPaginas}
-          </span>
-          <button 
-            disabled={paginaActual === totalPaginas} 
-            onClick={() => setPaginaActual(prev => Math.min(prev + 1, totalPaginas))}
-            className="btn btn-secondary"
-            style={{ padding: '0.4rem 1rem', fontSize: '0.75rem' }}
-          >
-            Siguiente &rarr;
-          </button>
+      {/* Columna Derecha (32% de ancho) - Hoy Ocupados */}
+      <div style={{ flex: '1 1 32%', minWidth: '290px', display: 'flex', flexDirection: 'column', gap: '1.5rem', position: 'sticky', top: 'calc(var(--header-height) + 1.5rem)' }}>
+        {/* Cronograma del Día */}
+        <div className="glass-card glow-card-cyan" style={{ borderLeft: '4px solid var(--color-brand-cyan-muted)', padding: '1.25rem' }}>
+          <h3 style={{ fontSize: '1.125rem', fontWeight: '800', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <Clock size={18} color="var(--color-brand-cyan-muted)" />
+            Cronograma del Día
+          </h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+            {reservas.filter(r => r.estado === 'Aprobada').slice(0, 3).length === 0 ? (
+              <span style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>No hay reservas activas aprobadas para hoy.</span>
+            ) : (
+              reservas.filter(r => r.estado === 'Aprobada').slice(0, 3).map(res => (
+                <div key={res.id} style={{ padding: '0.65rem 0.85rem', borderRadius: 'var(--border-radius-sm)', border: '1px solid var(--border-color)', backgroundColor: 'rgba(255,255,255,0.01)', fontSize: '0.75rem' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
+                    <span style={{ fontWeight: '700' }}>{res.itemName}</span>
+                    <span className="badge badge-success" style={{ fontSize: '0.625rem', padding: '0.1rem 0.35rem' }}>Aprobado</span>
+                  </div>
+                  <div style={{ color: 'var(--text-secondary)', fontSize: '0.6875rem' }}>
+                    Docente: {res.usuarioNombre}<br />
+                    Horario: {res.horaInicio} - {res.horaFin}
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
         </div>
-      )}
 
+        {/* Políticas de Reserva */}
+        <div className="glass-card glow-card-gold" style={{ borderLeft: '4px solid var(--color-brand-gold)', padding: '1.25rem' }}>
+          <h3 style={{ fontSize: '1.125rem', fontWeight: '800', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <AlertCircle size={18} color="var(--color-brand-gold)" />
+            Prioridad de Aprobación
+          </h3>
+          <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', lineHeight: '1.5', margin: 0 }}>
+            Los recursos y aulas se asignan con base en la fecha de solicitud. Las materias curriculares prácticas tienen prioridad alta sobre las sesiones extracurriculares.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+  return (
+    <div>
       {/* Modal de Solicitud de Reserva */}
       {modalAbierto && (
         <div className="modal-overlay">
