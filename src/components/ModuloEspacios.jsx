@@ -189,7 +189,7 @@ export default function ModuloEspacios({ alRedireccionarReserva }) {
           {/* Botón de nuevo espacio (solo admin) */}
           {esAdmin && (
             <button 
-              onClick={alAbrirModalCrear}
+              onClick={alAbrirModalAgregar}
               className="btn btn-primary"
               style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
             >
