@@ -863,6 +863,8 @@ if (typeof document !== 'undefined') {
       color: var(--text-primary) !important;
     }
   `;
+  document.head.appendChild(style);
+}
 
 const estiloFilaMenuPerfil = {
   display: 'flex',
@@ -917,5 +919,3 @@ const estiloBotonCerrarModal = {
   justifyContent: 'center',
   transition: 'all 0.2s ease',
 };
-  document.head.appendChild(style);
-}
