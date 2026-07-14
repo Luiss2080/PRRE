@@ -17,7 +17,9 @@ import {
   ChevronLeft,
   AlertCircle,
   HelpCircle,
-  Clock
+  Clock,
+  User,
+  Settings
 } from 'lucide-react';
 
 /**
@@ -30,6 +32,39 @@ export default function DisenoEstructura({ children, pestañaActual, establecerP
   const { alternarTema, esOscuro } = useTema();
   const [menuLateralAbierto, setMenuLateralAbierto] = useState(false);
   const [mostrarMenuPerfil, setMostrarMenuPerfil] = useState(false);
+  const [modalPerfilAbierto, setModalPerfilAbierto] = useState(false);
+  const [modalConfigAbierto, setModalConfigAbierto] = useState(false);
+  const [nuevoPassword, setNuevoPassword] = useState('');
+  const [confirmarPassword, setConfirmarPassword] = useState('');
+  const [recibirAlertas, setRecibirAlertas] = useState(true);
+
+  const alGuardarConfiguracion = (e) => {
+    e.preventDefault();
+    if (nuevoPassword !== confirmarPassword) {
+      alert('Las contraseñas no coinciden.');
+      return;
+    }
+    if (nuevoPassword.trim().length < 4) {
+      alert('La contraseña debe tener al menos 4 caracteres.');
+      return;
+    }
+    
+    const usuarioActualizado = { ...usuarioActual, password: nuevoPassword };
+    const usuarios = JSON.parse(localStorage.getItem('prre_usuarios') || '[]');
+    const idx = usuarios.findIndex(u => u.id === usuarioActual.id);
+    if (idx !== -1) {
+      usuarios[idx].password = nuevoPassword;
+      localStorage.setItem('prre_usuarios', JSON.stringify(usuarios));
+    }
+    
+    localStorage.setItem('prre_session', JSON.stringify(usuarioActualizado));
+    localStorage.setItem('prre_notif_alertas', recibirAlertas ? 'true' : 'false');
+    
+    alert('Configuración guardada exitosamente.');
+    setModalConfigAbierto(false);
+    setNuevoPassword('');
+    setConfirmarPassword('');
+  };
 
   // Definición de las opciones del menú de navegación según el rol
   const opcionesMenu = [
@@ -126,7 +161,7 @@ export default function DisenoEstructura({ children, pestañaActual, establecerP
               style={estiloBotonPerfilEncabezado}
             >
               <div style={estiloAvatarEncabezado}>
-                {usuarioActual?.nombre ? usuarioActual.nombre.substring(0, 2).toUpperCase() : 'U'}
+                <User size={16} color="white" />
               </div>
               <div style={estiloEnvolturaNombrePerfil}>
                 <span style={estiloNombrePerfilEncabezado}>{usuarioActual?.nombre}</span>
@@ -143,15 +178,52 @@ export default function DisenoEstructura({ children, pestañaActual, establecerP
                 />
                 <div style={estiloMenuPerfil}>
                   <div style={estiloCabeceraMenuPerfil}>
-                    <span style={{ fontWeight: '800', color: 'var(--text-primary)' }}>{usuarioActual?.nombre}</span>
-                    <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>{usuarioActual?.email}</span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.25rem' }}>
+                      <div style={{ ...estiloAvatarEncabezado, width: '36px', height: '36px', minWidth: '36px', backgroundColor: 'var(--color-brand-cyan-muted)', cursor: 'default' }}>
+                        <User size={18} color="white" />
+                      </div>
+                      <div style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+                        <span style={{ fontWeight: '800', color: 'var(--text-primary)', fontSize: '0.875rem', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{usuarioActual?.nombre}</span>
+                        <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{usuarioActual?.email}</span>
+                      </div>
+                    </div>
                   </div>
                   <div style={{ height: '1px', backgroundColor: 'var(--border-color)', margin: '0.25rem 0' }} />
+                  
+                  {/* Opciones del Desplegable */}
+                  <button 
+                    onClick={() => {
+                      setMostrarMenuPerfil(false);
+                      setModalPerfilAbierto(true);
+                    }}
+                    className="profile-menu-row"
+                    style={estiloFilaMenuPerfil}
+                  >
+                    <User size={14} color="var(--color-brand-cyan-muted)" />
+                    <span>Mi Perfil</span>
+                  </button>
+
+                  <button 
+                    onClick={() => {
+                      setMostrarMenuPerfil(false);
+                      setModalConfigAbierto(true);
+                    }}
+                    className="profile-menu-row"
+                    style={estiloFilaMenuPerfil}
+                  >
+                    <Settings size={14} color="var(--color-brand-gold)" />
+                    <span>Configuración</span>
+                  </button>
+
+                  <div style={{ height: '1px', backgroundColor: 'var(--border-color)', margin: '0.25rem 0' }} />
+                  
                   <div style={{ padding: '0.5rem 1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.8125rem' }}>
                     <span>Rol Actual:</span>
                     <span className="badge badge-info" style={{ fontSize: '0.625rem', padding: '0.2rem 0.5rem' }}>{usuarioActual?.rol}</span>
                   </div>
+                  
                   <div style={{ height: '1px', backgroundColor: 'var(--border-color)', margin: '0.25rem 0' }} />
+                  
                   <button 
                     onClick={() => {
                       setMostrarMenuPerfil(false);
@@ -323,6 +395,129 @@ export default function DisenoEstructura({ children, pestañaActual, establecerP
           &copy; 2026 U.E. Germán Busch B • Convenio Escuelas Populares Don Bosco. Todos los derechos reservados.
         </div>
       </footer>
+
+      {/* Modal de Mi Perfil */}
+      {modalPerfilAbierto && (
+        <div style={estiloOverlayModal}>
+          <div className="glass-card" style={estiloTarjetaModal}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.75rem' }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0 }}>
+                <User size={20} color="var(--color-brand-cyan-muted)" />
+                Mi Perfil de Operador
+              </h3>
+              <button onClick={() => setModalPerfilAbierto(false)} style={estiloBotonCerrarModal}>
+                <X size={18} />
+              </button>
+            </div>
+            
+            <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
+              <div style={{ width: '60px', height: '60px', borderRadius: '50%', backgroundColor: 'var(--color-brand-cyan-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: 'var(--shadow-glow-cyan)' }}>
+                <User size={30} color="white" />
+              </div>
+              <div>
+                <h4 style={{ fontSize: '1.15rem', fontWeight: '800', margin: '0 0 0.25rem 0' }}>{usuarioActual?.nombre}</h4>
+                <span className="badge badge-info" style={{ fontSize: '0.75rem', padding: '0.25rem 0.65rem' }}>{usuarioActual?.rol}</span>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.875rem', marginBottom: '1.5rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '0.5rem', borderBottom: '1px solid var(--border-color)' }}>
+                <span style={{ color: 'var(--text-secondary)' }}>Correo Electrónico:</span>
+                <b style={{ color: 'var(--text-primary)' }}>{usuarioActual?.email}</b>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '0.5rem', borderBottom: '1px solid var(--border-color)' }}>
+                <span style={{ color: 'var(--text-secondary)' }}>Estado de Cuenta:</span>
+                <b style={{ color: 'var(--color-success)' }}>Activa / Operativa</b>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '0.5rem', borderBottom: '1px solid var(--border-color)' }}>
+                <span style={{ color: 'var(--text-secondary)' }}>Institución:</span>
+                <b style={{ color: 'var(--text-primary)' }}>U.E. Germán Busch B</b>
+              </div>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <span style={{ color: 'var(--text-secondary)' }}>Base de datos:</span>
+                <span style={{ fontSize: '0.75rem', color: 'var(--color-brand-gold)', fontWeight: '700' }}>Local (Simulada / LocalStorage)</span>
+              </div>
+            </div>
+
+            <button onClick={() => setModalPerfilAbierto(false)} className="btn btn-secondary w-full" style={{ padding: '0.5rem 1rem' }}>
+              Cerrar Vista
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Modal de Configuración */}
+      {modalConfigAbierto && (
+        <div style={estiloOverlayModal}>
+          <div className="glass-card" style={estiloTarjetaModal}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.75rem' }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0 }}>
+                <Settings size={20} color="var(--color-brand-gold)" />
+                Configuración del Sistema
+              </h3>
+              <button onClick={() => setModalConfigAbierto(false)} style={estiloBotonCerrarModal}>
+                <X size={18} />
+              </button>
+            </div>
+
+            <form onSubmit={alGuardarConfiguracion}>
+              {/* Sección Alertas */}
+              <div style={{ marginBottom: '1.5rem' }}>
+                <h4 style={{ fontSize: '0.9375rem', fontWeight: '700', marginBottom: '0.75rem' }}>Preferencias de Notificación</h4>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer', fontSize: '0.875rem' }}>
+                  <input 
+                    type="checkbox" 
+                    checked={recibirAlertas}
+                    onChange={(e) => setRecibirAlertas(e.target.checked)}
+                    style={{ width: '16px', height: '16px', cursor: 'pointer' }}
+                  />
+                  <span>Recibir alertas sonoras y de sistema en tiempo real</span>
+                </label>
+              </div>
+
+              <div style={{ height: '1px', backgroundColor: 'var(--border-color)', margin: '1rem 0' }} />
+
+              {/* Sección Contraseña */}
+              <div style={{ marginBottom: '1.5rem' }}>
+                <h4 style={{ fontSize: '0.9375rem', fontWeight: '700', marginBottom: '0.75rem' }}>Cambiar Contraseña de Ingreso</h4>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.75rem', color: 'var(--text-secondary)', marginBottom: '0.25rem' }}>Nueva Contraseña</label>
+                    <input 
+                      type="password" 
+                      className="form-control" 
+                      style={{ width: '100%', fontSize: '0.875rem' }}
+                      value={nuevoPassword}
+                      onChange={(e) => setNuevoPassword(e.target.value)}
+                      placeholder="Mínimo 4 caracteres"
+                    />
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.75rem', color: 'var(--text-secondary)', marginBottom: '0.25rem' }}>Confirmar Contraseña</label>
+                    <input 
+                      type="password" 
+                      className="form-control" 
+                      style={{ width: '100%', fontSize: '0.875rem' }}
+                      value={confirmarPassword}
+                      onChange={(e) => setConfirmarPassword(e.target.value)}
+                      placeholder="Repita la nueva contraseña"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1.5rem' }}>
+                <button type="button" onClick={() => setModalConfigAbierto(false)} className="btn btn-secondary flex-1">
+                  Cancelar
+                </button>
+                <button type="submit" className="btn btn-primary flex-1">
+                  Guardar Cambios
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
       </div>
     </div>
   );
@@ -664,6 +859,64 @@ if (typeof document !== 'undefined') {
         position: fixed !important;
       }
     }
+    .profile-menu-row:hover {
+      background-color: rgba(255, 255, 255, 0.04) !important;
+      color: var(--text-primary) !important;
+    }
   `;
+
+const estiloFilaMenuPerfil = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: '0.75rem',
+  padding: '0.65rem 1rem',
+  border: 'none',
+  background: 'none',
+  width: '100%',
+  textAlign: 'left',
+  cursor: 'pointer',
+  fontSize: '0.8125rem',
+  color: 'var(--text-secondary)',
+  transition: 'all 0.2s ease',
+};
+
+const estiloOverlayModal = {
+  position: 'fixed',
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  backgroundColor: 'rgba(0, 0, 0, 0.7)',
+  backdropFilter: 'blur(8px)',
+  WebkitBackdropFilter: 'blur(8px)',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  zIndex: 2000,
+  padding: '1rem',
+};
+
+const estiloTarjetaModal = {
+  maxWidth: '450px',
+  width: '100%',
+  padding: '1.75rem',
+  background: 'var(--bg-secondary)',
+  borderRadius: 'var(--border-radius-lg)',
+  boxShadow: 'var(--shadow-xl)',
+  border: '1px solid var(--border-color)',
+};
+
+const estiloBotonCerrarModal = {
+  background: 'none',
+  border: 'none',
+  color: 'var(--text-secondary)',
+  cursor: 'pointer',
+  padding: '0.25rem',
+  borderRadius: '50%',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  transition: 'all 0.2s ease',
+};
   document.head.appendChild(style);
 }
