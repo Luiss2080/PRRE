@@ -275,21 +275,54 @@ export default function DisenoEstructura({ children, pestañaActual, establecerP
           <main className="page-body">
             {children}
           </main>
-
-          {/* Pie de página institucional */}
-          <footer style={estiloPiePaginaFijo}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
-              <ImagenLogo tamaño={24} />
-              <b>PRRE</b>
-            </div>
-            <div>
-              Portal de Reserva de Recursos Educativos • Escuela Alternativa EPDB
-            </div>
-            <div>
-              &copy; 2026 U.E. Germán Busch B • Todos los derechos reservados.
-            </div>
-          </footer>
         </div>
+      </div>
+
+      {/* Pie de página institucional enriquecido de ancho completo */}
+      <footer style={estiloPiePaginaFijo}>
+        <div style={estiloContenidoFooterGrid}>
+          {/* Columna 1: Escuela y Misión */}
+          <div style={estiloColumnaFooter}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem' }}>
+              <ImagenLogo tamaño={28} />
+              <b style={{ fontSize: '1.125rem', color: 'var(--text-primary)', letterSpacing: '0.05em' }}>PORTAL PRRE</b>
+            </div>
+            <p style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)', lineHeight: '1.5', maxWidth: '320px' }}>
+              Optimización digital del préstamo de laptops, proyectores y laboratorios didácticos para la U.E. Germán Busch B, en cooperación con las Escuelas Populares Don Bosco (EPDB).
+            </p>
+          </div>
+
+          {/* Columna 2: Enlaces del Portal */}
+          <div style={estiloColumnaFooter}>
+            <h4 style={{ fontSize: '0.875rem', fontWeight: '800', color: 'var(--text-primary)', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              Módulos del Sistema
+            </h4>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', fontSize: '0.8125rem' }}>
+              <span style={{ cursor: 'pointer', color: 'var(--text-secondary)' }} onClick={() => establecerPestañaActiva('dashboard')}>Panel de Inicio</span>
+              <span style={{ cursor: 'pointer', color: 'var(--text-secondary)' }} onClick={() => establecerPestañaActiva('recursos')}>Catálogo de Recursos</span>
+              <span style={{ cursor: 'pointer', color: 'var(--text-secondary)' }} onClick={() => establecerPestañaActiva('espacios')}>Aulas & Laboratorios</span>
+              <span style={{ cursor: 'pointer', color: 'var(--text-secondary)' }} onClick={() => establecerPestañaActiva('reservas')}>Solicitar Préstamo</span>
+            </div>
+          </div>
+
+          {/* Columna 3: Información de Soporte */}
+          <div style={estiloColumnaFooter}>
+            <h4 style={{ fontSize: '0.875rem', fontWeight: '800', color: 'var(--text-primary)', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+              Soporte y Contacto
+            </h4>
+            <p style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)', lineHeight: '1.6' }}>
+              <b>Oficina TI:</b> Bloque Norte, Planta Baja<br />
+              <b>Línea Directa:</b> 2-224455 (Ext. 104)<br />
+              <b>Correo:</b> ti.soporte@colegio.edu.bo
+            </p>
+          </div>
+        </div>
+
+        <div style={{ height: '1px', backgroundColor: 'var(--border-color)', margin: '1.5rem 0 1rem 0' }} />
+        <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', textAlign: 'center' }}>
+          &copy; 2026 U.E. Germán Busch B • Convenio Escuelas Populares Don Bosco. Todos los derechos reservados.
+        </div>
+      </footer>
       </div>
     </div>
   );
@@ -593,16 +626,28 @@ const estiloItemNavegacionMovil = (estaActivo) => ({
 });
 
 const estiloPiePaginaFijo = {
-  padding: '1.5rem',
+  padding: '2.5rem 2rem 1.5rem 2rem',
   backgroundColor: 'var(--bg-secondary)',
   borderTop: '1px solid var(--border-color)',
-  textAlign: 'center',
-  fontSize: '0.75rem',
-  color: 'var(--text-muted)',
+  marginTop: 'auto',
+  width: '100%',
+  zIndex: 100,
+  boxShadow: '0 -4px 20px rgba(0, 0, 0, 0.05)',
+};
+
+const estiloContenidoFooterGrid = {
+  display: 'grid',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+  gap: '2rem',
+  maxWidth: '1400px',
+  margin: '0 auto',
+  textAlign: 'left',
+  width: '100%',
+};
+
+const estiloColumnaFooter = {
   display: 'flex',
   flexDirection: 'column',
-  gap: '0.25rem',
-  marginTop: 'auto',
 };
 
 // Inyección de la clase responsiva del menú en CSS
