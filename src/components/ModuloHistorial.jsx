@@ -12,8 +12,8 @@ import {
   CalendarDays,
   Laptop,
   MapPin,
-  User,
-  Info
+  Info,
+  Layers
 } from 'lucide-react';
 
 /**
@@ -155,57 +155,41 @@ export default function ModuloHistorial() {
         </div>
       </div>
 
-      {/* Selector de Vistas de Historial */}
-      <div 
-        className="glass-card" 
-        style={{ 
-          padding: '0.75rem 1.25rem', 
-          marginBottom: '1rem', 
-          display: 'flex', 
-          justifyContent: 'space-between', 
-          alignItems: 'center',
-          flexWrap: 'wrap',
-          gap: '1rem'
-        }}
-      >
-        <div style={{ display: 'flex', gap: '0.5rem' }}>
-          <button 
-            onClick={() => setVistaHistorial('tabla')} 
-            className={`btn ${vistaHistorial === 'tabla' ? 'btn-primary' : 'btn-secondary'}`}
-            style={{ padding: '0.45rem 1rem', fontSize: '0.8125rem', display: 'flex', alignItems: 'center', gap: '0.35rem' }}
+      <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', width: '100%', alignItems: 'start' }}>
+        {/* Columna Izquierda (70% de ancho) */}
+        <div style={{ flex: '1 1 70%', minWidth: '320px', display: 'flex', flexDirection: 'column' }}>
+          {/* Selector de Vistas de Historial */}
+          <div 
+            className="glass-card" 
+            style={{ 
+              padding: '0.75rem 1.25rem', 
+              marginBottom: '1rem', 
+              display: 'flex', 
+              justifyContent: 'space-between', 
+              alignItems: 'center',
+              flexWrap: 'wrap',
+              gap: '1rem'
+            }}
           >
-            <Table size={14} />
-            <span>Vista Tabla</span>
-          </button>
-          <button 
-            onClick={() => setVistaHistorial('cronograma')} 
-            className={`btn ${vistaHistorial === 'cronograma' ? 'btn-primary' : 'btn-secondary'}`}
-            style={{ padding: '0.45rem 1rem', fontSize: '0.8125rem', display: 'flex', alignItems: 'center', gap: '0.35rem' }}
-          >
-            <CalendarDays size={14} />
-            <span>Cronograma de Uso</span>
-          </button>
-        </div>
-
-        <button 
-          onClick={alExportarReporte} 
-          className="btn btn-secondary" 
-          style={{ padding: '0.45rem 1rem', fontSize: '0.8125rem', gap: '0.375rem', display: 'flex', alignItems: 'center' }}
-          disabled={descargando || reservasFiltradas.length === 0}
-        >
-          {descargando ? (
-            <>
-              <span className="loading-spinner" style={{ width: '12px', height: '12px', borderWidth: '2px' }}></span>
-              <span>Generando...</span>
-            </>
-          ) : (
-            <>
-              <Download size={14} />
-              <span>Exportar PDF</span>
-            </>
-          )}
-        </button>
-      </div>
+            <div style={{ display: 'flex', gap: '0.5rem' }}>
+              <button 
+                onClick={() => setVistaHistorial('tabla')} 
+                className={`btn ${vistaHistorial === 'tabla' ? 'btn-primary' : 'btn-secondary'}`}
+                style={{ padding: '0.45rem 1rem', fontSize: '0.8125rem', display: 'flex', alignItems: 'center', gap: '0.35rem' }}
+              >
+                <Table size={14} />
+                <span>Vista Tabla</span>
+              </button>
+              <button 
+                onClick={() => setVistaHistorial('cronograma')} 
+                className={`btn ${vistaHistorial === 'cronograma' ? 'btn-primary' : 'btn-secondary'}`}
+                style={{ padding: '0.45rem 1rem', fontSize: '0.8125rem', display: 'flex', alignItems: 'center', gap: '0.35rem' }}
+              >
+                <CalendarDays size={14} />
+                <span>Cronograma de Uso</span>
+              </button>
+            </div>
+          </div>
 
       {/* Caja de Herramientas de Filtros */}
       <div 
@@ -411,39 +395,154 @@ export default function ModuloHistorial() {
                         <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={res.motivo}>
                           {res.motivo || 'Uso pedagógico.'}
                         </span>
+                        <div 
+                          style={{ 
+                            padding: '0.6rem', 
+                            backgroundColor: res.tipoRecurso === 'recurso' ? 'rgba(0, 229, 255, 0.1)' : 'rgba(255, 159, 28, 0.1)', 
+                            borderRadius: 'var(--border-radius-sm)', 
+                            color: res.tipoRecurso === 'recurso' ? 'var(--color-brand-cyan-muted)' : 'var(--color-brand-gold)',
+                            flexShrink: 0 
+                          }}
+                        >
+                          {res.tipoRecurso === 'recurso' ? <Laptop size={20} /> : <MapPin size={20} />}
+                        </div>
+                        <div style={{ flexGrow: 1, minWidth: 0 }}>
+                          <h4 style={{ fontWeight: '850', fontSize: '1rem', marginBottom: '0.25rem', color: 'var(--text-primary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={res.itemName}>
+                            {res.itemName}
+                          </h4>
+                          <div style={{ fontSize: '0.6875rem', color: 'var(--text-muted)', marginBottom: '0.75rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                            {res.tipoRecurso === 'recurso' ? `Cantidad prestada: ${res.cantidad} unidades` : 'Espacio Escolar'}
+                          </div>
+                          
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem', color: 'var(--text-secondary)', marginBottom: '0.35rem' }}>
+                            <Calendar size={13} style={{ color: 'var(--text-muted)' }} />
+                            <span style={{ fontWeight: '600' }}>{res.fechaInicio}</span>
+                          </div>
+                          
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem', color: 'var(--text-secondary)', marginBottom: '0.75rem' }}>
+                            <Clock size={13} style={{ color: 'var(--text-muted)' }} />
+                            <span style={{ fontWeight: '800', color: 'var(--color-brand-cyan-muted)' }}>{res.horaInicio} - {res.horaFin}</span>
+                          </div>
+
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', paddingTop: '0.75rem', borderTop: '1px solid var(--border-color)', fontSize: '0.8125rem' }}>
+                            <User size={13} style={{ color: 'var(--text-muted)' }} />
+                            <span style={{ color: 'var(--text-secondary)', fontSize: '0.75rem' }}>Docente:</span>
+                            <span style={{ color: 'var(--text-primary)', fontWeight: '750' }}>{res.usuarioNombre}</span>
+                          </div>
+
+                          <div style={{ marginTop: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
+                            <Info size={12} />
+                            <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={res.motivo}>
+                              {res.motivo || 'Uso pedagógico.'}
+                            </span>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                ))}
+                    ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Controles de Paginación */}
+          {totalPaginas > 1 && (
+            <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1rem', marginTop: '2.5rem', marginBottom: '1rem' }}>
+              <button 
+                disabled={paginaActual === 1} 
+                onClick={() => setPaginaActual(prev => Math.max(prev - 1, 1))}
+                className="btn btn-secondary"
+                style={{ padding: '0.45rem 1.25rem', fontSize: '0.8125rem' }}
+              >
+                &larr; Anterior
+              </button>
+              <span style={{ fontSize: '0.875rem', fontWeight: '700', color: 'var(--text-secondary)' }}>
+                Página {paginaActual} de {totalPaginas}
+              </span>
+              <button 
+                disabled={paginaActual === totalPaginas} 
+                onClick={() => setPaginaActual(prev => Math.min(prev + 1, totalPaginas))}
+                className="btn btn-secondary"
+                style={{ padding: '0.45rem 1.25rem', fontSize: '0.8125rem' }}
+              >
+                Siguiente &rarr;
+              </button>
             </div>
           )}
         </div>
-      )}
 
-      {/* Controles de Paginación */}
-      {totalPaginas > 1 && (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1rem', marginTop: '2.5rem', marginBottom: '1rem' }}>
-          <button 
-            disabled={paginaActual === 1} 
-            onClick={() => setPaginaActual(prev => Math.max(prev - 1, 1))}
-            className="btn btn-secondary"
-            style={{ padding: '0.45rem 1.25rem', fontSize: '0.8125rem' }}
-          >
-            &larr; Anterior
-          </button>
-          <span style={{ fontSize: '0.875rem', fontWeight: '700', color: 'var(--text-secondary)' }}>
-            Página {paginaActual} de {totalPaginas}
-          </span>
-          <button 
-            disabled={paginaActual === totalPaginas} 
-            onClick={() => setPaginaActual(prev => Math.min(prev + 1, totalPaginas))}
-            className="btn btn-secondary"
-            style={{ padding: '0.45rem 1.25rem', fontSize: '0.8125rem' }}
-          >
-            Siguiente &rarr;
-          </button>
+        {/* Columna Derecha (28% de ancho) - Reportes e Indicadores */}
+        <div style={{ flex: '1 1 28%', minWidth: '280px', display: 'flex', flexDirection: 'column', gap: '1.5rem', position: 'sticky', top: 'calc(var(--header-height) + 1.5rem)' }}>
+          {/* Panel de Descargas */}
+          <div className="glass-card glow-card-gold" style={{ borderLeft: '4px solid var(--color-brand-gold)', padding: '1.25rem' }}>
+            <h3 style={{ fontSize: '1.125rem', fontWeight: '800', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <Download size={18} color="var(--color-brand-gold)" />
+              Reportes en PDF
+            </h3>
+            <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', lineHeight: '1.5', marginBottom: '1.25rem' }}>
+              Genere un documento detallado con todas las solicitudes de préstamo filtradas según el estado de aprobación y rango de fechas establecido.
+            </p>
+
+            <button 
+              onClick={alExportarReporte} 
+              className="btn btn-primary w-full" 
+              style={{ padding: '0.625rem 1rem', fontSize: '0.8125rem', gap: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+              disabled={descargando || reservasFiltradas.length === 0}
+            >
+              {descargando ? (
+                <>
+                  <span className="loading-spinner" style={{ width: '12px', height: '12px', borderWidth: '2px' }}></span>
+                  <span>Generando PDF...</span>
+                </>
+              ) : (
+                <>
+                  <Download size={14} />
+                  <span>Descargar PDF</span>
+                </>
+              )}
+            </button>
+          </div>
+
+          {/* Frecuencia de Solicitudes */}
+          <div className="glass-card glow-card-cyan" style={{ borderLeft: '4px solid var(--color-brand-cyan-muted)', padding: '1.25rem' }}>
+            <h3 style={{ fontSize: '1.125rem', fontWeight: '800', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+              <Layers size={18} color="var(--color-brand-cyan-muted)" />
+              Uso por Categorías
+            </h3>
+            
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', fontWeight: '700', marginBottom: '0.25rem' }}>
+                  <span>Equipos de Computación</span>
+                  <span>70%</span>
+                </div>
+                <div style={{ height: '6px', backgroundColor: 'var(--border-color)', borderRadius: '3px', overflow: 'hidden' }}>
+                  <div style={{ height: '100%', width: '70%', backgroundColor: 'var(--color-brand-cyan)', borderRadius: '3px' }} />
+                </div>
+              </div>
+
+              <div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', fontWeight: '700', marginBottom: '0.25rem' }}>
+                  <span>Proyectores HDMI</span>
+                  <span>20%</span>
+                </div>
+                <div style={{ height: '6px', backgroundColor: 'var(--border-color)', borderRadius: '3px', overflow: 'hidden' }}>
+                  <div style={{ height: '100%', width: '20%', backgroundColor: 'var(--color-brand-gold)', borderRadius: '3px' }} />
+                </div>
+              </div>
+
+              <div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', fontWeight: '700', marginBottom: '0.25rem' }}>
+                  <span>Aulas y Auditorios</span>
+                  <span>10%</span>
+                </div>
+                <div style={{ height: '6px', backgroundColor: 'var(--border-color)', borderRadius: '3px', overflow: 'hidden' }}>
+                  <div style={{ height: '100%', width: '10%', backgroundColor: 'var(--color-success)', borderRadius: '3px' }} />
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      )}
+      </div>
     </div>
   );
 }
