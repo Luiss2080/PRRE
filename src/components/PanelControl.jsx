@@ -62,7 +62,7 @@ export default function PanelControl({ establecerPestañaActiva }) {
     // Escucha eventos de actualización de la BD simulada
     window.addEventListener('prre_db_update', cargarEstadisticas);
     return () => window.removeEventListener('prre_db_update', cargarEstadisticas);
-  }, []);
+  }, [usuarioActual]);
 
   // Retorna la clase CSS adecuada según el estado de la reserva
   const obtenerClaseInsigniaEstado = (estado) => {
