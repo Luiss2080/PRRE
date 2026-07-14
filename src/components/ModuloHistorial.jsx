@@ -13,7 +13,8 @@ import {
   Laptop,
   MapPin,
   Info,
-  Layers
+  Layers,
+  User
 } from 'lucide-react';
 
 /**
