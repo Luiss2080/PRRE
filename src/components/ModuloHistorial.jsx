@@ -395,50 +395,10 @@ export default function ModuloHistorial() {
                         <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={res.motivo}>
                           {res.motivo || 'Uso pedagógico.'}
                         </span>
-                        <div 
-                          style={{ 
-                            padding: '0.6rem', 
-                            backgroundColor: res.tipoRecurso === 'recurso' ? 'rgba(0, 229, 255, 0.1)' : 'rgba(255, 159, 28, 0.1)', 
-                            borderRadius: 'var(--border-radius-sm)', 
-                            color: res.tipoRecurso === 'recurso' ? 'var(--color-brand-cyan-muted)' : 'var(--color-brand-gold)',
-                            flexShrink: 0 
-                          }}
-                        >
-                          {res.tipoRecurso === 'recurso' ? <Laptop size={20} /> : <MapPin size={20} />}
-                        </div>
-                        <div style={{ flexGrow: 1, minWidth: 0 }}>
-                          <h4 style={{ fontWeight: '850', fontSize: '1rem', marginBottom: '0.25rem', color: 'var(--text-primary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={res.itemName}>
-                            {res.itemName}
-                          </h4>
-                          <div style={{ fontSize: '0.6875rem', color: 'var(--text-muted)', marginBottom: '0.75rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                            {res.tipoRecurso === 'recurso' ? `Cantidad prestada: ${res.cantidad} unidades` : 'Espacio Escolar'}
-                          </div>
-                          
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem', color: 'var(--text-secondary)', marginBottom: '0.35rem' }}>
-                            <Calendar size={13} style={{ color: 'var(--text-muted)' }} />
-                            <span style={{ fontWeight: '600' }}>{res.fechaInicio}</span>
-                          </div>
-                          
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.8125rem', color: 'var(--text-secondary)', marginBottom: '0.75rem' }}>
-                            <Clock size={13} style={{ color: 'var(--text-muted)' }} />
-                            <span style={{ fontWeight: '800', color: 'var(--color-brand-cyan-muted)' }}>{res.horaInicio} - {res.horaFin}</span>
-                          </div>
-
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', paddingTop: '0.75rem', borderTop: '1px solid var(--border-color)', fontSize: '0.8125rem' }}>
-                            <User size={13} style={{ color: 'var(--text-muted)' }} />
-                            <span style={{ color: 'var(--text-secondary)', fontSize: '0.75rem' }}>Docente:</span>
-                            <span style={{ color: 'var(--text-primary)', fontWeight: '750' }}>{res.usuarioNombre}</span>
-                          </div>
-
-                          <div style={{ marginTop: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.35rem', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-                            <Info size={12} />
-                            <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={res.motivo}>
-                              {res.motivo || 'Uso pedagógico.'}
-                            </span>
-                          </div>
-                        </div>
                       </div>
-                    ))}
+                    </div>
+                  </div>
+                ))}
                 </div>
               )}
             </div>
