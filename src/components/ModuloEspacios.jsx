@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAutenticacion } from '../context/ContextoAutenticacion';
 import { getEspacios, guardarEspacio, eliminarEspacio } from '../utils/datosSimulados';
-import { Plus, Edit2, Trash2, Search, X, MapPin, Globe } from 'lucide-react';
+import { Plus, Edit2, Trash2, Search, X, MapPin, Globe, Layers, HelpCircle } from 'lucide-react';
 
 /**
  * ModuloEspacios
@@ -146,159 +146,210 @@ export default function ModuloEspacios({ alRedireccionarReserva }) {
   };
 
   return (
-    <div>
-      {/* Controles de cabecera y búsqueda */}
-      <div 
-        style={{ 
-          display: 'flex', 
-          justifyContent: 'space-between', 
-          alignItems: 'center', 
-          marginBottom: '1.5rem',
-          flexWrap: 'wrap',
-          gap: '1rem'
-        }}
-      >
-        <div style={{ display: 'flex', gap: '0.75rem', flexGrow: 1, maxWidth: '600px' }}>
-          {/* Campo de búsqueda */}
-          <div className="search-container" style={{ flexGrow: 1, maxWidth: 'none' }}>
-            <Search size={16} className="search-icon" />
-            <input 
-              type="text" 
-              placeholder="Buscar espacio o ubicación..." 
-              className="search-input" 
-              value={terminoBusqueda}
-              onChange={(e) => setTerminoBusqueda(e.target.value)}
-            />
+    <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', width: '100%', alignItems: 'start' }}>
+      {/* Columna Izquierda (68% de ancho) */}
+      <div style={{ flex: '1 1 68%', minWidth: '320px', display: 'flex', flexDirection: 'column' }}>
+        {/* Controles de cabecera y búsqueda */}
+        <div 
+          style={{ 
+            display: 'flex', 
+            justifyContent: 'space-between', 
+            alignItems: 'center', 
+            marginBottom: '1.5rem',
+            flexWrap: 'wrap',
+            gap: '1rem'
+          }}
+        >
+          <div style={{ display: 'flex', gap: '0.75rem', flexGrow: 1, maxWidth: '600px' }}>
+            {/* Campo de búsqueda */}
+            <div className="search-container" style={{ flexGrow: 1, maxWidth: 'none' }}>
+              <Search size={16} className="search-icon" />
+              <input 
+                type="text" 
+                placeholder="Buscar espacio o ubicación..." 
+                className="search-input" 
+                value={terminoBusqueda}
+                onChange={(e) => setTerminoBusqueda(e.target.value)}
+              />
+            </div>
+
+            {/* Filtro de tipo de espacio */}
+            <select 
+              className="form-select" 
+              style={{ width: '160px', padding: '0.625rem 1rem' }}
+              value={filtroTipo}
+              onChange={(e) => setFiltroTipo(e.target.value)}
+            >
+              <option value="Todos">Todos los tipos</option>
+              <option value="Físico">Físicos</option>
+              <option value="Virtual">Virtuales</option>
+            </select>
           </div>
 
-          {/* Filtro de tipo de espacio */}
-          <select 
-            className="form-select" 
-            style={{ width: '160px', padding: '0.625rem 1rem' }}
-            value={filtroTipo}
-            onChange={(e) => setFiltroTipo(e.target.value)}
-          >
-            <option value="Todos">Todos los tipos</option>
-            <option value="Físico">Físicos</option>
-            <option value="Virtual">Virtuales</option>
-          </select>
+          {/* Botón de nuevo espacio (solo admin) */}
+          {esAdmin && (
+            <button 
+              onClick={alAbrirModalCrear}
+              className="btn btn-primary"
+              style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
+            >
+              <Plus size={16} />
+              <span>Nuevo Espacio</span>
+            </button>
+          )}
         </div>
 
-        {/* Botón para agregar espacios (Solo Administradores) */}
-        {esAdmin && (
-          <button onClick={alAbrirModalAgregar} className="btn btn-primary">
-            <Plus size={18} />
-            <span>Agregar Espacio</span>
-          </button>
-        )}
-      </div>
-
-      {/* Tabla de Espacios */}
-      <div className="table-container">
-        {espaciosFiltrados.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: '3rem 1rem', color: 'var(--text-muted)' }}>
-            No se encontraron espacios que coincidan con la búsqueda.
-          </div>
-        ) : (
-          <table className="custom-table">
-            <thead>
-              <tr>
-                <th style={{ width: '40px' }}></th>
-                <th>Nombre del Espacio</th>
-                <th>Ubicación</th>
-                <th>Tipo</th>
-                <th style={{ textAlign: 'center' }}>Capacidad</th>
-                <th>Estado</th>
-                <th>Descripción</th>
-                {esAdmin && <th style={{ textAlign: 'center', width: '100px' }}>Acciones</th>}
-                {!esAdmin && <th style={{ textAlign: 'center', width: '130px' }}>Reservar</th>}
-              </tr>
-            </thead>
-            <tbody>
-              {espaciosPaginados.map(esp => (
-                <tr key={esp.id}>
-                  <td style={{ verticalAlign: 'middle', textAlign: 'center' }}>
-                    {obtenerIconoTipo(esp.tipo)}
-                  </td>
-                  <td style={{ fontWeight: '700' }}>{esp.nombre}</td>
-                  <td>{esp.ubicacion}</td>
-                  <td>
-                    <span style={{ fontWeight: '500', fontSize: '0.8125rem' }}>
-                      {esp.tipo}
-                    </span>
-                  </td>
-                  <td style={{ textAlign: 'center', fontWeight: '600' }}>
-                    {esp.capacidad} pers.
-                  </td>
-                  <td>{obtenerInsigniaEstado(esp.estado)}</td>
-                  <td style={{ color: 'var(--text-secondary)', maxWidth: '280px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }} title={esp.descripcion}>
-                    {esp.descripcion || 'Sin descripción.'}
-                  </td>
-                  {esAdmin && (
-                    <td style={{ textAlign: 'center' }}>
-                      <div style={{ display: 'inline-flex', gap: '0.5rem' }}>
-                        <button 
-                          onClick={() => alAbrirModalEditar(esp)} 
-                          className="btn btn-secondary" 
-                          style={{ padding: '0.375rem', borderRadius: '4px' }} 
-                          title="Editar"
-                        >
-                          <Edit2 size={14} />
-                        </button>
-                        <button 
-                          onClick={() => alEliminar(esp.id)} 
-                          className="btn btn-danger" 
-                          style={{ padding: '0.375rem', borderRadius: '4px' }} 
-                          title="Eliminar"
-                        >
-                          <Trash2 size={14} />
-                        </button>
+        {/* Tabla de registros */}
+        <div className="table-container">
+          {espaciosFiltrados.length === 0 ? (
+            <div style={{ textAlign: 'center', padding: '3rem 1rem', color: 'var(--text-muted)' }}>
+              No se encontraron espacios que coincidan con los filtros aplicados.
+            </div>
+          ) : (
+            <table className="custom-table">
+              <thead>
+                <tr>
+                  <th style={{ width: '60px' }}>ID</th>
+                  <th>Espacio</th>
+                  <th>Ubicación / Link</th>
+                  <th>Capacidad</th>
+                  <th>Estado</th>
+                  <th style={{ textAlign: 'center' }}>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {espaciosPaginados.map(esp => (
+                  <tr key={esp.id}>
+                    <td style={{ fontWeight: '700' }}>{esp.id}</td>
+                    <td>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                        {obtenerIconoTipo(esp.tipo)}
+                        <span style={{ fontWeight: '700' }}>{esp.nombre}</span>
                       </div>
                     </td>
-                  )}
-                  {!esAdmin && (
-                    <td style={{ textAlign: 'center' }}>
-                      <button
-                        onClick={() => alRedireccionarReserva && alRedireccionarReserva(esp)}
-                        className="btn btn-primary"
-                        style={{ padding: '0.4rem 0.85rem', fontSize: '0.75rem', fontWeight: '750' }}
-                        disabled={esp.estado === 'Mantenimiento' || esp.estado === 'Ocupado'}
-                      >
-                        {esp.estado === 'Mantenimiento' ? 'Mantenimiento' : (esp.estado === 'Ocupado' ? 'Ocupado' : 'Reservar Aula')}
-                      </button>
+                    <td style={{ color: 'var(--text-secondary)' }}>
+                      {esp.tipo === 'Virtual' ? (
+                        <a 
+                          href={esp.ubicacion} 
+                          target="_blank" 
+                          rel="noreferrer" 
+                          style={{ color: 'var(--color-brand-cyan)', textDecoration: 'underline' }}
+                        >
+                          Enlace de Aula
+                        </a>
+                      ) : (
+                        esp.ubicacion
+                      )}
                     </td>
-                  )}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                    <td style={{ fontWeight: '600' }}>{esp.capacidad} estudiantes</td>
+                    <td>{obtenerInsigniaEstado(esp.estado)}</td>
+                    <td style={{ textAlign: 'center' }}>
+                      <div style={{ display: 'inline-flex', gap: '0.5rem' }}>
+                        {esAdmin ? (
+                          <>
+                            <button 
+                              onClick={() => alAbrirModalEditar(esp)} 
+                              className="btn btn-secondary" 
+                              style={{ padding: '0.375rem', borderRadius: '4px' }}
+                              title="Editar"
+                            >
+                              <Edit2 size={14} />
+                            </button>
+                            <button 
+                              onClick={() => alEliminar(esp.id)} 
+                              className="btn btn-danger" 
+                              style={{ padding: '0.375rem', borderRadius: '4px' }}
+                              title="Eliminar"
+                            >
+                              <Trash2 size={14} />
+                            </button>
+                          </>
+                        ) : (
+                          <button 
+                            onClick={() => alRedireccionarReserva && alRedireccionarReserva(esp)}
+                            className="btn btn-primary"
+                            style={{ padding: '0.35rem 0.75rem', fontSize: '0.75rem' }}
+                            disabled={esp.estado === 'Mantenimiento' || esp.estado === 'Ocupado'}
+                          >
+                            Reservar
+                          </button>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
+
+        {/* Controles de Paginación */}
+        {totalPaginas > 1 && (
+          <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1rem', marginTop: '1.5rem', marginBottom: '1.5rem' }}>
+            <button 
+              disabled={paginaActual === 1} 
+              onClick={() => setPaginaActual(prev => Math.max(prev - 1, 1))}
+              className="btn btn-secondary"
+              style={{ padding: '0.4rem 1rem', fontSize: '0.75rem' }}
+            >
+              &larr; Anterior
+            </button>
+            <span style={{ fontSize: '0.8125rem', fontWeight: '700', color: 'var(--text-secondary)' }}>
+              Página {paginaActual} de {totalPaginas}
+            </span>
+            <button 
+              disabled={paginaActual === totalPaginas} 
+              onClick={() => setPaginaActual(prev => Math.min(prev + 1, totalPaginas))}
+              className="btn btn-secondary"
+              style={{ padding: '0.4rem 1rem', fontSize: '0.75rem' }}
+            >
+              Siguiente &rarr;
+            </button>
+          </div>
         )}
       </div>
 
-      {/* Controles de Paginación */}
-      {totalPaginas > 1 && (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '1rem', marginTop: '1.5rem', marginBottom: '1.5rem' }}>
-          <button 
-            disabled={paginaActual === 1} 
-            onClick={() => setPaginaActual(prev => Math.max(prev - 1, 1))}
-            className="btn btn-secondary"
-            style={{ padding: '0.4rem 1rem', fontSize: '0.75rem' }}
-          >
-            &larr; Anterior
-          </button>
-          <span style={{ fontSize: '0.8125rem', fontWeight: '700', color: 'var(--text-secondary)' }}>
-            Página {paginaActual} de {totalPaginas}
-          </span>
-          <button 
-            disabled={paginaActual === totalPaginas} 
-            onClick={() => setPaginaActual(prev => Math.min(prev + 1, totalPaginas))}
-            className="btn btn-secondary"
-            style={{ padding: '0.4rem 1rem', fontSize: '0.75rem' }}
-          >
-            Siguiente &rarr;
-          </button>
+      {/* Columna Derecha (28% de ancho) - Estado y Políticas */}
+      <div style={{ flex: '1 1 28%', minWidth: '280px', display: 'flex', flexDirection: 'column', gap: '1.5rem', position: 'sticky', top: 'calc(var(--header-height) + 1.5rem)' }}>
+        {/* Monitoreo de Aulas */}
+        <div className="glass-card glow-card-cyan" style={{ borderLeft: '4px solid var(--color-brand-cyan-muted)', padding: '1.25rem' }}>
+          <h3 style={{ fontSize: '1.125rem', fontWeight: '800', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <Layers size={18} color="var(--color-brand-cyan-muted)" />
+            Estado de Aulas
+          </h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.8125rem' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '0.5rem', borderBottom: '1px solid var(--border-color)' }}>
+              <span>Laboratorio de Computación A:</span>
+              <b style={{ color: 'var(--color-success)' }}>Disponible</b>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '0.5rem', borderBottom: '1px solid var(--border-color)' }}>
+              <span>Laboratorio de Computación B:</span>
+              <b style={{ color: 'var(--color-danger)' }}>Ocupado (Clase)</b>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '0.5rem', borderBottom: '1px solid var(--border-color)' }}>
+              <span>Aula de Audiovisuales:</span>
+              <b style={{ color: 'var(--color-success)' }}>Disponible</b>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <span>Auditorio de Eventos:</span>
+              <b style={{ color: 'var(--color-brand-gold)' }}>Mantenimiento</b>
+            </div>
+          </div>
         </div>
-      )}
+
+        {/* Políticas de Espacio */}
+        <div className="glass-card glow-card-gold" style={{ borderLeft: '4px solid var(--color-brand-gold)', padding: '1.25rem' }}>
+          <h3 style={{ fontSize: '1.125rem', fontWeight: '800', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <HelpCircle size={18} color="var(--color-brand-gold)" />
+            Políticas de Uso
+          </h3>
+          <ul style={{ paddingLeft: '1.15rem', margin: 0, fontSize: '0.75rem', color: 'var(--text-secondary)', display: 'flex', flexDirection: 'column', gap: '0.5rem', lineHeight: '1.4' }}>
+            <li>Las llaves de las aulas deben solicitarse y devolverse en soporte TI.</li>
+            <li>No se permite ingresar con alimentos o bebidas a los laboratorios.</li>
+            <li>Apague los equipos y luces al concluir la sesión.</li>
+          </ul>
+        </div>
+      </div>
 
       {/* Modal de Creación / Modificación de Espacios */}
       {modalAbierto && (
