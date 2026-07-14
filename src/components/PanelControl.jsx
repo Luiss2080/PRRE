@@ -24,6 +24,7 @@ export default function PanelControl({ establecerPestañaActiva }) {
     reservasAprobadas: 0,
     reservasPendientes: 0,
     reservasRecientes: [],
+    misReservasActivas: [],
     cantidadUsuarios: 0
   });
 
@@ -41,12 +42,18 @@ export default function PanelControl({ establecerPestañaActiva }) {
       // Ordenar las reservas por fecha/id (más recientes primero)
       const ordenadas = [...reservas].sort((a, b) => b.id.localeCompare(a.id)).slice(0, 4);
 
+      // Obtener reservas activas/pendientes del usuario actual
+      const misReservas = reservas
+        .filter(r => r.usuarioId === usuarioActual?.id && (r.estado === 'Aprobada' || r.estado === 'Pendiente'))
+        .slice(0, 3);
+
       setEstadisticas({
         cantidadRecursos: recursos.length,
         cantidadEspacios: espacios.length,
         reservasAprobadas: aprobadas,
         reservasPendientes: pendientes,
         reservasRecientes: ordenadas,
+        misReservasActivas: misReservas,
         cantidadUsuarios: usuarios.length
       });
     };
@@ -232,6 +239,49 @@ export default function PanelControl({ establecerPestañaActiva }) {
                   <span style={{ fontSize: '1.125rem', fontWeight: '800', color: 'var(--color-success)' }}>EPDB Convenio</span>
                 </div>
               </div>
+            </div>
+          )}
+
+          {/* Panel de Mis Reservas Activas (Solo Docente) */}
+          {usuarioActual?.rol !== 'Administrador' && (
+            <div className="glass-card" style={{ borderLeft: '4px solid var(--color-brand-cyan-muted)' }}>
+              <h3 style={{ fontSize: '1.125rem', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem', fontWeight: '800' }}>
+                <CalendarCheck2 size={20} color="var(--color-brand-cyan-muted)" />
+                Mis Solicitudes Activas
+              </h3>
+              {estadisticas.misReservasActivas.length === 0 ? (
+                <div style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', padding: '0.5rem 0' }}>
+                  No tienes reservas pendientes ni aprobadas en este momento.
+                </div>
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.625rem' }}>
+                  {estadisticas.misReservasActivas.map(res => (
+                    <div 
+                      key={res.id} 
+                      style={{ 
+                        padding: '0.65rem 0.85rem', 
+                        borderRadius: 'var(--border-radius-sm)', 
+                        border: '1px solid var(--border-color)',
+                        backgroundColor: 'rgba(255,255,255,0.01)',
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        fontSize: '0.75rem'
+                      }}
+                    >
+                      <div>
+                        <span style={{ fontWeight: '700' }}>{res.itemName}</span>
+                        <div style={{ color: 'var(--text-secondary)', fontSize: '0.6875rem', marginTop: '0.125rem' }}>
+                          Horario: {res.fechaInicio} • {res.horaInicio} - {res.horaFin}
+                        </div>
+                      </div>
+                      <span className={`badge ${obtenerClaseInsigniaEstado(res.estado)}`} style={{ fontSize: '0.625rem', padding: '0.15rem 0.4rem' }}>
+                        {res.estado}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           )}
         </div>
