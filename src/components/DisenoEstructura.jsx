@@ -518,7 +518,6 @@ export default function DisenoEstructura({ children, pestañaActual, establecerP
           </div>
         </div>
       )}
-      </div>
     </div>
   );
 }
