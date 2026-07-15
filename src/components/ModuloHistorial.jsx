@@ -157,8 +157,8 @@ export default function ModuloHistorial() {
       </div>
 
       <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', width: '100%', alignItems: 'start' }}>
-        {/* Columna Izquierda (70% de ancho) */}
-        <div style={{ flex: '1 1 70%', minWidth: '320px', display: 'flex', flexDirection: 'column' }}>
+        {/* Tabla de Historial en Pantalla Completa */}
+        <div style={{ flex: '1 1 100%', display: 'flex', flexDirection: 'column' }}>
           {/* Selector de Vistas de Historial */}
           <div 
             className="glass-card" 
@@ -190,6 +190,26 @@ export default function ModuloHistorial() {
                 <span>Cronograma de Uso</span>
               </button>
             </div>
+
+            {/* Botón de Exportación PDF Relocalizado */}
+            <button 
+              onClick={alExportarReporte} 
+              className="btn btn-primary" 
+              style={{ padding: '0.45rem 1rem', fontSize: '0.8125rem', gap: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+              disabled={descargando || reservasFiltradas.length === 0}
+            >
+              {descargando ? (
+                <>
+                  <span className="loading-spinner" style={{ width: '12px', height: '12px', borderWidth: '2px' }}></span>
+                  <span>Generando PDF...</span>
+                </>
+              ) : (
+                <>
+                  <Download size={14} />
+                  <span>Descargar PDF</span>
+                </>
+              )}
+            </button>
           </div>
 
       {/* Caja de Herramientas de Filtros */}
@@ -429,80 +449,6 @@ export default function ModuloHistorial() {
               </button>
             </div>
           )}
-        </div>
-
-        {/* Columna Derecha (28% de ancho) - Reportes e Indicadores */}
-        <div style={{ flex: '1 1 28%', minWidth: '280px', display: 'flex', flexDirection: 'column', gap: '1.5rem', position: 'sticky', top: 'calc(var(--header-height) + 1.5rem)' }}>
-          {/* Panel de Descargas */}
-          <div className="glass-card glow-card-gold" style={{ borderLeft: '4px solid var(--color-brand-gold)', padding: '1.25rem' }}>
-            <h3 style={{ fontSize: '1.125rem', fontWeight: '800', marginBottom: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <Download size={18} color="var(--color-brand-gold)" />
-              Reportes en PDF
-            </h3>
-            <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', lineHeight: '1.5', marginBottom: '1.25rem' }}>
-              Genere un documento detallado con todas las solicitudes de préstamo filtradas según el estado de aprobación y rango de fechas establecido.
-            </p>
-
-            <button 
-              onClick={alExportarReporte} 
-              className="btn btn-primary w-full" 
-              style={{ padding: '0.625rem 1rem', fontSize: '0.8125rem', gap: '0.5rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
-              disabled={descargando || reservasFiltradas.length === 0}
-            >
-              {descargando ? (
-                <>
-                  <span className="loading-spinner" style={{ width: '12px', height: '12px', borderWidth: '2px' }}></span>
-                  <span>Generando PDF...</span>
-                </>
-              ) : (
-                <>
-                  <Download size={14} />
-                  <span>Descargar PDF</span>
-                </>
-              )}
-            </button>
-          </div>
-
-          {/* Frecuencia de Solicitudes */}
-          <div className="glass-card glow-card-cyan" style={{ borderLeft: '4px solid var(--color-brand-cyan-muted)', padding: '1.25rem' }}>
-            <h3 style={{ fontSize: '1.125rem', fontWeight: '800', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-              <Layers size={18} color="var(--color-brand-cyan-muted)" />
-              Uso por Categorías
-            </h3>
-            
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', fontWeight: '700', marginBottom: '0.25rem' }}>
-                  <span>Equipos de Computación</span>
-                  <span>70%</span>
-                </div>
-                <div style={{ height: '6px', backgroundColor: 'var(--border-color)', borderRadius: '3px', overflow: 'hidden' }}>
-                  <div style={{ height: '100%', width: '70%', backgroundColor: 'var(--color-brand-cyan)', borderRadius: '3px' }} />
-                </div>
-              </div>
-
-              <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', fontWeight: '700', marginBottom: '0.25rem' }}>
-                  <span>Proyectores HDMI</span>
-                  <span>20%</span>
-                </div>
-                <div style={{ height: '6px', backgroundColor: 'var(--border-color)', borderRadius: '3px', overflow: 'hidden' }}>
-                  <div style={{ height: '100%', width: '20%', backgroundColor: 'var(--color-brand-gold)', borderRadius: '3px' }} />
-                </div>
-              </div>
-
-              <div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', fontWeight: '700', marginBottom: '0.25rem' }}>
-                  <span>Aulas y Auditorios</span>
-                  <span>10%</span>
-                </div>
-                <div style={{ height: '6px', backgroundColor: 'var(--border-color)', borderRadius: '3px', overflow: 'hidden' }}>
-                  <div style={{ height: '100%', width: '10%', backgroundColor: 'var(--color-success)', borderRadius: '3px' }} />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );

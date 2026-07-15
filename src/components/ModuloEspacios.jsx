@@ -147,8 +147,8 @@ export default function ModuloEspacios({ alRedireccionarReserva }) {
 
   return (
     <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', width: '100%', alignItems: 'start' }}>
-      {/* Columna Izquierda (68% de ancho) */}
-      <div style={{ flex: '1 1 68%', minWidth: '320px', display: 'flex', flexDirection: 'column' }}>
+      {/* Grilla de Espacios en Pantalla Completa */}
+      <div style={{ flex: '1 1 100%', display: 'flex', flexDirection: 'column' }}>
         {/* Controles de cabecera y búsqueda */}
         <div 
           style={{ 

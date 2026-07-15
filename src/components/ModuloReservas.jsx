@@ -307,8 +307,8 @@ export default function ModuloReservas({ elementoPreseleccionado, alLimpiarPrese
 
   return (
     <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', width: '100%', alignItems: 'start' }}>
-      {/* Columna Izquierda (65% de ancho) */}
-      <div style={{ flex: '1 1 65%', minWidth: '320px', display: 'flex', flexDirection: 'column' }}>
+      {/* Tabla de Reservas en Pantalla Completa */}
+      <div style={{ flex: '1 1 100%', display: 'flex', flexDirection: 'column' }}>
         {/* Controles de cabecera */}
         <div 
           style={{ 
@@ -492,46 +492,6 @@ export default function ModuloReservas({ elementoPreseleccionado, alLimpiarPrese
             </button>
           </div>
         )}
-      </div>
-
-      {/* Columna Derecha (32% de ancho) - Hoy Ocupados */}
-      <div style={{ flex: '1 1 32%', minWidth: '290px', display: 'flex', flexDirection: 'column', gap: '1.5rem', position: 'sticky', top: 'calc(var(--header-height) + 1.5rem)' }}>
-        {/* Cronograma del Día */}
-        <div className="glass-card glow-card-cyan" style={{ borderLeft: '4px solid var(--color-brand-cyan-muted)', padding: '1.25rem' }}>
-          <h3 style={{ fontSize: '1.125rem', fontWeight: '800', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <Clock size={18} color="var(--color-brand-cyan-muted)" />
-            Cronograma del Día
-          </h3>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-            {reservas.filter(r => r.estado === 'Aprobada').slice(0, 3).length === 0 ? (
-              <span style={{ fontSize: '0.8125rem', color: 'var(--text-muted)' }}>No hay reservas activas aprobadas para hoy.</span>
-            ) : (
-              reservas.filter(r => r.estado === 'Aprobada').slice(0, 3).map(res => (
-                <div key={res.id} style={{ padding: '0.65rem 0.85rem', borderRadius: 'var(--border-radius-sm)', border: '1px solid var(--border-color)', backgroundColor: 'rgba(255,255,255,0.01)', fontSize: '0.75rem' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
-                    <span style={{ fontWeight: '700' }}>{res.itemName}</span>
-                    <span className="badge badge-success" style={{ fontSize: '0.625rem', padding: '0.1rem 0.35rem' }}>Aprobado</span>
-                  </div>
-                  <div style={{ color: 'var(--text-secondary)', fontSize: '0.6875rem' }}>
-                    Docente: {res.usuarioNombre}<br />
-                    Horario: {res.horaInicio} - {res.horaFin}
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
-        </div>
-
-        {/* Políticas de Reserva */}
-        <div className="glass-card glow-card-gold" style={{ borderLeft: '4px solid var(--color-brand-gold)', padding: '1.25rem' }}>
-          <h3 style={{ fontSize: '1.125rem', fontWeight: '800', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <AlertCircle size={18} color="var(--color-brand-gold)" />
-            Prioridad de Aprobación
-          </h3>
-          <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', lineHeight: '1.5', margin: 0 }}>
-            Los recursos y aulas se asignan con base en la fecha de solicitud. Las materias curriculares prácticas tienen prioridad alta sobre las sesiones extracurriculares.
-          </p>
-        </div>
       </div>
       {/* Modal de Solicitud de Reserva */}
       {modalAbierto && (

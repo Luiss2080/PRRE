@@ -212,8 +212,8 @@ export default function ModuloRecursos({ alRedireccionarReserva }) {
         <CatalogoRecursos alHacerClicReserva={alRedireccionarReserva} esPublico={false} />
       ) : (
         <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', width: '100%', alignItems: 'start' }}>
-          {/* Columna Izquierda (70% de ancho) */}
-          <div style={{ flex: '1 1 70%', minWidth: '320px', display: 'flex', flexDirection: 'column' }}>
+          {/* Tabla de Recursos en Pantalla Completa */}
+          <div style={{ flex: '1 1 100%', display: 'flex', flexDirection: 'column' }}>
           {/* Barra de búsqueda para administradores */}
           <div 
             style={{ 
@@ -342,49 +342,9 @@ export default function ModuloRecursos({ alRedireccionarReserva }) {
               </button>
             </div>
           )}
-          </div>
-
-          {/* Columna Derecha (28% de ancho) - Resumen y Políticas */}
-          <div style={{ flex: '1 1 28%', minWidth: '280px', display: 'flex', flexDirection: 'column', gap: '1.5rem', position: 'sticky', top: 'calc(var(--header-height) + 1.5rem)' }}>
-            {/* Métricas de Inventario */}
-            <div className="glass-card glow-card-cyan" style={{ borderLeft: '4px solid var(--color-brand-cyan-muted)', padding: '1.25rem' }}>
-              <h3 style={{ fontSize: '1.125rem', fontWeight: '800', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <Layers size={18} color="var(--color-brand-cyan-muted)" />
-                Estado del Inventario
-              </h3>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.8125rem' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '0.5rem', borderBottom: '1px solid var(--border-color)' }}>
-                  <span>Dispositivos Registrados:</span>
-                  <b style={{ color: 'var(--text-primary)' }}>{recursos.length} tipos</b>
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '0.5rem', borderBottom: '1px solid var(--border-color)' }}>
-                  <span>Stock Total Físico:</span>
-                  <b style={{ color: 'var(--text-primary)' }}>{recursos.reduce((acc, r) => acc + r.cantidadTotal, 0)} uds.</b>
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '0.5rem', borderBottom: '1px solid var(--border-color)' }}>
-                  <span>Stock en Servicio:</span>
-                  <b style={{ color: 'var(--color-success)' }}>{recursos.reduce((acc, r) => acc + r.cantidadDisponible, 0)} uds.</b>
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <span>En Mantenimiento:</span>
-                  <b style={{ color: 'var(--color-brand-gold)' }}>{recursos.filter(r => r.estado === 'Mantenimiento').length} tipos</b>
-                </div>
-              </div>
-            </div>
-
-            {/* Consejos del Administrador */}
-            <div className="glass-card glow-card-gold" style={{ borderLeft: '4px solid var(--color-brand-gold)', padding: '1.25rem' }}>
-              <h3 style={{ fontSize: '1.125rem', fontWeight: '800', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <BookOpen size={18} color="var(--color-brand-gold)" />
-                Consejo de Gestión
-              </h3>
-              <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', lineHeight: '1.5', margin: 0 }}>
-                Asegúrese de cambiar el estado de los recursos a <b>Mantenimiento</b> si reportan fallas físicas, para evitar que los docentes realicen solicitudes sobre equipos dañados.
-              </p>
-            </div>
-          </div>
         </div>
-      )}
+      </div>
+    )}
 
       {/* Modal de Agregar / Editar */}
       {modalAbierto && (
