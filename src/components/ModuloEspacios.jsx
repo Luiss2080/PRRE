@@ -309,48 +309,6 @@ export default function ModuloEspacios({ alRedireccionarReserva }) {
         )}
       </div>
 
-      {/* Columna Derecha (28% de ancho) - Estado y Políticas */}
-      <div style={{ flex: '1 1 28%', minWidth: '280px', display: 'flex', flexDirection: 'column', gap: '1.5rem', position: 'sticky', top: 'calc(var(--header-height) + 1.5rem)' }}>
-        {/* Monitoreo de Aulas */}
-        <div className="glass-card glow-card-cyan" style={{ borderLeft: '4px solid var(--color-brand-cyan-muted)', padding: '1.25rem' }}>
-          <h3 style={{ fontSize: '1.125rem', fontWeight: '800', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <Layers size={18} color="var(--color-brand-cyan-muted)" />
-            Estado de Aulas
-          </h3>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.8125rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '0.5rem', borderBottom: '1px solid var(--border-color)' }}>
-              <span>Laboratorio de Computación A:</span>
-              <b style={{ color: 'var(--color-success)' }}>Disponible</b>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '0.5rem', borderBottom: '1px solid var(--border-color)' }}>
-              <span>Laboratorio de Computación B:</span>
-              <b style={{ color: 'var(--color-danger)' }}>Ocupado (Clase)</b>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '0.5rem', borderBottom: '1px solid var(--border-color)' }}>
-              <span>Aula de Audiovisuales:</span>
-              <b style={{ color: 'var(--color-success)' }}>Disponible</b>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <span>Auditorio de Eventos:</span>
-              <b style={{ color: 'var(--color-brand-gold)' }}>Mantenimiento</b>
-            </div>
-          </div>
-        </div>
-
-        {/* Políticas de Espacio */}
-        <div className="glass-card glow-card-gold" style={{ borderLeft: '4px solid var(--color-brand-gold)', padding: '1.25rem' }}>
-          <h3 style={{ fontSize: '1.125rem', fontWeight: '800', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <HelpCircle size={18} color="var(--color-brand-gold)" />
-            Políticas de Uso
-          </h3>
-          <ul style={{ paddingLeft: '1.15rem', margin: 0, fontSize: '0.75rem', color: 'var(--text-secondary)', display: 'flex', flexDirection: 'column', gap: '0.5rem', lineHeight: '1.4' }}>
-            <li>Las llaves de las aulas deben solicitarse y devolverse en soporte TI.</li>
-            <li>No se permite ingresar con alimentos o bebidas a los laboratorios.</li>
-            <li>Apague los equipos y luces al concluir la sesión.</li>
-          </ul>
-        </div>
-      </div>
-
       {/* Modal de Creación / Modificación de Espacios */}
       {modalAbierto && (
         <div className="modal-overlay">
