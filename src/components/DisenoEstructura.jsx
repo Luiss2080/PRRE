@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAutenticacion } from '../context/ContextoAutenticacion';
 import { useTema } from '../context/ContextoTema';
+import logoSistemaImg from '../../img/LogoSistema.png';
 import { 
   LayoutDashboard, 
   Package, 
@@ -19,7 +20,8 @@ import {
   HelpCircle,
   Clock,
   User,
-  Settings
+  Settings,
+  BarChart3
 } from 'lucide-react';
 
 /**
