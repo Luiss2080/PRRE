@@ -39,6 +39,35 @@ const calcularHoraFin = (inicio, dur) => {
   return `${String(nuevaHora).padStart(2, '0')}:${String(min).padStart(2, '0')}`;
 };
 
+const obtenerFechasInicio = () => {
+  const fechas = [];
+  const hoy = new Date();
+  for (let i = 0; i < 10; i++) {
+    const fecha = new Date();
+    fecha.setDate(hoy.getDate() + i);
+    fechas.push(getFechaLocalStr(fecha));
+  }
+  return fechas;
+};
+
+const obtenerFechasCierre = (fechaInicioSel) => {
+  if (!fechaInicioSel) return [];
+  const fechas = [];
+  const inicio = new Date(fechaInicioSel + 'T00:00:00');
+  for (let i = 0; i < 10; i++) {
+    const fecha = new Date(inicio.getTime());
+    fecha.setDate(inicio.getDate() + i);
+    fechas.push(getFechaLocalStr(fecha));
+  }
+  return fechas;
+};
+
+const formatearFechaLegible = (fechaStr) => {
+  if (!fechaStr) return '';
+  const [anio, mes, dia] = fechaStr.split('-');
+  return `${dia}/${mes}/${anio}`;
+};
+
 /**
  * ModuloReservas
  * Componente que gestiona el sistema de reservas y solicitudes de préstamos de recursos y espacios.
@@ -634,29 +663,32 @@ export default function ModuloReservas({ elementoPreseleccionado, alLimpiarPrese
 
                   <div className="form-group" style={{ marginBottom: 0 }}>
                     <label className="form-label" style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-secondary)', marginBottom: '0.25rem', display: 'block' }}>Fecha Inicio</label>
-                    <input 
-                      type="date" 
-                      className="form-input" 
+                    <select 
+                      className="form-select" 
                       value={fechaInicio} 
-                      min={getFechaLocalStr(new Date())}
                       onChange={(e) => alCambiarFechaInicio(e.target.value)}
                       style={{ padding: '0.5rem 0.75rem', fontSize: '0.8125rem' }}
                       required 
-                    />
+                    >
+                      {obtenerFechasInicio().map(f => (
+                        <option key={f} value={f}>{formatearFechaLegible(f)}</option>
+                      ))}
+                    </select>
                   </div>
 
                   <div className="form-group" style={{ marginBottom: 0 }}>
                     <label className="form-label" style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-secondary)', marginBottom: '0.25rem', display: 'block' }}>Fecha Cierre</label>
-                    <input 
-                      type="date" 
-                      className="form-input" 
+                    <select 
+                      className="form-select" 
                       value={fechaFin} 
-                      min={fechaInicio}
-                      max={calcularFechaFinMaxima(fechaInicio)}
                       onChange={(e) => setFechaFin(e.target.value)}
                       style={{ padding: '0.5rem 0.75rem', fontSize: '0.8125rem' }}
                       required 
-                    />
+                    >
+                      {obtenerFechasCierre(fechaInicio).map(f => (
+                        <option key={f} value={f}>{formatearFechaLegible(f)}</option>
+                      ))}
+                    </select>
                   </div>
                 </div>
 

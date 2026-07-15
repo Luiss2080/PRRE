@@ -8,8 +8,78 @@ import {
   Clock, 
   ArrowRight,
   AlertTriangle,
-  UserCheck
+  UserCheck,
+  Layers,
+  BookOpen
 } from 'lucide-react';
+
+// Componente interno para renderizar los anillos de progreso circulares de forma vectorial y moderna
+const CirculoProgreso = ({ porcentaje, color, etiqueta, valor }) => {
+  const radio = 28;
+  const circunferencia = 2 * Math.PI * radio;
+  const strokeDashoffset = circunferencia - (porcentaje / 100) * circunferencia;
+  
+  return (
+    <div 
+      className="progress-circle-container" 
+      style={{ 
+        display: 'flex', 
+        flexDirection: 'column', 
+        alignItems: 'center', 
+        gap: '0.4rem', 
+        flex: '1 1 20%', 
+        minWidth: '85px',
+        cursor: 'pointer'
+      }}
+    >
+      <div style={{ position: 'relative', width: '70px', height: '70px' }} className="circle-hover">
+        <svg width="70" height="70" viewBox="0 0 70 70" style={{ transform: 'rotate(-90deg)' }}>
+          {/* Círculo trasero */}
+          <circle 
+            cx="35" 
+            cy="35" 
+            r={radio} 
+            fill="transparent" 
+            stroke="var(--border-color)" 
+            strokeWidth="4" 
+          />
+          {/* Círculo delantero animado con brillo */}
+          <circle 
+            cx="35" 
+            cy="35" 
+            r={radio} 
+            fill="transparent" 
+            stroke={color} 
+            strokeWidth="4" 
+            strokeDasharray={circunferencia} 
+            strokeDashoffset={strokeDashoffset} 
+            strokeLinecap="round" 
+            style={{ 
+              transition: 'stroke-dashoffset 0.6s ease-in-out', 
+              filter: `drop-shadow(0 0 3px ${color})` 
+            }}
+          />
+        </svg>
+        {/* Porcentaje en el centro */}
+        <div 
+          style={{ 
+            position: 'absolute', 
+            top: '50%', 
+            left: '50%', 
+            transform: 'translate(-50%, -50%)', 
+            fontWeight: '800', 
+            fontSize: '0.8rem',
+            color: 'var(--text-primary)'
+          }}
+        >
+          {porcentaje}%
+        </div>
+      </div>
+      <span style={{ fontSize: '0.72rem', fontWeight: '750', color: 'var(--text-secondary)', textAlign: 'center' }}>{etiqueta}</span>
+      <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)' }}>({valor} sol.)</span>
+    </div>
+  );
+};
 
 /**
  * PanelControl
@@ -25,7 +95,8 @@ export default function PanelControl({ establecerPestañaActiva }) {
     reservasPendientes: 0,
     reservasRecientes: [],
     misReservasActivas: [],
-    cantidadUsuarios: 0
+    cantidadUsuarios: 0,
+    todasLasReservas: []
   });
 
   useEffect(() => {
@@ -54,7 +125,8 @@ export default function PanelControl({ establecerPestañaActiva }) {
         reservasPendientes: pendientes,
         reservasRecientes: ordenadas,
         misReservasActivas: misReservas,
-        cantidadUsuarios: usuarios.length
+        cantidadUsuarios: usuarios.length,
+        todasLasReservas: reservas
       });
     };
 
@@ -86,6 +158,33 @@ export default function PanelControl({ establecerPestañaActiva }) {
     { dia: 'Dom', valor: 1, altura: '10%' },
   ];
 
+  // Cálculos dinámicos para gráficos interactivos
+  const todasLasReservas = estadisticas.todasLasReservas || [];
+  
+  // Gráfico 1: Recursos más solicitados (Top 5)
+  const conteoRecursos = {};
+  todasLasReservas.forEach(r => {
+    conteoRecursos[r.itemName] = (conteoRecursos[r.itemName] || 0) + 1;
+  });
+  const recursosMasSolicitados = Object.entries(conteoRecursos)
+    .map(([nombre, total]) => ({ nombre, total }))
+    .sort((a, b) => b.total - a.total)
+    .slice(0, 5);
+  
+  const maxConteo = recursosMasSolicitados.length > 0 ? Math.max(...recursosMasSolicitados.map(r => r.total)) : 1;
+
+  // Gráfico 2: Distribución por Estado de Reservas
+  const totalRes = todasLasReservas.length || 1;
+  const cantAprobadas = todasLasReservas.filter(r => r.estado === 'Aprobada').length;
+  const cantPendientes = todasLasReservas.filter(r => r.estado === 'Pendiente').length;
+  const cantFinalizadas = todasLasReservas.filter(r => r.estado === 'Finalizada').length;
+  const cantRechazadasCanceladas = todasLasReservas.filter(r => r.estado === 'Rechazada' || r.estado === 'Cancelada').length;
+  
+  const porcAprobadas = Math.round((cantAprobadas / totalRes) * 100);
+  const porcPendientes = Math.round((cantPendientes / totalRes) * 100);
+  const porcFinalizadas = Math.round((cantFinalizadas / totalRes) * 100);
+  const porcRechazadasCanceladas = Math.round((cantRechazadasCanceladas / totalRes) * 100);
+
   return (
     <div>
       {/* Inyección de estilos dinámicos para los efectos hover del gráfico */}
@@ -97,6 +196,25 @@ export default function PanelControl({ establecerPestañaActiva }) {
         .chart-bar:hover {
           filter: brightness(1.15) !important;
           box-shadow: 0 0 15px rgba(0, 229, 255, 0.4) !important;
+        }
+        .progress-circle-container:hover .circle-hover {
+          transform: scale(1.08) !important;
+          filter: brightness(1.1) !important;
+        }
+        .circle-hover {
+          transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .horizontal-bar-row:hover {
+          background-color: rgba(255, 255, 255, 0.03) !important;
+        }
+        .horizontal-bar-row:hover .h-bar {
+          filter: brightness(1.2) !important;
+          box-shadow: 0 0 10px var(--bar-color-glow) !important;
+          transform: scaleX(1.02);
+        }
+        .h-bar {
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          transform-origin: left;
         }
       `}} />
 

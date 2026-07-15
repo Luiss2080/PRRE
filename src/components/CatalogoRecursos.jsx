@@ -73,8 +73,8 @@ export default function CatalogoRecursos({ alHacerClicReserva, esPublico = false
 
   return (
     <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap', width: '100%', alignItems: 'start' }}>
-      {/* Columna Izquierda (68% de ancho) */}
-      <div style={{ flex: '1 1 68%', minWidth: '320px', display: 'flex', flexDirection: 'column' }}>
+      {/* Catálogo en Pantalla Completa */}
+      <div style={{ flex: '1 1 100%', display: 'flex', flexDirection: 'column' }}>
         {/* Contenedor de Búsqueda y Filtros de Categorías */}
         <div 
           className="glass-card" 
@@ -268,48 +268,6 @@ export default function CatalogoRecursos({ alHacerClicReserva, esPublico = false
             </button>
           </div>
         )}
-      </div>
-
-      {/* Columna Derecha (28% de ancho) - Resumen y Políticas */}
-      <div style={{ flex: '1 1 28%', minWidth: '280px', display: 'flex', flexDirection: 'column', gap: '1.5rem', position: 'sticky', top: 'calc(var(--header-height) + 1.5rem)' }}>
-        {/* Resumen del Inventario */}
-        <div className="glass-card glow-card-cyan" style={{ borderLeft: '4px solid var(--color-brand-cyan-muted)', padding: '1.25rem' }}>
-          <h3 style={{ fontSize: '1.125rem', fontWeight: '800', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <Layers size={18} color="var(--color-brand-cyan-muted)" />
-            Inventario Rápido
-          </h3>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.8125rem' }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '0.5rem', borderBottom: '1px solid var(--border-color)' }}>
-              <span>Laptops de Computación:</span>
-              <b style={{ color: 'var(--text-primary)' }}>20 unidades</b>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '0.5rem', borderBottom: '1px solid var(--border-color)' }}>
-              <span>Proyectores HDMI:</span>
-              <b style={{ color: 'var(--text-primary)' }}>5 unidades</b>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '0.5rem', borderBottom: '1px solid var(--border-color)' }}>
-              <span>Tabletas Lenovo:</span>
-              <b style={{ color: 'var(--text-primary)' }}>15 unidades</b>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <span>Textos de Consulta:</span>
-              <b style={{ color: 'var(--text-primary)' }}>3 unidades</b>
-            </div>
-          </div>
-        </div>
-
-        {/* Políticas del Portal */}
-        <div className="glass-card glow-card-gold" style={{ borderLeft: '4px solid var(--color-brand-gold)', padding: '1.25rem' }}>
-          <h3 style={{ fontSize: '1.125rem', fontWeight: '800', marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <BookOpen size={18} color="var(--color-brand-gold)" />
-            Reglas del Portal
-          </h3>
-          <ul style={{ paddingLeft: '1.15rem', margin: 0, fontSize: '0.75rem', color: 'var(--text-secondary)', display: 'flex', flexDirection: 'column', gap: '0.5rem', lineHeight: '1.4' }}>
-            <li>Las reservas deben crearse al menos con 24h de anticipación.</li>
-            <li>Al finalizar su clase, devuelva los cables y adaptadores en TI.</li>
-            <li>En caso de fallas físicas, repórtelo en soporte del bloque administrativo.</li>
-          </ul>
-        </div>
       </div>
     </div>
   );
