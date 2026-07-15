@@ -616,32 +616,66 @@ export default function DisenoEstructura({ children, pestañaActual, establecerP
             </div>
 
             <form onSubmit={alGuardarConfiguracion}>
+              {/* Sección Preferencias de Interfaz */}
+              <div style={{ marginBottom: '1.25rem' }}>
+                <h4 style={{ fontSize: '0.9375rem', fontWeight: '750', marginBottom: '0.75rem', color: 'var(--text-primary)' }}>Interfaz del Portal</h4>
+                
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.75rem', color: 'var(--text-secondary)', marginBottom: '0.25rem' }}>Pestaña de Inicio Predeterminada</label>
+                    <select
+                      className="form-control"
+                      style={{ width: '100%', fontSize: '0.8125rem', backgroundColor: 'var(--bg-primary)', color: 'var(--text-primary)', border: '1px solid var(--border-color)', borderRadius: 'var(--border-radius-sm)', padding: '0.4rem 0.5rem' }}
+                      value={pestañaPredeterminada}
+                      onChange={(e) => setPestañaPredeterminada(e.target.value)}
+                    >
+                      <option value="dashboard">Inicio / Dashboard</option>
+                      <option value="recursos">Recursos / Equipos</option>
+                      <option value="espacios">Espacios / Aulas</option>
+                      <option value="reservas">Reservar / Préstamos</option>
+                    </select>
+                  </div>
+
+                  <label style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', cursor: 'pointer', fontSize: '0.8125rem', color: 'var(--text-secondary)' }}>
+                    <input 
+                      type="checkbox" 
+                      checked={tablasCompactas}
+                      onChange={(e) => setTablasCompactas(e.target.checked)}
+                      style={{ width: '15px', height: '15px', cursor: 'pointer' }}
+                    />
+                    <span>Habilitar vista compacta para tablas de registros</span>
+                  </label>
+                </div>
+              </div>
+
+              <div style={{ height: '1px', backgroundColor: 'var(--border-color)', margin: '1rem 0' }} />
+
               {/* Sección Alertas */}
-              <div style={{ marginBottom: '1.5rem' }}>
-                <h4 style={{ fontSize: '0.9375rem', fontWeight: '700', marginBottom: '0.75rem' }}>Preferencias de Notificación</h4>
-                <label style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', cursor: 'pointer', fontSize: '0.875rem' }}>
+              <div style={{ marginBottom: '1.25rem' }}>
+                <h4 style={{ fontSize: '0.9375rem', fontWeight: '750', marginBottom: '0.5rem', color: 'var(--text-primary)' }}>Notificaciones</h4>
+                <label style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', cursor: 'pointer', fontSize: '0.8125rem', color: 'var(--text-secondary)' }}>
                   <input 
                     type="checkbox" 
                     checked={recibirAlertas}
                     onChange={(e) => setRecibirAlertas(e.target.checked)}
-                    style={{ width: '16px', height: '16px', cursor: 'pointer' }}
+                    style={{ width: '15px', height: '15px', cursor: 'pointer' }}
                   />
-                  <span>Recibir alertas sonoras y de sistema en tiempo real</span>
+                  <span>Recibir alertas y recordatorios en tiempo real</span>
                 </label>
               </div>
 
               <div style={{ height: '1px', backgroundColor: 'var(--border-color)', margin: '1rem 0' }} />
 
               {/* Sección Contraseña */}
-              <div style={{ marginBottom: '1.5rem' }}>
-                <h4 style={{ fontSize: '0.9375rem', fontWeight: '700', marginBottom: '0.75rem' }}>Cambiar Contraseña de Ingreso</h4>
+              <div style={{ marginBottom: '1.25rem' }}>
+                <h4 style={{ fontSize: '0.9375rem', fontWeight: '750', marginBottom: '0.75rem', color: 'var(--text-primary)' }}>Cambiar Contraseña de Ingreso</h4>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                   <div>
                     <label style={{ display: 'block', fontSize: '0.75rem', color: 'var(--text-secondary)', marginBottom: '0.25rem' }}>Nueva Contraseña</label>
                     <input 
                       type="password" 
                       className="form-control" 
-                      style={{ width: '100%', fontSize: '0.875rem' }}
+                      style={{ width: '100%', fontSize: '0.8125rem' }}
                       value={nuevoPassword}
                       onChange={(e) => setNuevoPassword(e.target.value)}
                       placeholder="Mínimo 4 caracteres"
@@ -652,7 +686,7 @@ export default function DisenoEstructura({ children, pestañaActual, establecerP
                     <input 
                       type="password" 
                       className="form-control" 
-                      style={{ width: '100%', fontSize: '0.875rem' }}
+                      style={{ width: '100%', fontSize: '0.8125rem' }}
                       value={confirmarPassword}
                       onChange={(e) => setConfirmarPassword(e.target.value)}
                       placeholder="Repita la nueva contraseña"
@@ -662,11 +696,11 @@ export default function DisenoEstructura({ children, pestañaActual, establecerP
               </div>
 
               <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1.5rem' }}>
-                <button type="button" onClick={() => setModalConfigAbierto(false)} className="btn btn-secondary flex-1">
+                <button type="button" onClick={() => setModalConfigAbierto(false)} className="btn btn-secondary flex-1" style={{ fontSize: '0.8125rem', padding: '0.5rem' }}>
                   Cancelar
                 </button>
-                <button type="submit" className="btn btn-primary flex-1">
-                  Guardar Cambios
+                <button type="submit" className="btn btn-primary flex-1" style={{ fontSize: '0.8125rem', padding: '0.5rem' }}>
+                  Guardar Configuración
                 </button>
               </div>
             </form>
