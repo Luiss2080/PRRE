@@ -6,8 +6,7 @@ const CLAVE_ESPACIOS = 'prre_espacios';
 const CLAVE_RESERVAS = 'prre_reservas';
 const CLAVE_USUARIOS = 'prre_usuarios';
 
-// Datos iniciales por defecto para el sistema en su primer inicio
-const RECURSOS_INICIALES = [
+// Datos iniciales por defecto para el sistema en su primer iniciconst RECURSOS_INICIALES = [
   { id: 'rec_1', nombre: 'Proyector Epson PowerLite', tipo: 'Dispositivo', cantidadTotal: 5, cantidadDisponible: 5, estado: 'Excelente', descripcion: 'Proyector multimedia con entrada HDMI y control remoto.' },
   { id: 'rec_2', nombre: 'Laptop HP ProBook 440', tipo: 'Dispositivo', cantidadTotal: 25, cantidadDisponible: 25, estado: 'Excelente', descripcion: 'Laptops para clases prácticas, Intel Core i5, 8GB RAM.' },
   { id: 'rec_3', nombre: 'Tablet Lenovo K10', tipo: 'Dispositivo', cantidadTotal: 15, cantidadDisponible: 15, estado: 'Bueno', descripcion: 'Tabletas para lectura y cuestionarios dinámicos.' },
@@ -19,7 +18,15 @@ const RECURSOS_INICIALES = [
   { id: 'rec_9', nombre: 'Diccionario Enciclopédico de Química', tipo: 'Libro', cantidadTotal: 6, cantidadDisponible: 6, estado: 'Bueno', descripcion: 'Libro de referencia esencial para nomenclatura y reacciones químicas.' },
   { id: 'rec_10', nombre: 'Maqueta del Torso Humano Desarmable', tipo: 'Material', cantidadTotal: 2, cantidadDisponible: 2, estado: 'Bueno', descripcion: 'Modelo anatómico con órganos removibles para clases de biología.' },
   { id: 'rec_11', nombre: 'Kit de Experimento Eléctrico Básico', tipo: 'Material', cantidadTotal: 12, cantidadDisponible: 12, estado: 'Excelente', descripcion: 'Kits para armar circuitos eléctricos en serie y paralelo.' },
-  { id: 'rec_12', nombre: 'Calculadora Científica Casio', tipo: 'Dispositivo', cantidadTotal: 30, cantidadDisponible: 30, estado: 'Bueno', descripcion: 'Calculadoras para exámenes de matemáticas y física.' }
+  { id: 'rec_12', nombre: 'Calculadora Científica Casio', tipo: 'Dispositivo', cantidadTotal: 30, cantidadDisponible: 30, estado: 'Bueno', descripcion: 'Calculadoras para exámenes de matemáticas y física.' },
+  { id: 'rec_13', nombre: 'Laptop Dell Latitude 3420', tipo: 'Dispositivo', cantidadTotal: 15, cantidadDisponible: 15, estado: 'Excelente', descripcion: 'Laptops de última generación para diseño y simulaciones.' },
+  { id: 'rec_14', nombre: 'Tablet Samsung Galaxy Tab A8', tipo: 'Dispositivo', cantidadTotal: 20, cantidadDisponible: 20, estado: 'Excelente', descripcion: 'Tabletas ligeras con pantalla HD de 10.5 pulgadas.' },
+  { id: 'rec_15', nombre: 'Kit de Anatomía Ósea Completa', tipo: 'Material', cantidadTotal: 3, cantidadDisponible: 3, estado: 'Bueno', descripcion: 'Esqueleto humano articulado y desmontable para clases de ciencias.' },
+  { id: 'rec_16', nombre: 'Libro de Álgebra Lineal de Grossman', tipo: 'Libro', cantidadTotal: 8, cantidadDisponible: 8, estado: 'Excelente', descripcion: 'Libros oficiales para el área de matemáticas avanzadas.' },
+  { id: 'rec_17', nombre: 'Kit de Termodinámica y Calor', tipo: 'Material', cantidadTotal: 5, cantidadDisponible: 5, estado: 'Bueno', descripcion: 'Equipos y sensores calorimétricos para experimentos térmicos.' },
+  { id: 'rec_18', nombre: 'Proyector Optoma UHD 4K', tipo: 'Dispositivo', cantidadTotal: 2, cantidadDisponible: 2, estado: 'Excelente', descripcion: 'Proyector de alta gama para salón de actos y proyecciones amplias.' },
+  { id: 'rec_19', nombre: 'Libro de Química General de Chang', tipo: 'Libro', cantidadTotal: 10, cantidadDisponible: 10, estado: 'Excelente', descripcion: 'Manuales académicos de química general e inorgánica.' },
+  { id: 'rec_20', nombre: 'Juego de Cristalería de Laboratorio', tipo: 'Material', cantidadTotal: 4, cantidadDisponible: 4, estado: 'Excelente', descripcion: 'Kits de probetas, matraces, vasos de precipitados y tubos de ensayo.' }
 ];
 
 const ESPACIOS_INICIALES = [
@@ -30,7 +37,14 @@ const ESPACIOS_INICIALES = [
   { id: 'esp_5', nombre: 'Aula de Audiovisuales & Cine', capacidad: 40, ubicacion: 'Bloque Sur - Planta Baja', tipo: 'Físico', estado: 'Disponible', descripcion: 'Equipado con Smart TV de 75", sistema de sonido envolvente y cortinas blackout.' },
   { id: 'esp_6', nombre: 'Laboratorio de Robótica y Electrónica', capacidad: 15, ubicacion: 'Bloque Central - 3er Piso', tipo: 'Físico', estado: 'Disponible', descripcion: 'Laboratorio con osciloscopios, estaciones de soldadura y kits Arduino.' },
   { id: 'esp_7', nombre: 'Taller de Arte y Modelado', capacidad: 30, ubicacion: 'Bloque Sur - 2do Piso', tipo: 'Físico', estado: 'Disponible', descripcion: 'Espacio iluminado con caballetes, piletas de lavado y mesas de madera amplias.' },
-  { id: 'esp_8', nombre: 'Gimnasio Techado & Polideportivo', capacidad: 300, ubicacion: 'Bloque Norte - Exterior', tipo: 'Físico', estado: 'Disponible', descripcion: 'Cancha cubierta con gradas, tableros de básquetbol y arcos de futsal.' }
+  { id: 'esp_8', nombre: 'Gimnasio Techado & Polideportivo', capacidad: 300, ubicacion: 'Bloque Norte - Exterior', tipo: 'Físico', estado: 'Disponible', descripcion: 'Cancha cubierta con gradas, tableros de básquetbol y arcos de futsal.' },
+  { id: 'esp_9', nombre: 'Laboratorio de Biología Celular', capacidad: 25, ubicacion: 'Bloque Norte - 2do Piso', tipo: 'Físico', estado: 'Disponible', descripcion: 'Espacio equipado para análisis microbiológico e histológico.' },
+  { id: 'esp_10', nombre: 'Auditorio Nivel Primaria', capacidad: 80, ubicacion: 'Bloque Sur - Planta Alta', tipo: 'Físico', estado: 'Disponible', descripcion: 'Teatro pequeño idóneo para títeres, obras escolares y reuniones.' },
+  { id: 'esp_11', nombre: 'Sala de Consejo de Docentes', capacidad: 20, ubicacion: 'Bloque Central - 1er Piso', tipo: 'Físico', estado: 'Disponible', descripcion: 'Mesa de directorio, proyector fijo y cafetera para juntas de personal.' },
+  { id: 'esp_12', nombre: 'Aula Virtual Google Meet A', capacidad: 250, ubicacion: 'Servidor Virtual U.E.', tipo: 'Virtual', estado: 'Disponible', descripcion: 'Cuenta premium institucional para seminarios web y clases a distancia.' },
+  { id: 'esp_13', nombre: 'Aula Virtual Zoom Pro B', capacidad: 100, ubicacion: 'Servidor Virtual U.E.', tipo: 'Virtual', estado: 'Disponible', descripcion: 'Enlace exclusivo para tutorías grupales y defensas de grado.' },
+  { id: 'esp_14', nombre: 'Laboratorio de Ciencias Mecánicas', capacidad: 18, ubicacion: 'Bloque Norte - Sótano', tipo: 'Físico', estado: 'Disponible', descripcion: 'Equipado con rieles, poleas y sensores Vernier para física elemental.' },
+  { id: 'esp_15', nombre: 'Biblioteca Histórica Física', capacidad: 45, ubicacion: 'Bloque Oeste - Planta Alta', tipo: 'Físico', estado: 'Disponible', descripcion: 'Estanterías con archivos históricos, enciclopedias y mesas de estudio silencioso.' }
 ];
 
 const USUARIOS_INICIALES = [
@@ -38,7 +52,17 @@ const USUARIOS_INICIALES = [
   { id: 'user_2', nombre: 'Profa. María Delgado', email: 'docente@colegio.edu.bo', rol: 'Docente', estado: 'Activo', password: 'user123' },
   { id: 'user_3', nombre: 'Est. Alejandro Vargas', email: 'estudiante@colegio.edu.bo', rol: 'Docente', estado: 'Activo', password: 'user123' },
   { id: 'user_4', fontName: 'Prof. Carlos Choque', nombre: 'Prof. Carlos Choque', email: 'carlos@colegio.edu.bo', rol: 'Docente', estado: 'Activo', password: 'user123' },
-  { id: 'user_5', nombre: 'Profa. Ana Mendoza', email: 'ana@colegio.edu.bo', rol: 'Docente', estado: 'Activo', password: 'user123' }
+  { id: 'user_5', nombre: 'Profa. Ana Mendoza', email: 'ana@colegio.edu.bo', rol: 'Docente', estado: 'Activo', password: 'user123' },
+  { id: 'user_6', nombre: 'Profa. Carmen Ortiz', email: 'carmen@colegio.edu.bo', rol: 'Docente', estado: 'Activo', password: 'user123' },
+  { id: 'user_7', nombre: 'Prof. Roberto Gómez', email: 'roberto@colegio.edu.bo', rol: 'Docente', estado: 'Activo', password: 'user123' },
+  { id: 'user_8', nombre: 'Profa. Julia Quispe', email: 'julia@colegio.edu.bo', rol: 'Docente', estado: 'Activo', password: 'user123' },
+  { id: 'user_9', nombre: 'Prof. Ramiro Beltrán', email: 'ramiro@colegio.edu.bo', rol: 'Docente', estado: 'Activo', password: 'user123' },
+  { id: 'user_10', nombre: 'Profa. Sandra Flores', email: 'sandra@colegio.edu.bo', rol: 'Docente', estado: 'Activo', password: 'user123' },
+  { id: 'user_11', nombre: 'Prof. Fernando Loza', email: 'fernando@colegio.edu.bo', rol: 'Docente', estado: 'Activo', password: 'user123' },
+  { id: 'user_12', nombre: 'Profa. Gabriela Silva', email: 'gabriela@colegio.edu.bo', rol: 'Docente', estado: 'Activo', password: 'user123' },
+  { id: 'user_13', nombre: 'Prof. Hugo Vásquez', email: 'hugo@colegio.edu.bo', rol: 'Docente', estado: 'Activo', password: 'user123' },
+  { id: 'user_14', nombre: 'Profa. Patricia Rojas', email: 'patricia@colegio.edu.bo', rol: 'Docente', estado: 'Activo', password: 'user123' },
+  { id: 'user_15', nombre: 'Prof. Ricardo Aliaga', email: 'ricardo@colegio.edu.bo', rol: 'Docente', estado: 'Activo', password: 'user123' }
 ];
 
 const RESERVAS_INICIALES = [
@@ -297,26 +321,257 @@ const RESERVAS_INICIALES = [
     motivo: 'Práctica libre de escultura en arcilla',
     estado: 'Pendiente',
     fechaCreacion: '2026-07-14 19:30'
+  },
+  {
+    id: 'res_17',
+    tipoRecurso: 'recurso',
+    itemId: 'rec_13',
+    itemName: 'Laptop Dell Latitude 3420',
+    usuarioId: 'user_6',
+    usuarioNombre: 'Profa. Carmen Ortiz',
+    fechaInicio: '2026-07-13',
+    fechaFin: '2026-07-13',
+    horaInicio: '14:00',
+    horaFin: '16:00',
+    cantidad: 5,
+    motivo: 'Simulación de sistemas operativos en redes locales',
+    estado: 'Finalizada',
+    fechaCreacion: '2026-07-11 11:20'
+  },
+  {
+    id: 'res_18',
+    tipoRecurso: 'espacio',
+    itemId: 'esp_9',
+    itemName: 'Laboratorio de Biología Celular',
+    usuarioId: 'user_7',
+    usuarioNombre: 'Prof. Roberto Gómez',
+    fechaInicio: '2026-07-15',
+    fechaFin: '2026-07-15',
+    horaInicio: '09:00',
+    horaFin: '11:00',
+    cantidad: 1,
+    motivo: 'Práctica microbiológica de hongos y levaduras',
+    estado: 'Aprobada',
+    fechaCreacion: '2026-07-14 10:30'
+  },
+  {
+    id: 'res_19',
+    tipoRecurso: 'recurso',
+    itemId: 'rec_12',
+    itemName: 'Calculadora Científica Casio',
+    usuarioId: 'user_8',
+    usuarioNombre: 'Profa. Julia Quispe',
+    fechaInicio: '2026-07-14',
+    fechaFin: '2026-07-14',
+    horaInicio: '08:00',
+    horaFin: '10:00',
+    cantidad: 20,
+    motivo: 'Prueba trimestral de trigonometría y cálculo integral',
+    estado: 'Finalizada',
+    fechaCreacion: '2026-07-12 16:30'
+  },
+  {
+    id: 'res_20',
+    tipoRecurso: 'espacio',
+    itemId: 'esp_10',
+    itemName: 'Auditorio Nivel Primaria',
+    usuarioId: 'user_9',
+    usuarioNombre: 'Prof. Ramiro Beltrán',
+    fechaInicio: '2026-07-16',
+    fechaFin: '2026-07-16',
+    horaInicio: '10:00',
+    horaFin: '11:00',
+    cantidad: 1,
+    motivo: 'Charla sobre valores y convivencia armónica escolar',
+    estado: 'Pendiente',
+    fechaCreacion: '2026-07-14 11:00'
+  },
+  {
+    id: 'res_21',
+    tipoRecurso: 'recurso',
+    itemId: 'rec_11',
+    itemName: 'Kit de Experimento Eléctrico Básico',
+    usuarioId: 'user_10',
+    usuarioNombre: 'Profa. Sandra Flores',
+    fechaInicio: '2026-07-16',
+    fechaFin: '2026-07-16',
+    horaInicio: '14:00',
+    horaFin: '15:00',
+    cantidad: 8,
+    motivo: 'Montaje de circuitos de corriente continua y alterna',
+    estado: 'Pendiente',
+    fechaCreacion: '2026-07-14 17:10'
+  },
+  {
+    id: 'res_22',
+    tipoRecurso: 'espacio',
+    itemId: 'esp_11',
+    itemName: 'Sala de Consejo de Docentes',
+    usuarioId: 'user_1',
+    usuarioNombre: 'Prof. Luis Sanders',
+    fechaInicio: '2026-07-17',
+    fechaFin: '2026-07-17',
+    horaInicio: '08:00',
+    horaFin: '10:00',
+    cantidad: 1,
+    motivo: 'Reunión de coordinación pedagógica y evaluación de fin de ciclo',
+    estado: 'Aprobada',
+    fechaCreacion: '2026-07-13 09:00'
+  },
+  {
+    id: 'res_23',
+    tipoRecurso: 'espacio',
+    itemId: 'esp_12',
+    itemName: 'Aula Virtual Google Meet A',
+    usuarioId: 'user_11',
+    usuarioNombre: 'Prof. Fernando Loza',
+    fechaInicio: '2026-07-15',
+    fechaFin: '2026-07-15',
+    horaInicio: '19:00',
+    horaFin: '20:00',
+    cantidad: 1,
+    motivo: 'Reunión informativa con padres de familia de 6to de secundaria',
+    estado: 'Aprobada',
+    fechaCreacion: '2026-07-14 08:30'
+  },
+  {
+    id: 'res_24',
+    tipoRecurso: 'recurso',
+    itemId: 'rec_18',
+    itemName: 'Proyector Optoma UHD 4K',
+    usuarioId: 'user_12',
+    usuarioNombre: 'Profa. Gabriela Silva',
+    fechaInicio: '2026-07-18',
+    fechaFin: '2026-07-18',
+    horaInicio: '10:00',
+    horaFin: '12:00',
+    cantidad: 1,
+    motivo: 'Proyección de cortometrajes artísticos creados por estudiantes',
+    estado: 'Pendiente',
+    fechaCreacion: '2026-07-14 18:40'
+  },
+  {
+    id: 'res_25',
+    tipoRecurso: 'recurso',
+    itemId: 'rec_15',
+    itemName: 'Kit de Anatomía Ósea Completa',
+    usuarioId: 'user_13',
+    usuarioNombre: 'Prof. Hugo Vásquez',
+    fechaInicio: '2026-07-17',
+    fechaFin: '2026-07-17',
+    horaInicio: '11:00',
+    horaFin: '13:00',
+    cantidad: 1,
+    motivo: 'Clase descriptiva sobre articulaciones y huesos largos',
+    estado: 'Aprobada',
+    fechaCreacion: '2026-07-13 14:00'
+  },
+  {
+    id: 'res_26',
+    tipoRecurso: 'espacio',
+    itemId: 'esp_14',
+    itemName: 'Laboratorio de Ciencias Mecánicas',
+    usuarioId: 'user_14',
+    usuarioNombre: 'Profa. Patricia Rojas',
+    fechaInicio: '2026-07-19',
+    fechaFin: '2026-07-19',
+    horaInicio: '09:00',
+    horaFin: '11:00',
+    cantidad: 1,
+    motivo: 'Práctica de péndulo simple y oscilaciones',
+    estado: 'Pendiente',
+    fechaCreacion: '2026-07-14 15:00'
+  },
+  {
+    id: 'res_27',
+    tipoRecurso: 'recurso',
+    itemId: 'rec_20',
+    itemName: 'Juego de Cristalería de Laboratorio',
+    usuarioId: 'user_15',
+    usuarioNombre: 'Prof. Ricardo Aliaga',
+    fechaInicio: '2026-07-13',
+    fechaFin: '2026-07-13',
+    horaInicio: '11:00',
+    horaFin: '12:00',
+    cantidad: 2,
+    motivo: 'Práctica básica de destilación de agua y medición de densidades',
+    estado: 'Finalizada',
+    fechaCreacion: '2026-07-10 11:30'
+  },
+  {
+    id: 'res_28',
+    tipoRecurso: 'espacio',
+    itemId: 'esp_15',
+    itemName: 'Biblioteca Histórica Física',
+    usuarioId: 'user_2',
+    usuarioNombre: 'Profa. María Delgado',
+    fechaInicio: '2026-07-21',
+    fechaFin: '2026-07-21',
+    horaInicio: '15:00',
+    horaFin: '17:00',
+    cantidad: 1,
+    motivo: 'Investigación bibliográfica de archivos coloniales de Bolivia',
+    estado: 'Pendiente',
+    fechaCreacion: '2026-07-14 19:40'
+  },
+  {
+    id: 'res_29',
+    tipoRecurso: 'recurso',
+    itemId: 'rec_14',
+    itemName: 'Tablet Samsung Galaxy Tab A8',
+    usuarioId: 'user_6',
+    usuarioNombre: 'Profa. Carmen Ortiz',
+    fechaInicio: '2026-07-14',
+    fechaFin: '2026-07-14',
+    horaInicio: '10:00',
+    horaFin: '12:00',
+    cantidad: 12,
+    motivo: 'Aplicación de examen diagnóstico interactivo de geografía',
+    estado: 'Finalizada',
+    fechaCreacion: '2026-07-11 16:50'
+  },
+  {
+    id: 'res_30',
+    tipoRecurso: 'espacio',
+    itemId: 'esp_5',
+    itemName: 'Aula de Audiovisuales & Cine',
+    usuarioId: 'user_7',
+    usuarioNombre: 'Prof. Roberto Gómez',
+    fechaInicio: '2026-07-16',
+    fechaFin: '2026-07-16',
+    horaInicio: '16:00',
+    horaFin: '17:00',
+    cantidad: 1,
+    motivo: 'Proyección especial de película educativa sobre calentamiento global',
+    estado: 'Aprobada',
+    fechaCreacion: '2026-07-14 10:00'
   }
 ];
 
 /**
  * inicializarBD
- * Comprueba e inicializa las colecciones en LocalStorage si no existen previamente.
+ * Comprueba e inicializa las colecciones en LocalStorage si no existen previamente,
+ * o si la base de datos local tiene menor cantidad de elementos que el catálogo inicial actual.
  */
 export const inicializarBD = () => {
-  if (!localStorage.getItem(CLAVE_RECURSOS)) {
+  const recursosExistentes = JSON.parse(localStorage.getItem(CLAVE_RECURSOS)) || [];
+  if (recursosExistentes.length < RECURSOS_INICIALES.length) {
     localStorage.setItem(CLAVE_RECURSOS, JSON.stringify(RECURSOS_INICIALES));
   }
-  if (!localStorage.getItem(CLAVE_ESPACIOS)) {
+
+  const espaciosExistentes = JSON.parse(localStorage.getItem(CLAVE_ESPACIOS)) || [];
+  if (espaciosExistentes.length < ESPACIOS_INICIALES.length) {
     localStorage.setItem(CLAVE_ESPACIOS, JSON.stringify(ESPACIOS_INICIALES));
   }
-  if (!localStorage.getItem(CLAVE_RESERVAS)) {
+
+  const reservasExistentes = JSON.parse(localStorage.getItem(CLAVE_RESERVAS)) || [];
+  if (reservasExistentes.length < RESERVAS_INICIALES.length) {
     localStorage.setItem(CLAVE_RESERVAS, JSON.stringify(RESERVAS_INICIALES));
   }
-  if (!localStorage.getItem(CLAVE_USUARIOS)) {
+
+  const usuariosExistentes = JSON.parse(localStorage.getItem(CLAVE_USUARIOS)) || [];
+  if (usuariosExistentes.length < USUARIOS_INICIALES.length) {
     localStorage.setItem(CLAVE_USUARIOS, JSON.stringify(USUARIOS_INICIALES));
-  }
 };
 
 // Métodos auxiliares de serialización genéricos para LocalStorage

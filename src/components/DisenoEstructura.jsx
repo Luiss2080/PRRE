@@ -859,7 +859,7 @@ if (typeof document !== 'undefined') {
       }
     }
     .profile-menu-row:hover {
-      background-color: rgba(255, 255, 255, 0.04) !important;
+      background-color: var(--border-color) !important;
       color: var(--text-primary) !important;
     }
   `;
