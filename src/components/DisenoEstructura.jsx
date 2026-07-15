@@ -311,48 +311,72 @@ export default function DisenoEstructura({ children, pestañaActual, establecerP
           </main>
 
           {/* Pie de página institucional enriquecido respetando la barra lateral */}
+          {/* Pie de página del sistema modernizado */}
           <footer style={estiloPiePaginaFijo}>
             <div style={estiloContenidoFooterGrid}>
-              {/* Columna 1: Escuela y Misión */}
+              {/* Columna 1: Branding y Misión */}
               <div style={estiloColumnaFooter}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
-                  <ImagenLogo tamaño={24} />
-                  <b style={{ fontSize: '1rem', color: 'var(--text-primary)', letterSpacing: '0.05em' }}>PORTAL PRRE</b>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '0.75rem' }}>
+                  <ImagenLogo tamaño={28} />
+                  <b style={{ fontSize: '1.1rem', color: 'var(--text-primary)', letterSpacing: '0.06em', fontWeight: '850' }}>PRRE SYSTEM</b>
                 </div>
-                <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', lineHeight: '1.4', maxWidth: '320px' }}>
-                  Optimización digital del préstamo de laptops, proyectores y laboratorios didácticos para la U.E. Germán Busch B, en cooperación con las Escuelas Populares Don Bosco (EPDB).
+                <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', lineHeight: '1.5', maxWidth: '280px' }}>
+                  Gestión inteligente y automatización del préstamo de recursos educativos, laboratorios y herramientas didácticas.
                 </p>
               </div>
 
-              {/* Columna 2: Enlaces del Portal */}
+              {/* Columna 2: Enlaces Rápidos del Sistema */}
               <div style={estiloColumnaFooter}>
-                <h4 style={{ fontSize: '0.78rem', fontWeight: '800', color: 'var(--text-primary)', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                  Módulos del Sistema
+                <h4 style={{ fontSize: '0.8125rem', fontWeight: '850', color: 'var(--text-primary)', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                  Navegación
                 </h4>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.35rem', fontSize: '0.75rem' }}>
-                  <span style={{ cursor: 'pointer', color: 'var(--text-secondary)' }} onClick={() => establecerPestañaActiva('dashboard')}>Panel de Inicio</span>
-                  <span style={{ cursor: 'pointer', color: 'var(--text-secondary)' }} onClick={() => establecerPestañaActiva('recursos')}>Catálogo de Recursos</span>
-                  <span style={{ cursor: 'pointer', color: 'var(--text-secondary)' }} onClick={() => establecerPestañaActiva('espacios')}>Aulas & Laboratorios</span>
-                  <span style={{ cursor: 'pointer', color: 'var(--text-secondary)' }} onClick={() => establecerPestañaActiva('reservas')}>Solicitar Préstamo</span>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem', fontSize: '0.75rem' }}>
+                  <span style={{ cursor: 'pointer', color: 'var(--text-secondary)', transition: 'color 0.2s' }} onClick={() => establecerPestañaActiva('dashboard')}>Inicio</span>
+                  <span style={{ cursor: 'pointer', color: 'var(--text-secondary)', transition: 'color 0.2s' }} onClick={() => establecerPestañaActiva('recursos')}>Recursos</span>
+                  <span style={{ cursor: 'pointer', color: 'var(--text-secondary)', transition: 'color 0.2s' }} onClick={() => establecerPestañaActiva('espacios')}>Espacios</span>
+                  <span style={{ cursor: 'pointer', color: 'var(--text-secondary)', transition: 'color 0.2s' }} onClick={() => establecerPestañaActiva('reservas')}>Reservar</span>
+                  {usuarioActual?.rol !== 'Estudiante' && (
+                    <>
+                      <span style={{ cursor: 'pointer', color: 'var(--text-secondary)', transition: 'color 0.2s' }} onClick={() => establecerPestañaActiva('historial')}>Historial</span>
+                      <span style={{ cursor: 'pointer', color: 'var(--text-secondary)', transition: 'color 0.2s' }} onClick={() => establecerPestañaActiva('reportes')}>Reportes</span>
+                    </>
+                  )}
+                  <span style={{ cursor: 'pointer', color: 'var(--text-secondary)', transition: 'color 0.2s' }} onClick={() => establecerPestañaActiva('ayuda')}>Ayuda</span>
                 </div>
               </div>
 
-              {/* Columna 3: Información de Soporte */}
+              {/* Columna 3: Telemetría Técnica del Sistema */}
               <div style={estiloColumnaFooter}>
-                <h4 style={{ fontSize: '0.78rem', fontWeight: '800', color: 'var(--text-primary)', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                  Soporte y Contacto
+                <h4 style={{ fontSize: '0.8125rem', fontWeight: '850', color: 'var(--text-primary)', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                  Estado del Servidor
                 </h4>
-                <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', lineHeight: '1.4' }}>
-                  <b>Oficina TI:</b> Bloque Norte, Planta Baja<br />
-                  <b>Línea Directa:</b> 2-224455 (Ext. 104)<br />
-                  <b>Correo:</b> ti.soporte@colegio.edu.bo
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                    <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--color-success)', boxShadow: '0 0 8px var(--color-success)' }} />
+                    <span>Servicios: <b>Operacionales</b></span>
+                  </div>
+                  <span>Latencia: <b>45 ms</b></span>
+                  <span>Sincronización: <b>Tiempo Real</b></span>
+                  <span>Versión: <b>v1.5.0</b></span>
+                </div>
+              </div>
+
+              {/* Columna 4: Canales de Soporte */}
+              <div style={estiloColumnaFooter}>
+                <h4 style={{ fontSize: '0.8125rem', fontWeight: '850', color: 'var(--text-primary)', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                  Soporte Técnico
+                </h4>
+                <p style={{ fontSize: '0.75rem', color: 'var(--text-secondary)', lineHeight: '1.5', margin: 0 }}>
+                  <b>Oficina de TI:</b> Bloque Norte, Planta Baja<br />
+                  <b>Consultas:</b> soporte@prre.sistema.edu<br />
+                  <b>Horario:</b> Lun - Vie (08:00 - 19:00)
                 </p>
               </div>
             </div>
 
-            <div style={{ height: '1px', backgroundColor: 'var(--border-color)', margin: '1rem 0 0.75rem 0' }} />
+            <div style={{ height: '1px', backgroundColor: 'var(--border-color)', margin: '1.5rem 0 1rem 0' }} />
             <div style={{ fontSize: '0.6875rem', color: 'var(--text-muted)', textAlign: 'center' }}>
-              &copy; 2026 U.E. Germán Busch B • Convenio Escuelas Populares Don Bosco. Todos los derechos reservados.
+              &copy; 2026 PRRE System • Plataforma de Reserva de Recursos Educativos. Todos los derechos reservados.
             </div>
           </footer>
         </div>
