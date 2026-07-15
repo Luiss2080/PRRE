@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useAutenticacion } from '../context/ContextoAutenticacion';
 import { useTema } from '../context/ContextoTema';
-import logoSistemaImg from '../../img/LogoSistema.png';
 import { 
   LayoutDashboard, 
   Package, 
@@ -91,7 +90,7 @@ export default function DisenoEstructura({ children, pestañaActual, establecerP
   // Componente interno para renderizar el logo institucional
   const ImagenLogo = ({ tamaño = 32 }) => (
     <img 
-      src={logoSistemaImg} 
+      src="/LogoSistema.png" 
       alt="Logo Sistema PRRE" 
       style={{ 
         width: `${tamaño}px`, 
