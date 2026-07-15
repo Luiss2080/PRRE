@@ -75,7 +75,9 @@ export default function DisenoEstructura({ children, pestañaActual, establecerP
     { id: 'espacios', etiqueta: 'Espacios', icono: MapPin, roles: ['Administrador', 'Docente', 'Estudiante'] },
     { id: 'reservas', etiqueta: 'Reservar', icono: CalendarCheck, roles: ['Administrador', 'Docente', 'Estudiante'] },
     { id: 'historial', etiqueta: 'Historial', icono: History, roles: ['Administrador', 'Docente'] },
+    { id: 'reportes', etiqueta: 'Reportes', icono: BarChart3, roles: ['Administrador', 'Docente'] },
     { id: 'roles', etiqueta: 'Usuarios & Roles', icono: Users, roles: ['Administrador'] },
+    { id: 'ayuda', etiqueta: 'Ayuda', icono: HelpCircle, roles: ['Administrador', 'Docente', 'Estudiante'] },
   ];
 
   // Filtra las opciones de navegación que el rol del usuario tiene permitido ver
@@ -89,8 +91,8 @@ export default function DisenoEstructura({ children, pestañaActual, establecerP
   // Componente interno para renderizar el logo institucional
   const ImagenLogo = ({ tamaño = 32 }) => (
     <img 
-      src="/LogoInstitucional.png" 
-      alt="Logo PRRE U.E. Germán Busch B" 
+      src={logoSistemaImg} 
+      alt="Logo Sistema PRRE" 
       style={{ 
         width: `${tamaño}px`, 
         height: 'auto', 
