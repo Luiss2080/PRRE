@@ -69,14 +69,14 @@ export default function DisenoEstructura({ children, pestañaActual, establecerP
 
   // Definición de las opciones del menú de navegación según el rol
   const opcionesMenu = [
-    { id: 'dashboard', etiqueta: 'Inicio', icono: LayoutDashboard, roles: ['Administrador', 'Docente', 'Estudiante'] },
-    { id: 'recursos', etiqueta: 'Recursos', icono: Package, roles: ['Administrador', 'Docente', 'Estudiante'] },
-    { id: 'espacios', etiqueta: 'Espacios', icono: MapPin, roles: ['Administrador', 'Docente', 'Estudiante'] },
-    { id: 'reservas', etiqueta: 'Reservar', icono: CalendarCheck, roles: ['Administrador', 'Docente', 'Estudiante'] },
-    { id: 'historial', etiqueta: 'Historial', icono: History, roles: ['Administrador', 'Docente'] },
-    { id: 'reportes', etiqueta: 'Reportes', icono: BarChart3, roles: ['Administrador', 'Docente'] },
-    { id: 'roles', etiqueta: 'Usuarios & Roles', icono: Users, roles: ['Administrador'] },
-    { id: 'ayuda', etiqueta: 'Ayuda', icono: HelpCircle, roles: ['Administrador', 'Docente', 'Estudiante'] },
+    { id: 'dashboard', etiqueta: 'Inicio', descripcion: 'Panel de control y analíticas', icono: LayoutDashboard, roles: ['Administrador', 'Docente', 'Estudiante'] },
+    { id: 'recursos', etiqueta: 'Recursos', descripcion: 'Inventario de equipos y stock', icono: Package, roles: ['Administrador', 'Docente', 'Estudiante'] },
+    { id: 'espacios', etiqueta: 'Espacios', descripcion: 'Aulas y laboratorios', icono: MapPin, roles: ['Administrador', 'Docente', 'Estudiante'] },
+    { id: 'reservas', etiqueta: 'Reservar', descripcion: 'Nueva solicitud de préstamo', icono: CalendarCheck, roles: ['Administrador', 'Docente', 'Estudiante'] },
+    { id: 'historial', etiqueta: 'Historial', descripcion: 'Bitácora general de registros', icono: History, roles: ['Administrador', 'Docente'] },
+    { id: 'reportes', etiqueta: 'Reportes', descripcion: 'Estadísticas e informes', icono: BarChart3, roles: ['Administrador', 'Docente'] },
+    { id: 'roles', etiqueta: 'Usuarios & Roles', descripcion: 'Privilegios y cuentas', icono: Users, roles: ['Administrador'] },
+    { id: 'ayuda', etiqueta: 'Ayuda', descripcion: 'Centro de soporte y FAQs', icono: HelpCircle, roles: ['Administrador', 'Docente', 'Estudiante'] },
   ];
 
   // Filtra las opciones de navegación que el rol del usuario tiene permitido ver
@@ -278,13 +278,41 @@ export default function DisenoEstructura({ children, pestañaActual, establecerP
                           establecerPestañaActiva(opcion.id);
                           cerrarMenuLateral();
                         }}
-                        style={estiloItemNavegacionMovil(estaActivo)}
+                        style={{
+                          ...estiloItemNavegacionMovil(estaActivo),
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '0.85rem',
+                          padding: '0.55rem 0.85rem'
+                        }}
                       >
-                        <Icono size={16} />
-                        <span>{opcion.etiqueta}</span>
+                        <Icono size={18} style={{ color: estaActivo ? 'var(--color-brand-cyan)' : 'rgba(255, 255, 255, 0.7)', flexShrink: 0 }} />
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.1rem', textAlign: 'left' }}>
+                          <span style={{ fontSize: '0.8125rem', fontWeight: '700', color: estaActivo ? 'var(--color-brand-cyan)' : 'rgba(255, 255, 255, 0.95)' }}>{opcion.etiqueta}</span>
+                          <span style={{ fontSize: '0.625rem', color: estaActivo ? 'rgba(0, 229, 255, 0.7)' : 'rgba(255, 255, 255, 0.45)', fontWeight: '500' }}>{opcion.descripcion}</span>
+                        </div>
                       </button>
                     );
                   })}
+                </div>
+              </div>
+
+              {/* Resumen del Sistema en el sidebar */}
+              <div style={{ padding: '0 1rem 1rem 1rem', borderTop: '1px solid rgba(255,255,255,0.06)', marginTop: '0.75rem', paddingTop: '1rem' }}>
+                <span style={estiloTituloSeccionSidebar}>Resumen del Sistema</span>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.65rem', marginTop: '0.75rem' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', alignItems: 'center' }}>
+                    <span style={{ color: 'rgba(255,255,255,0.6)' }}>Equipos de Inventario</span>
+                    <span style={{ color: 'var(--color-brand-cyan)', fontWeight: '750', backgroundColor: 'rgba(0, 229, 255, 0.1)', padding: '0.15rem 0.4rem', borderRadius: '4px' }}>20 Items</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', alignItems: 'center' }}>
+                    <span style={{ color: 'rgba(255,255,255,0.6)' }}>Espacios Activos</span>
+                    <span style={{ color: 'var(--color-brand-gold)', fontWeight: '750', backgroundColor: 'rgba(255, 159, 28, 0.1)', padding: '0.15rem 0.4rem', borderRadius: '4px' }}>15 Aulas</span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', alignItems: 'center' }}>
+                    <span style={{ color: 'rgba(255,255,255,0.6)' }}>Docentes y Personal</span>
+                    <span style={{ color: 'var(--color-success)', fontWeight: '750', backgroundColor: 'rgba(46, 196, 182, 0.1)', padding: '0.15rem 0.4rem', borderRadius: '4px' }}>15 Cuentas</span>
+                  </div>
                 </div>
               </div>
             </div>
