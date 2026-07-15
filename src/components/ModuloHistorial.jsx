@@ -449,6 +449,7 @@ export default function ModuloHistorial() {
               </button>
             </div>
           )}
+        </div>
       </div>
     </div>
   );

@@ -279,6 +279,62 @@ export default function PanelControl({ establecerPestañaActiva }) {
         </div>
       </div>
 
+      {/* Nuevos Gráficos Interactivos de Gestión */}
+      <div className="grid-cols-2" style={{ gap: '2rem', marginBottom: '2rem', marginTop: '2rem' }}>
+        {/* Gráfico 1: Recursos más solicitados */}
+        <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', minHeight: '300px' }}>
+          <h3 style={{ fontSize: '1.125rem', fontWeight: '800', marginBottom: '1.25rem' }}>Recursos Más Solicitados</h3>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem', flexGrow: 1, justifyContent: 'center' }}>
+            {recursosMasSolicitados.length === 0 ? (
+              <span style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', textAlign: 'center' }}>No hay solicitudes de reserva registradas.</span>
+            ) : (
+              recursosMasSolicitados.map((item, idx) => {
+                const pct = Math.round((item.total / maxConteo) * 100);
+                const colors = [
+                  'var(--color-brand-cyan)',
+                  'var(--color-brand-gold)',
+                  'var(--color-success)',
+                  'var(--color-info)',
+                  '#a855f7'
+                ];
+                const color = colors[idx % colors.length];
+                return (
+                  <div key={idx} className="horizontal-bar-row" style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', padding: '0.35rem 0.5rem', borderRadius: '4px', transition: 'background-color 0.2s' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', fontWeight: '700' }}>
+                      <span style={{ color: 'var(--text-primary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '280px' }}>{item.nombre}</span>
+                      <span style={{ color: color }}>{item.total} reservas</span>
+                    </div>
+                    <div style={{ height: '8px', backgroundColor: 'var(--border-color)', borderRadius: '4px', overflow: 'hidden', width: '100%' }}>
+                      <div 
+                        className="h-bar"
+                        style={{ 
+                          height: '100%', 
+                          width: `${pct}%`, 
+                          backgroundColor: color, 
+                          borderRadius: '4px',
+                          '--bar-color-glow': color
+                        }} 
+                      />
+                    </div>
+                  </div>
+                );
+              })
+            )}
+          </div>
+        </div>
+
+        {/* Gráfico 2: Distribución por Estado de Reservas */}
+        <div className="glass-card" style={{ display: 'flex', flexDirection: 'column', minHeight: '300px' }}>
+          <h3 style={{ fontSize: '1.125rem', fontWeight: '800', marginBottom: '1.25rem' }}>Distribución de Reservas</h3>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem', flexGrow: 1, padding: '0 0.5rem' }}>
+            <CirculoProgreso porcentaje={porcAprobadas} color="var(--color-success)" etiqueta="Aprobadas" valor={cantAprobadas} />
+            <CirculoProgreso porcentaje={porcPendientes} color="var(--color-brand-gold)" etiqueta="Pendientes" valor={cantPendientes} />
+            <CirculoProgreso porcentaje={porcFinalizadas} color="var(--color-brand-cyan)" etiqueta="Finalizadas" valor={cantFinalizadas} />
+            <CirculoProgreso porcentaje={porcRechazadasCanceladas} color="var(--color-danger)" etiqueta="Rechazadas/Canc." valor={cantRechazadasCanceladas} />
+          </div>
+        </div>
+      </div>
+
       {/* Grid Principal: Columna Izquierda (Actividad) | Columna Derecha (Gráfico y Acciones) */}
       <div className="grid-cols-2" style={{ gap: '2rem' }}>
         
@@ -412,7 +468,7 @@ export default function PanelControl({ establecerPestañaActiva }) {
             <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', height: '160px', padding: '0 0.5rem', gap: '0.75rem', marginTop: 'auto' }}>
               {datosGrafico.map((data, index) => (
                 <div key={index} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexGrow: 1, height: '100%', justifyContent: 'flex-end' }}>
-                  <div className="chart-bar-container" style={{ width: '100%', position: 'relative', display: 'flex', justifyContent: 'center' }}>
+                  <div className="chart-bar-container" style={{ width: '100%', height: '100%', position: 'relative', display: 'flex', alignItems: 'flex-end', justifyContent: 'center' }}>
                     {/* Tooltip de valor */}
                     <div style={estiloTooltip} className="chart-tooltip">{data.valor} reservas</div>
                     <div 
