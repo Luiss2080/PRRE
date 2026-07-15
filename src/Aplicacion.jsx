@@ -747,6 +747,10 @@ function ContenidoAplicacion() {
         );
       case 'historial':
         return <ModuloHistorial />;
+      case 'reportes':
+        return <ModuloReportes />;
+      case 'ayuda':
+        return <ModuloAyuda />;
       case 'roles':
         if (usuarioActual?.rol !== 'Administrador') {
           setPestañaActualPortal('dashboard');
