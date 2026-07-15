@@ -218,6 +218,30 @@ export default function DisenoEstructura({ children, pestañaActual, establecerP
                     <span>Configuración</span>
                   </button>
 
+                  <button 
+                    onClick={() => {
+                      setMostrarMenuPerfil(false);
+                      establecerPestañaActiva('reservas');
+                    }}
+                    className="profile-menu-row"
+                    style={estiloFilaMenuPerfil}
+                  >
+                    <CalendarCheck size={14} color="var(--color-success)" />
+                    <span>Mis Reservas Activas</span>
+                  </button>
+
+                  <button 
+                    onClick={() => {
+                      setMostrarMenuPerfil(false);
+                      establecerPestañaActiva('ayuda');
+                    }}
+                    className="profile-menu-row"
+                    style={estiloFilaMenuPerfil}
+                  >
+                    <HelpCircle size={14} color="var(--color-brand-cyan-muted)" />
+                    <span>Centro de Soporte & FAQs</span>
+                  </button>
+
                   <div style={{ height: '1px', backgroundColor: 'var(--border-color)', margin: '0.25rem 0' }} />
                   
                   <div style={{ padding: '0.5rem 1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.8125rem' }}>
