@@ -54,9 +54,6 @@ function ContenidoAplicacion() {
   // Estado para la redirección o preselección de recursos
   const [recursoPreseleccionado, setRecursoPreseleccionado] = useState(null);
 
-  // Estado para la barra de avisos institucionales
-  const [mostrarAviso, setMostrarAviso] = useState(true);
-
   // Estado para el panel de Preguntas Frecuentes (FAQ)
   const [indiceFaqAbierto, setIndiceFaqAbierto] = useState(null);
 
@@ -112,17 +109,17 @@ function ContenidoAplicacion() {
     return <PantallaCarga alTerminar={() => setMostrarPantallaCarga(false)} />;
   }
 
-  // Componente interno para el logo institucional
+  // Componente interno para el logo institucional (landing pública)
   const Logo = ({ tamaño = 32 }) => (
-    <img 
-      src="/LogoSistema.png" 
-      alt="Logo PRRE" 
-      style={{ 
-        width: `${tamaño}px`, 
-        height: 'auto', 
+    <img
+      src="/LogoInstitucional.png"
+      alt="Logo U.E. Germán Busch B"
+      style={{
+        width: `${tamaño}px`,
+        height: 'auto',
         display: 'block',
-        filter: 'drop-shadow(0 2px 8px rgba(0, 229, 255, 0.2))' 
-      }} 
+        filter: 'drop-shadow(0 2px 8px rgba(0,229,255,0.2))'
+      }}
     />
   );
 
@@ -167,24 +164,24 @@ function ContenidoAplicacion() {
                 </div>
               </section>
 
-              {/* Franja de Estadísticas */}
+              {/* Franja de Estadísticas - Datos Reales */}
               <section style={estiloFranjaStats}>
                 <div style={estiloGridFranjaStats} className="grid-cols-4">
                   <div style={estiloItemFranjaStats}>
-                    <span style={estiloNumeroFranjaStats}>120+</span>
-                    <span style={estiloEtiquetaFranjaStats}>Usuarios Activos</span>
+                    <span style={estiloNumeroFranjaStats}>591</span>
+                    <span style={estiloEtiquetaFranjaStats}>Estudiantes Activos</span>
                   </div>
                   <div style={estiloItemFranjaStats}>
-                    <span style={estiloNumeroFranjaStats}>50+</span>
-                    <span style={estiloEtiquetaFranjaStats}>Equipos Tecnológicos</span>
+                    <span style={estiloNumeroFranjaStats}>40+</span>
+                    <span style={estiloEtiquetaFranjaStats}>Docentes y Administrativos</span>
                   </div>
                   <div style={estiloItemFranjaStats}>
-                    <span style={estiloNumeroFranjaStats}>5</span>
-                    <span style={estiloEtiquetaFranjaStats}>Laboratorios y Aulas</span>
+                    <span style={estiloNumeroFranjaStats}>3</span>
+                    <span style={estiloEtiquetaFranjaStats}>Niveles Educativos</span>
                   </div>
                   <div style={estiloItemFranjaStats}>
-                    <span style={estiloNumeroFranjaStats}>98%</span>
-                    <span style={estiloEtiquetaFranjaStats}>Tasa de Aprobación</span>
+                    <span style={estiloNumeroFranjaStats}>29+</span>
+                    <span style={estiloEtiquetaFranjaStats}>Años de Trayectoria</span>
                   </div>
                 </div>
               </section>
@@ -280,41 +277,51 @@ function ContenidoAplicacion() {
             </>
           );
 
-        // --- VISTA SOBRE NOSOTROS ---
+        // --- VISTA SOBRE EL PORTAL ---
         case 'nosotros':
           return (
-            <div style={{ maxWidth: '900px', margin: '0 auto', padding: '2rem 1rem' }}>
-              <div className="glass-card" style={{ padding: '2.5rem' }}>
-                <h2 className="gradient-text" style={{ fontSize: '2rem', marginBottom: '1.5rem' }}>Nuestra Institución</h2>
-                
-                <p style={{ color: 'var(--text-secondary)', lineHeight: '1.7', marginBottom: '1.25rem', fontSize: '1.05rem' }}>
-                  La <b>Unidad Educativa Germán Busch B</b> fue fundada en <b>1993</b> con el firme propósito de impartir educación técnico-humanística de primer nivel a la juventud del departamento. Afiliada a las <b>Escuelas Populares Don Bosco (EPDB)</b>, la institución prioriza la enseñanza de las tecnologías de la información, electrónica, física aplicada y robótica industrial.
-                </p>
-
-                <div 
-                  style={{ 
-                    display: 'flex', 
-                    gap: '1.5rem', 
-                    backgroundColor: 'rgba(0, 229, 255, 0.03)', 
-                    border: '1px solid var(--border-color)', 
-                    padding: '1.5rem', 
-                    borderRadius: 'var(--border-radius-md)',
-                    alignItems: 'center',
-                    marginBottom: '1.5rem'
-                  }}
-                >
-                  <Logo tamaño={70} />
+            <div style={{ maxWidth: '960px', margin: '0 auto', padding: '2.5rem 1rem' }}>
+              {/* Cabecera */}
+              <div className="glass-card" style={{ padding: '2.5rem', marginBottom: '1.5rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', marginBottom: '1.5rem' }}>
+                  <Logo tamaño={64} />
                   <div>
-                    <h4 style={{ fontSize: '1rem', fontWeight: '800', marginBottom: '0.25rem', color: 'var(--color-brand-cyan-muted)' }}>Misión del Portal PRRE</h4>
-                    <p style={{ fontSize: '0.875rem', color: 'var(--text-secondary)', lineHeight: '1.6' }}>
-                      Brindar un canal digital transparente y organizado para que docentes y estudiantes accedan con equidad y de manera ordenada al material educativo y laboratorios de la escuela, previniendo choques de agenda y prolongando el ciclo de vida del equipamiento mediante reportes de mantenimiento.
+                    <h2 className="gradient-text" style={{ fontSize: '1.75rem', marginBottom: '0.35rem' }}>Sobre el Portal PRRE</h2>
+                    <p style={{ color: 'var(--text-muted)', fontSize: '0.875rem', fontWeight: '600' }}>
+                      Plataforma de Reserva de Recursos Educativos • U.E. Germán Busch B
                     </p>
                   </div>
                 </div>
+                <p style={{ color: 'var(--text-secondary)', lineHeight: '1.75', fontSize: '1rem' }}>
+                  El sistema <b>PRRE</b> es una plataforma digital diseñada en cooperación con las <b>Escuelas Populares Don Bosco (EPDB)</b>
+                  para optimizar el préstamo y reserva de recursos educativos, laboratorios y herramientas didácticas de la
+                  <b>Unidad Educativa Germán Busch "B"</b>, ubicada en Shinahota, Provincia Tiraque, Cochabamba.
+                </p>
+              </div>
 
-                <h3 style={{ fontSize: '1.25rem', marginBottom: '0.75rem', marginTop: '2rem' }}>Cooperación EPDB</h3>
-                <p style={{ color: 'var(--text-secondary)', lineHeight: '1.7', fontSize: '0.95rem' }}>
-                  Bajo la metodología salesiana, fomentamos que la tecnología esté al alcance de todos. El portal PRRE es parte de la iniciativa de transformación digital escolar impulsada por el convenio de Escuelas Populares Don Bosco para modernizar la administración de recursos didácticos en Bolivia.
+              {/* Cards de objetivos */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1rem', marginBottom: '1.5rem' }}>
+                {[
+                  { titulo: 'Misión', texto: 'Brindar acceso equitativo y organizado a los recursos educativos de la institución, previniendo conflictos de horario y prolongando la vida útil del equipamiento.', color: 'var(--color-brand-cyan-muted)' },
+                  { titulo: 'Visión', texto: 'Convertirse en el referente de administración digital escolar en la región del Chapáre, promoviendo la transformación tecnológica salesiana.', color: 'var(--color-brand-gold)' },
+                  { titulo: 'Valores', texto: 'Transparencia, equidad, responsabilidad y compromiso con la formación integral de docentes y estudiantes de la U.E.', color: 'var(--color-success)' },
+                ].map(card => (
+                  <div key={card.titulo} className="glass-card" style={{ padding: '1.5rem', borderTop: `3px solid ${card.color}` }}>
+                    <h4 style={{ color: card.color, marginBottom: '0.5rem', fontSize: '0.9375rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.04em' }}>{card.titulo}</h4>
+                    <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', lineHeight: '1.65' }}>{card.texto}</p>
+                  </div>
+                ))}
+              </div>
+
+              {/* Cooperación EPDB */}
+              <div className="glass-card" style={{ padding: '2rem' }}>
+                <h3 style={{ fontSize: '1.125rem', marginBottom: '0.75rem', color: 'var(--color-brand-cyan-muted)' }}>Cooperación con Escuelas Populares Don Bosco</h3>
+                <p style={{ color: 'var(--text-secondary)', lineHeight: '1.75', fontSize: '0.9375rem' }}>
+                  Bajo la filosofía salesiana, fomentamos que la tecnología esté al alcance de todos los estudiantes del Chapáre.
+                  El portal PRRE es parte de la iniciativa de transformación digital impulsada por el convenio EPDB
+                  para modernizar la administración de recursos didácticos en Bolivia.
+                  En 2019, la A.L.D. de Cochabamba reconoció a la institución mediante la <b>Ley N° 147/2018-2019</b> por su aporte
+                  a la educación de niños y jóvenes de la región.
                 </p>
               </div>
             </div>
@@ -382,6 +389,169 @@ function ContenidoAplicacion() {
             </div>
           );
 
+        // --- VISTA INSTITUCIÓN ---
+        case 'institucion':
+          return (
+            <div style={{ maxWidth: '1060px', margin: '0 auto', padding: '2.5rem 1rem' }}>
+              {/* Encabezado institucional */}
+              <div className="glass-card" style={{ padding: '2.5rem', marginBottom: '1.5rem', borderTop: '3px solid var(--color-brand-cyan-muted)' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
+                  <Logo tamaño={80} />
+                  <div>
+                    <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontWeight: '700', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '0.25rem' }}>
+                      Estado Plurinacional de Bolivia • Ministerio de Educación
+                    </p>
+                    <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '0.5rem' }}>
+                      Dirección Departamental de Educación Cochabamba • Distrito Tiraque
+                    </p>
+                    <h2 className="gradient-text" style={{ fontSize: '1.6rem', lineHeight: '1.2', marginBottom: '0.35rem' }}>U.E. Germán Busch “B”</h2>
+                    <p style={{ color: 'var(--text-secondary)', fontWeight: '700', fontSize: '0.9rem' }}>
+                      Escuelas Populares Don Bosco (EPDB) • Shinahota, Tiraque, Cochabamba
+                    </p>
+                  </div>
+                </div>
+                <p style={{ color: 'var(--text-secondary)', lineHeight: '1.75', fontSize: '0.9375rem', borderTop: '1px solid var(--border-color)', paddingTop: '1.25rem' }}>
+                  Fundada oficialmente el <b>26 de abril de 1993</b>, la Unidad Educativa Germán Busch “B” es una institución dependiente de las
+                  Escuelas Populares Don Bosco, con filosofía orientada a la madurez de niños y jóvenes en Cristo y la Iglesia, enseñando el
+                  evangelio mediante la educación y la evangelización. Actualmente cuenta con <b>591 estudiantes</b> en los tres niveles.
+                  En 2019 fue reconocida por la Asamblea Legislativa Departamental de Cochabamba mediante la <b>Ley N° 147/2018-2019</b>.
+                </p>
+              </div>
+
+              {/* Grid: datos + carrera */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem', marginBottom: '1.5rem' }}>
+                {/* Datos institucionales */}
+                <div className="glass-card" style={{ padding: '1.5rem' }}>
+                  <h3 style={{ fontSize: '1rem', fontWeight: '800', marginBottom: '1rem', color: 'var(--color-brand-cyan-muted)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                    Datos Institucionales
+                  </h3>
+                  <table style={{ width: '100%', fontSize: '0.8125rem', borderCollapse: 'collapse' }}>
+                    <tbody>
+                      {[
+                        ['Código SIE', '80830066'],
+                        ['Cód. Edificio Escolar', '80830068'],
+                        ['Res. Administrativa', 'N° 0752/2000'],
+                        ['Res. Ministerial', '26/04/1993'],
+                        ['Municipio', 'Shinahota'],
+                        ['Provincia', 'Tiraque, Cochabamba'],
+                        ['Dependencia', 'Convenio EPDB'],
+                        ['Director', 'José Antonio Mendizábal M.'],
+                        ['Cód. CIE Director', 'CIE: 808300066'],
+                        ['Correo', 'dir.germanbuschb@gmail.com'],
+                        ['Bachillerato', 'Técnico Humanístico (BTH)'],
+                        ['Carreras', 'Electricidad / Secretariado'],
+                      ].map(([clave, valor]) => (
+                        <tr key={clave} style={{ borderBottom: '1px solid var(--border-color)' }}>
+                          <td style={{ padding: '0.5rem 0.25rem', color: 'var(--text-muted)', fontWeight: '700', width: '45%' }}>{clave}</td>
+                          <td style={{ padding: '0.5rem 0.25rem', color: 'var(--text-primary)', fontWeight: '600' }}>{valor}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+
+                {/* Plantilla docente */}
+                <div className="glass-card" style={{ padding: '1.5rem' }}>
+                  <h3 style={{ fontSize: '1rem', fontWeight: '800', marginBottom: '1rem', color: 'var(--color-brand-gold)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                    Plantilla Docente 2024
+                  </h3>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+                    {[
+                      { nivel: 'Nivel Inicial', maestros: 4, color: '#6366F1' },
+                      { nivel: 'Nivel Primario', maestros: 20, color: 'var(--color-brand-cyan-muted)' },
+                      { nivel: 'Nivel Secundario (BTH)', maestros: 16, color: 'var(--color-brand-gold)' },
+                      { nivel: 'Personal Administrativo', maestros: 3, color: 'var(--color-success)' },
+                    ].map(item => (
+                      <div key={item.nivel}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.3rem', fontSize: '0.8125rem' }}>
+                          <span style={{ fontWeight: '700', color: 'var(--text-primary)' }}>{item.nivel}</span>
+                          <span style={{ color: item.color, fontWeight: '800' }}>{item.maestros} personas</span>
+                        </div>
+                        <div style={{ height: '6px', backgroundColor: 'rgba(255,255,255,0.06)', borderRadius: '99px', overflow: 'hidden' }}>
+                          <div style={{ height: '100%', width: `${(item.maestros / 20) * 100}%`, backgroundColor: item.color, borderRadius: '99px', transition: 'width 1s ease' }} />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div style={{ marginTop: '1.5rem', padding: '1rem', backgroundColor: 'rgba(0,229,255,0.04)', borderRadius: 'var(--border-radius-sm)', border: '1px solid var(--border-color)' }}>
+                    <p style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)', lineHeight: '1.65' }}>
+                      <b style={{ color: 'var(--color-brand-cyan-muted)' }}>Primera promoción:</b> Graduados en 1994 con 9 estudiantes bachilleres.<br />
+                      <b style={{ color: 'var(--color-brand-gold)' }}>XXIX aniversario</b> de vida institucional celebrado con reconocimiento legislativo departamental.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Ubicación e historia */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1rem' }}>
+                {/* Mapa embed */}
+                <div className="glass-card" style={{ padding: '1.5rem' }}>
+                  <h3 style={{ fontSize: '1rem', fontWeight: '800', marginBottom: '1rem', color: 'var(--color-success)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                    Ubicación
+                  </h3>
+                  <div style={{ borderRadius: 'var(--border-radius-sm)', overflow: 'hidden', marginBottom: '0.75rem' }}>
+                    <iframe
+                      src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d947.3!2d-65.2408588!3d-16.9951941!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x93e44fccf9852c73%3A0x58afa85344fc4c76!2sColegio%20German%20Busch%20%22B%22!5e0!3m2!1ses!2sbo!4v1234567890"
+                      width="100%"
+                      height="200"
+                      style={{ border: 0, display: 'block' }}
+                      allowFullScreen
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      title="Mapa U.E. Germán Busch B"
+                    />
+                  </div>
+                  <div style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)', display: 'flex', flexDirection: 'column', gap: '0.35rem' }}>
+                    <span><b>Dirección:</b> 2Q35+WMC, Shinahota, Bolivia</span>
+                    <span><b>Municipio:</b> Shinahota • Provincia Tiraque</span>
+                    <span><b>Departamento:</b> Cochabamba, Bolivia</span>
+                    <a
+                      href="https://maps.app.goo.gl/QS8SQA6X8BByZuZa7"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="btn btn-secondary"
+                      style={{ marginTop: '0.5rem', fontSize: '0.8125rem', padding: '0.5rem 1rem', textDecoration: 'none' }}
+                    >
+                      Ver en Google Maps →
+                    </a>
+                  </div>
+                </div>
+
+                {/* Reseña histórica */}
+                <div className="glass-card" style={{ padding: '1.5rem', maxHeight: '420px', overflowY: 'auto' }}>
+                  <h3 style={{ fontSize: '1rem', fontWeight: '800', marginBottom: '1rem', color: 'var(--text-primary)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+                    Reseña Histórica
+                  </h3>
+                  <div style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)', lineHeight: '1.7', display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+                    <p>
+                      El <b style={{ color: 'var(--color-brand-cyan-muted)' }}>26 de abril de 1993</b> se obtuvo la Resolución Ministerial que legalizaba el
+                      funcionamiento de los niveles Intermedio y Medio bajo la supervisión del Supervisor Regional Rural Chapáre Tropical,
+                      Prof. Leónidas Torres Luján, siendo director el Prof. Pedro Cruz Flores.
+                    </p>
+                    <p>
+                      La primera Junta Escolar de Padres de Familia estuvo presidida por Manuel Henry Flores.
+                      La <b style={{ color: 'var(--color-brand-gold)' }}>primera Promoción</b> se graduó en 1994 con 9 estudiantes bachilleres.
+                    </p>
+                    <p>
+                      Cuenta con Resolución Administrativa N° 0752/2000 y Código SIE: 80830066. Tiene sus tres niveles
+                      Inicial, Primario y Secundario, perteneciente al área curricular de Educación REGULAR, de dependencia CONVENIO.
+                    </p>
+                    <p>
+                      En 2019, en ocasión de celebrar los XXVI años de vida institucional, fue reconocida por la <b>Asamblea Legislativa
+                      Departamental de Cochabamba</b> mediante la <b style={{ color: 'var(--color-brand-cyan-muted)' }}>Ley N° 147/2018-2019</b> por su
+                      aporte a la educación de la región.
+                    </p>
+                    <p>
+                      Actualmente es consolidada como <b>Bachillerato Técnico Humanístico (BTH)</b> con dos carreras:
+                      <b style={{ color: 'var(--color-brand-gold)' }}>Electricidad</b> y <b style={{ color: 'var(--color-brand-gold)' }}>Secretariado</b>.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+
         // --- VISTA DE PREGUNTAS FRECUENTES (FAQ) ---
         case 'faq':
           const listaFaq = [
@@ -435,10 +605,10 @@ function ContenidoAplicacion() {
                   <form onSubmit={alEnviarContacto}>
                     <div className="form-group">
                       <label className="form-label">Nombre Completo</label>
-                      <input 
-                        type="text" 
-                        className="form-input" 
-                        placeholder="Ej. María Quiroga" 
+                      <input
+                        type="text"
+                        className="form-input"
+                        placeholder="Ej. María Quiroga"
                         value={nombreContacto}
                         onChange={(e) => setNombreContacto(e.target.value)}
                         required
@@ -446,10 +616,10 @@ function ContenidoAplicacion() {
                     </div>
                     <div className="form-group">
                       <label className="form-label">Correo Institucional</label>
-                      <input 
-                        type="email" 
-                        className="form-input" 
-                        placeholder="m.quiroga@colegio.edu.bo" 
+                      <input
+                        type="email"
+                        className="form-input"
+                        placeholder="m.quiroga@colegio.edu.bo"
                         value={emailContacto}
                         onChange={(e) => setEmailContacto(e.target.value)}
                         required
@@ -457,9 +627,9 @@ function ContenidoAplicacion() {
                     </div>
                     <div className="form-group">
                       <label className="form-label">Detalle de la consulta / Reporte</label>
-                      <textarea 
-                        className="form-textarea" 
-                        placeholder="Escriba aquí los detalles..." 
+                      <textarea
+                        className="form-textarea"
+                        placeholder="Escriba aquí los detalles..."
                         rows="4"
                         value={mensajeContacto}
                         onChange={(e) => setMensajeContacto(e.target.value)}
@@ -473,52 +643,54 @@ function ContenidoAplicacion() {
                   </form>
                 </div>
 
-                {/* Tarjeta de Información Física */}
+                {/* Tarjeta de Información Institucional */}
                 <div className="contact-card-info">
-                  <h3 style={{ fontSize: '1.25rem', color: 'var(--text-primary)' }}>Oficina de Administración</h3>
-                  
+                  <h3 style={{ fontSize: '1.25rem', color: 'var(--text-primary)', marginBottom: '0.25rem' }}>Oficina de Dirección</h3>
+                  <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginBottom: '1rem' }}>U.E. Germán Busch “B” • Escuelas Populares Don Bosco</p>
+
                   <div className="contact-info-item">
-                    <div className="contact-icon-wrapper">
-                      <MapPin size={18} />
-                    </div>
+                    <div className="contact-icon-wrapper"><MapPin size={18} /></div>
                     <div>
                       <span style={{ fontWeight: '700', fontSize: '0.875rem', display: 'block' }}>Dirección Física</span>
                       <span style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)' }}>
-                        Bloque Administrativo, Planta Baja, Oficina de Soporte TI. Miraflores, La Paz.
+                        2Q35+WMC, Shinahota, Tiraque, Cochabamba, Bolivia
                       </span>
                     </div>
                   </div>
 
                   <div className="contact-info-item">
-                    <div className="contact-icon-wrapper">
-                      <Phone size={18} />
-                    </div>
+                    <div className="contact-icon-wrapper"><Phone size={18} /></div>
                     <div>
-                      <span style={{ fontWeight: '700', fontSize: '0.875rem', display: 'block' }}>Línea Telefónica</span>
-                      <span style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)' }}>2-224455 (Ext. 104)</span>
+                      <span style={{ fontWeight: '700', fontSize: '0.875rem', display: 'block' }}>Central Telefónica Escolar</span>
+                      <span style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)' }}>(+591) Oficina Dirección EPDB</span>
                     </div>
                   </div>
 
                   <div className="contact-info-item">
-                    <div className="contact-icon-wrapper">
-                      <Mail size={18} />
-                    </div>
+                    <div className="contact-icon-wrapper"><Mail size={18} /></div>
                     <div>
-                      <span style={{ fontWeight: '700', fontSize: '0.875rem', display: 'block' }}>Correo de Soporte</span>
-                      <span style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)' }}>ti.soporte@colegio.edu.bo</span>
+                      <span style={{ fontWeight: '700', fontSize: '0.875rem', display: 'block' }}>Correo de Soporte TI</span>
+                      <span style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)' }}>soporte@prre.sistema.edu</span>
                     </div>
                   </div>
 
                   <div className="contact-info-item">
-                    <div className="contact-icon-wrapper">
-                      <Globe size={18} />
-                    </div>
+                    <div className="contact-icon-wrapper"><Globe size={18} /></div>
                     <div>
                       <span style={{ fontWeight: '700', fontSize: '0.875rem', display: 'block' }}>Plataforma EPDB</span>
-                      <a href="https://www.epdb.org.bo" target="_blank" rel="noopener noreferrer" style={{ fontSize: '0.8125rem', color: 'var(--color-brand-cyan-muted)', textDecoration: 'none', fontWeight: '600' }}>
-                        www.epdb.org.bo
+                      <a href="https://www.donbosco.edu.bo" target="_blank" rel="noopener noreferrer"
+                        style={{ fontSize: '0.8125rem', color: 'var(--color-brand-cyan-muted)', textDecoration: 'none', fontWeight: '600' }}>
+                        www.donbosco.edu.bo
                       </a>
                     </div>
+                  </div>
+
+                  <div style={{ marginTop: 'auto', padding: '1rem', backgroundColor: 'rgba(0,229,255,0.04)', borderRadius: 'var(--border-radius-sm)', border: '1px solid var(--border-color)' }}>
+                    <p style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)', lineHeight: '1.6' }}>
+                      <b>Director:</b> José Antonio Mendizábal Maldonado<br />
+                      <b>CIE:</b> 808300066<br />
+                      <b>Cód. SIE:</b> 80830066
+                    </p>
                   </div>
                 </div>
               </div>
@@ -532,21 +704,6 @@ function ContenidoAplicacion() {
 
     return (
       <div style={estiloEnvolturaLanding}>
-        {/* Barra de avisos */}
-        {mostrarAviso && (
-          <div style={estiloBarraAviso}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', justifyContent: 'center', flexGrow: 1, padding: '0 1rem' }}>
-              <AlertTriangle size={16} />
-              <span>
-                <b>Aviso:</b> El sábado 12 de julio se realizará el mantenimiento preventivo anual de las laptops HP ProBook. Tomar previsiones.
-              </span>
-            </div>
-            <button onClick={() => setMostrarAviso(false)} style={estiloBotonCerrarAviso}>
-              <X size={16} />
-            </button>
-          </div>
-        )}
-
         {/* Encabezado Público */}
         <header style={estiloEncabezadoLanding}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
@@ -571,42 +728,13 @@ function ContenidoAplicacion() {
 
           {/* Navegación de pestañas públicas */}
           <nav className="header-nav">
-            <button 
-              onClick={() => setLandingTab('inicio')}
-              className={`header-nav-link ${pestañaActualPublico === 'inicio' ? 'active' : ''}`}
-            >
-              Inicio
-            </button>
-            <button 
-              onClick={() => setLandingTab('nosotros')}
-              className={`header-nav-link ${pestañaActualPublico === 'nosotros' ? 'active' : ''}`}
-            >
-              Sobre el Portal
-            </button>
-            <button 
-              onClick={() => setLandingTab('catalogo')}
-              className={`header-nav-link ${pestañaActualPublico === 'catalogo' ? 'active' : ''}`}
-            >
-              Catálogo de Recursos
-            </button>
-            <button 
-              onClick={() => setLandingTab('espacios')}
-              className={`header-nav-link ${pestañaActualPublico === 'espacios' ? 'active' : ''}`}
-            >
-              Aulas & Espacios
-            </button>
-            <button 
-              onClick={() => setLandingTab('faq')}
-              className={`header-nav-link ${pestañaActualPublico === 'faq' ? 'active' : ''}`}
-            >
-              Preguntas Frecuentes
-            </button>
-            <button 
-              onClick={() => setLandingTab('contacto')}
-              className={`header-nav-link ${pestañaActualPublico === 'contacto' ? 'active' : ''}`}
-            >
-              Contacto
-            </button>
+            <button onClick={() => setLandingTab('inicio')} className={`header-nav-link ${pestañaActualPublico === 'inicio' ? 'active' : ''}`}>Inicio</button>
+            <button onClick={() => setLandingTab('nosotros')} className={`header-nav-link ${pestañaActualPublico === 'nosotros' ? 'active' : ''}`}>Sobre el Portal</button>
+            <button onClick={() => setLandingTab('institucion')} className={`header-nav-link ${pestañaActualPublico === 'institucion' ? 'active' : ''}`}>Institución</button>
+            <button onClick={() => setLandingTab('catalogo')} className={`header-nav-link ${pestañaActualPublico === 'catalogo' ? 'active' : ''}`}>Catálogo</button>
+            <button onClick={() => setLandingTab('espacios')} className={`header-nav-link ${pestañaActualPublico === 'espacios' ? 'active' : ''}`}>Espacios</button>
+            <button onClick={() => setLandingTab('faq')} className={`header-nav-link ${pestañaActualPublico === 'faq' ? 'active' : ''}`}>FAQ</button>
+            <button onClick={() => setLandingTab('contacto')} className={`header-nav-link ${pestañaActualPublico === 'contacto' ? 'active' : ''}`}>Contacto</button>
           </nav>
 
           {/* Controles de autenticación y tema */}
@@ -642,15 +770,15 @@ function ContenidoAplicacion() {
 
         {/* Pie de página público */}
         <footer style={estiloPiePaginaLanding}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', marginBottom: '0.5rem' }}>
-            <Logo size={24} />
-            <b>Portal PRRE</b>
-          </div>
-          <div>
-            U. E. Germán Busch B • Convenio Escuelas Populares Don Bosco (EPDB)
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.65rem', marginBottom: '0.5rem' }}>
+            <Logo tamaño={28} />
+            <div style={{ textAlign: 'left' }}>
+              <b style={{ display: 'block', fontSize: '0.9rem' }}>U.E. Germán Busch “B”</b>
+              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>Escuelas Populares Don Bosco (EPDB)</span>
+            </div>
           </div>
           <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: '0.25rem' }}>
-            &copy; 2026 Reservas Educativas. Todos los derechos reservados.
+            Shinahota, Tiraque, Cochabamba, Bolivia • &copy; 2026 Portal PRRE. Todos los derechos reservados.
           </div>
         </footer>
 
@@ -683,6 +811,7 @@ function ContenidoAplicacion() {
                 {[
                   { id: 'inicio', label: 'Inicio' },
                   { id: 'nosotros', label: 'Sobre el Portal' },
+                  { id: 'institucion', label: 'Institución' },
                   { id: 'catalogo', label: 'Catálogo de Recursos' },
                   { id: 'espacios', label: 'Aulas & Espacios' },
                   { id: 'faq', label: 'Preguntas Frecuentes' },
