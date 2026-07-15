@@ -29,7 +29,7 @@ import {
  * incluyendo la barra de navegación superior (Navbar) y el panel lateral colapsable (Sidebar/Drawer).
  */
 export default function DisenoEstructura({ children, pestañaActual, establecerPestañaActiva }) {
-  const { usuarioActual, cerrarSesion } = useAutenticacion();
+  const { usuarioActual, cerrarSesion, actualizarUsuario } = useAutenticacion();
   const { alternarTema, esOscuro } = useTema();
   const [menuLateralAbierto, setMenuLateralAbierto] = useState(false);
   const [mostrarMenuPerfil, setMostrarMenuPerfil] = useState(false);
@@ -39,27 +39,65 @@ export default function DisenoEstructura({ children, pestañaActual, establecerP
   const [confirmarPassword, setConfirmarPassword] = useState('');
   const [recibirAlertas, setRecibirAlertas] = useState(true);
 
+  // Estados para la edición de perfil
+  const [editandoPerfil, setEditandoPerfil] = useState(false);
+  const [nombreEdit, setNombreEdit] = useState('');
+  const [emailEdit, setEmailEdit] = useState('');
+  const [telefonoEdit, setTelefonoEdit] = useState('');
+  const [cargoEdit, setCargoEdit] = useState('');
+
+  // Estados para configuración adicional
+  const [pestañaPredeterminada, setPestañaPredeterminada] = useState(localStorage.getItem('prre_pestaña_predeterminada') || 'dashboard');
+  const [tablasCompactas, setTablasCompactas] = useState(localStorage.getItem('prre_tablas_compactas') === 'true');
+
+  // Inicializar campos de edición al cargar o cambiar el usuario
+  React.useEffect(() => {
+    if (usuarioActual) {
+      setNombreEdit(usuarioActual.nombre || '');
+      setEmailEdit(usuarioActual.email || '');
+      setTelefonoEdit(usuarioActual.telefono || 'No especificado');
+      setCargoEdit(usuarioActual.cargo || 'Docente de Materia');
+    }
+  }, [usuarioActual, modalPerfilAbierto]);
+
+  const alGuardarPerfil = (e) => {
+    e.preventDefault();
+    if (!nombreEdit.trim() || !emailEdit.trim()) {
+      alert('El nombre y el correo electrónico no pueden estar vacíos.');
+      return;
+    }
+    actualizarUsuario({
+      id: usuarioActual.id,
+      nombre: nombreEdit,
+      email: emailEdit,
+      telefono: telefonoEdit,
+      cargo: cargoEdit,
+    });
+    alert('¡Su perfil ha sido actualizado con éxito!');
+    setEditandoPerfil(false);
+  };
+
   const alGuardarConfiguracion = (e) => {
     e.preventDefault();
-    if (nuevoPassword !== confirmarPassword) {
-      alert('Las contraseñas no coinciden.');
-      return;
-    }
-    if (nuevoPassword.trim().length < 4) {
-      alert('La contraseña debe tener al menos 4 caracteres.');
-      return;
-    }
     
-    const usuarioActualizado = { ...usuarioActual, password: nuevoPassword };
-    const usuarios = JSON.parse(localStorage.getItem('prre_usuarios') || '[]');
-    const idx = usuarios.findIndex(u => u.id === usuarioActual.id);
-    if (idx !== -1) {
-      usuarios[idx].password = nuevoPassword;
-      localStorage.setItem('prre_usuarios', JSON.stringify(usuarios));
+    if (nuevoPassword.trim()) {
+      if (nuevoPassword !== confirmarPassword) {
+        alert('Las contraseñas nuevas no coinciden.');
+        return;
+      }
+      if (nuevoPassword.trim().length < 4) {
+        alert('La contraseña debe tener al menos 4 caracteres.');
+        return;
+      }
+      actualizarUsuario({
+        id: usuarioActual.id,
+        password: nuevoPassword
+      });
     }
-    
-    localStorage.setItem('prre_session', JSON.stringify(usuarioActualizado));
+
     localStorage.setItem('prre_notif_alertas', recibirAlertas ? 'true' : 'false');
+    localStorage.setItem('prre_pestaña_predeterminada', pestañaPredeterminada);
+    localStorage.setItem('prre_tablas_compactas', tablasCompactas ? 'true' : 'false');
     
     alert('Configuración guardada exitosamente.');
     setModalConfigAbierto(false);
