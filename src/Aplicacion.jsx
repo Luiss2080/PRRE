@@ -10,7 +10,10 @@ import ModuloEspacios from './components/ModuloEspacios';
 import ModuloReservas from './components/ModuloReservas';
 import ModuloHistorial from './components/ModuloHistorial';
 import ModuloRoles from './components/ModuloRoles';
+import ModuloReportes from './components/ModuloReportes';
+import ModuloAyuda from './components/ModuloAyuda';
 import CatalogoRecursos from './components/CatalogoRecursos';
+import logoSistemaImg from '../img/LogoSistema.png';
 import { getEspacios } from './utils/datosSimulados';
 import { 
   Laptop, 
@@ -113,8 +116,8 @@ function ContenidoAplicacion() {
   // Componente interno para el logo institucional
   const Logo = ({ tamaño = 32 }) => (
     <img 
-      src="/LogoInstitucional.png" 
-      alt="Logo PRRE U.E. Germán Busch B" 
+      src={logoSistemaImg} 
+      alt="Logo PRRE" 
       style={{ 
         width: `${tamaño}px`, 
         height: 'auto', 
