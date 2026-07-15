@@ -536,10 +536,10 @@ export default function ModuloReservas({ elementoPreseleccionado, alLimpiarPrese
       {/* Modal de Solicitud de Reserva */}
       {modalAbierto && (
         <div className="modal-overlay">
-          <div className="modal-content" style={{ maxWidth: '520px' }}>
-            <div className="modal-header">
-              <h2 style={{ fontSize: '1.25rem' }}>
-                Solicitud de Reserva de Recurso
+          <div className="modal-content" style={{ maxWidth: '480px' }}>
+            <div className="modal-header" style={{ padding: '1rem 1.25rem' }}>
+              <h2 style={{ fontSize: '1.125rem', fontWeight: '800' }}>
+                Nueva Reserva
               </h2>
               <button 
                 onClick={() => setModalAbierto(false)}
@@ -549,58 +549,61 @@ export default function ModuloReservas({ elementoPreseleccionado, alLimpiarPrese
               </button>
             </div>
 
-            <form onSubmit={alGuardar}>
-              <div className="modal-body">
+            <form onSubmit={alGuardar} style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden', flexGrow: 1 }}>
+              <div className="modal-body" style={{ padding: '1rem', display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
                 {errorFormulario && (
                   <div 
                     style={{ 
                       backgroundColor: 'var(--color-danger-bg)', 
                       color: 'var(--color-danger)', 
-                      padding: '0.75rem', 
+                      padding: '0.65rem 0.85rem', 
                       borderRadius: 'var(--border-radius-sm)', 
-                      fontSize: '0.8125rem',
-                      marginBottom: '1rem',
-                      fontWeight: '500'
+                      fontSize: '0.75rem',
+                      fontWeight: '650',
+                      lineHeight: '1.3'
                     }}
                   >
                     {errorFormulario}
                   </div>
                 )}
 
-                {/* Tipo de Recurso (Radio buttons) */}
-                <div className="form-group">
-                  <label className="form-label">¿Qué tipo de recurso desea reservar?</label>
-                  <div style={{ display: 'flex', gap: '1rem' }}>
-                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontSize: '0.875rem' }}>
+                {/* Tipo de Recurso (Radio buttons compactos) */}
+                <div className="form-group" style={{ marginBottom: 0 }}>
+                  <label className="form-label" style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-secondary)', marginBottom: '0.25rem', display: 'block' }}>¿Qué reservará?</label>
+                  <div style={{ display: 'flex', gap: '1.25rem', marginTop: '0.15rem' }}>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', cursor: 'pointer', fontSize: '0.8125rem' }}>
                       <input 
                         type="radio" 
                         name="tipoRecurso" 
                         value="recurso" 
                         checked={tipoRecurso === 'recurso'} 
                         onChange={() => setTipoRecurso('recurso')} 
+                        style={{ cursor: 'pointer' }}
                       />
-                      Recurso Educativo (Laptop, Proyector, Kits...)
+                      Recurso (Laptop, Proyector...)
                     </label>
-                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer', fontSize: '0.875rem' }}>
+                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.4rem', cursor: 'pointer', fontSize: '0.8125rem' }}>
                       <input 
                         type="radio" 
                         name="tipoRecurso" 
                         value="espacio" 
                         checked={tipoRecurso === 'espacio'} 
                         onChange={() => setTipoRecurso('espacio')} 
+                        style={{ cursor: 'pointer' }}
                       />
-                      Espacio Físico/Virtual (Aulas, Laboratorios...)
+                      Espacio (Aula, Laboratorio...)
                     </label>
                   </div>
                 </div>
 
                 {/* Selector de Elemento */}
-                <div className="form-group">
-                  <label className="form-label">Seleccionar Elemento</label>
+                <div className="form-group" style={{ marginBottom: 0 }}>
+                  <label className="form-label" style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-secondary)', marginBottom: '0.25rem', display: 'block' }}>Elemento</label>
                   <select 
                     className="form-select" 
                     value={itemId} 
                     onChange={(e) => setItemId(e.target.value)}
+                    style={{ padding: '0.5rem 0.75rem', fontSize: '0.8125rem' }}
                     required
                   >
                     {tipoRecurso === 'recurso' ? (
@@ -625,125 +628,162 @@ export default function ModuloReservas({ elementoPreseleccionado, alLimpiarPrese
                   </select>
                 </div>
 
-                {/* Panel de detalles del elemento seleccionado */}
+                {/* Panel de detalles del elemento seleccionado (Compacto) */}
                 {datosElementoSeleccionado && (
                   <div 
                     style={{ 
-                      padding: '0.75rem 1rem', 
+                      padding: '0.5rem 0.75rem', 
                       borderRadius: 'var(--border-radius-sm)', 
-                      backgroundColor: 'var(--bg-primary)', 
+                      backgroundColor: 'rgba(255, 255, 255, 0.02)', 
                       border: '1px solid var(--border-color)',
-                      marginBottom: '1.25rem',
-                      fontSize: '0.8125rem',
+                      fontSize: '0.75rem',
                       display: 'flex',
-                      gap: '0.5rem'
+                      gap: '0.5rem',
+                      alignItems: 'start'
                     }}
                   >
-                    <Info size={16} style={{ color: 'var(--color-brand-cyan)', flexShrink: 0, marginTop: '2px' }} />
-                    <div>
+                    <Info size={14} style={{ color: 'var(--color-brand-cyan)', flexShrink: 0, marginTop: '2px' }} />
+                    <div style={{ lineHeight: '1.3' }}>
                       <span style={{ fontWeight: '700' }}>Detalles:</span> {datosElementoSeleccionado.descripcion || 'Sin descripción adicional.'}
                       {tipoRecurso === 'recurso' && (
-                        <div style={{ marginTop: '0.25rem', fontWeight: '600', color: 'var(--color-success)' }}>
-                          Estado físico del recurso: {datosElementoSeleccionado.estado}
-                        </div>
+                        <span style={{ marginLeft: '0.5rem', fontWeight: '600', color: 'var(--color-success)' }}>
+                          (Estado: {datosElementoSeleccionado.estado})
+                        </span>
                       )}
                     </div>
                   </div>
                 )}
 
-                {/* Cantidad (Solo para recursos) */}
-                {tipoRecurso === 'recurso' && (
-                  <div className="form-group">
-                    <label className="form-label">Cantidad a Reservar</label>
-                    <input 
-                      type="number" 
-                      className="form-input" 
-                      min="1" 
-                      max={datosElementoSeleccionado ? datosElementoSeleccionado.cantidadDisponible : undefined}
-                      value={cantidad} 
-                      onChange={(e) => setCantidad(e.target.value)}
-                      required 
-                    />
-                  </div>
-                )}
+                {/* Cantidad y Fechas en una sola fila compacta adaptable */}
+                <div style={{ display: 'grid', gridTemplateColumns: tipoRecurso === 'recurso' ? '1fr 1.5fr 1.5fr' : '1fr 1fr', gap: '0.75rem' }}>
+                  {tipoRecurso === 'recurso' && (
+                    <div className="form-group" style={{ marginBottom: 0 }}>
+                      <label className="form-label" style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-secondary)', marginBottom: '0.25rem', display: 'block' }}>Cantidad</label>
+                      <input 
+                        type="number" 
+                        className="form-input" 
+                        min="1" 
+                        max={datosElementoSeleccionado ? datosElementoSeleccionado.cantidadDisponible : undefined}
+                        value={cantidad} 
+                        onChange={(e) => setCantidad(e.target.value)}
+                        style={{ padding: '0.5rem 0.75rem', fontSize: '0.8125rem' }}
+                        required 
+                      />
+                    </div>
+                  )}
 
-                {/* Rango de Fechas */}
-                <div className="grid-cols-2" style={{ gap: '1rem', marginBottom: '1.25rem' }}>
                   <div className="form-group" style={{ marginBottom: 0 }}>
-                    <label className="form-label">Fecha de Inicio</label>
+                    <label className="form-label" style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-secondary)', marginBottom: '0.25rem', display: 'block' }}>Fecha Inicio</label>
                     <input 
                       type="date" 
                       className="form-input" 
                       value={fechaInicio} 
-                      onChange={(e) => setFechaInicio(e.target.value)}
+                      min={getFechaLocalStr(new Date())}
+                      onChange={(e) => alCambiarFechaInicio(e.target.value)}
+                      style={{ padding: '0.5rem 0.75rem', fontSize: '0.8125rem' }}
                       required 
                     />
                   </div>
 
                   <div className="form-group" style={{ marginBottom: 0 }}>
-                    <label className="form-label">Fecha de Cierre</label>
+                    <label className="form-label" style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-secondary)', marginBottom: '0.25rem', display: 'block' }}>Fecha Cierre</label>
                     <input 
                       type="date" 
                       className="form-input" 
                       value={fechaFin} 
+                      min={fechaInicio}
+                      max={calcularFechaFinMaxima(fechaInicio)}
                       onChange={(e) => setFechaFin(e.target.value)}
+                      style={{ padding: '0.5rem 0.75rem', fontSize: '0.8125rem' }}
                       required 
                     />
                   </div>
                 </div>
 
-                {/* Rango de Horarios */}
-                <div className="grid-cols-2" style={{ gap: '1rem', marginBottom: '1.25rem' }}>
+                {/* Hora de Inicio y Duración en una fila compacta */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
                   <div className="form-group" style={{ marginBottom: 0 }}>
-                    <label className="form-label">Hora de Inicio</label>
-                    <input 
-                      type="time" 
-                      className="form-input" 
+                    <label className="form-label" style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-secondary)', marginBottom: '0.25rem', display: 'block' }}>Hora Inicio</label>
+                    <select 
+                      className="form-select" 
                       value={horaInicio} 
-                      onChange={(e) => setHoraInicio(e.target.value)}
-                      required 
-                    />
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        setHoraInicio(val);
+                        if (val === '18:00' && duracion === '2') {
+                          setDuracion('1');
+                        }
+                      }}
+                      style={{ padding: '0.5rem 0.75rem', fontSize: '0.8125rem' }}
+                      required
+                    >
+                      <option value="08:00">08:00</option>
+                      <option value="09:00">09:00</option>
+                      <option value="10:00">10:00</option>
+                      <option value="11:00">11:00</option>
+                      <option value="12:00">12:00</option>
+                      <option value="13:00">13:00</option>
+                      <option value="14:00">14:00</option>
+                      <option value="15:00">15:00</option>
+                      <option value="16:00">16:00</option>
+                      <option value="17:00">17:00</option>
+                      <option value="18:00">18:00</option>
+                    </select>
                   </div>
 
                   <div className="form-group" style={{ marginBottom: 0 }}>
-                    <label className="form-label">Hora de Salida</label>
-                    <input 
-                      type="time" 
-                      className="form-input" 
-                      value={horaFin} 
-                      onChange={(e) => setHoraFin(e.target.value)}
-                      required 
-                    />
+                    <label className="form-label" style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-secondary)', marginBottom: '0.25rem', display: 'block' }}>Duración</label>
+                    <select
+                      className="form-select"
+                      value={duracion}
+                      onChange={(e) => setDuracion(e.target.value)}
+                      style={{ padding: '0.5rem 0.75rem', fontSize: '0.8125rem' }}
+                      required
+                    >
+                      <option value="1">1 hora (hasta {calcularHoraFin(horaInicio, '1')})</option>
+                      {horaInicio !== '18:00' && (
+                        <option value="2">2 horas (hasta {calcularHoraFin(horaInicio, '2')})</option>
+                      )}
+                    </select>
                   </div>
                 </div>
 
                 {/* Justificación */}
-                <div className="form-group">
-                  <label className="form-label">Justificación / Proyecto de Clase</label>
+                <div className="form-group" style={{ marginBottom: 0 }}>
+                  <label className="form-label" style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-secondary)', marginBottom: '0.25rem', display: 'block' }}>Justificación</label>
                   <textarea 
                     className="form-textarea" 
-                    placeholder="Escriba el motivo detallado de la reserva o actividad planificada..." 
+                    placeholder="Motivo o actividad planificada..." 
                     value={motivo} 
                     onChange={(e) => setMotivo(e.target.value)}
-                    rows="3"
+                    rows="2"
+                    style={{ padding: '0.5rem 0.75rem', fontSize: '0.8125rem' }}
                     required
                   />
                 </div>
               </div>
 
-              <div className="modal-footer">
+              <div className="modal-footer" style={{ padding: '0.75rem 1.25rem' }}>
                 <button 
                   type="button" 
                   onClick={() => setModalAbierto(false)} 
                   className="btn btn-secondary"
+                  style={{ padding: '0.45rem 1rem', fontSize: '0.8125rem' }}
                 >
                   Cancelar
                 </button>
                 <button 
                   type="submit" 
                   className="btn btn-primary"
+                  style={{ padding: '0.45rem 1.25rem', fontSize: '0.8125rem' }}
                 >
                   {esAdmin ? 'Aprobar y Reservar' : 'Enviar Solicitud'}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
                 </button>
               </div>
             </form>
