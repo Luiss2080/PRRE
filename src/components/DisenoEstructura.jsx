@@ -312,17 +312,33 @@ export default function DisenoEstructura({ children, pestañaActual, establecerP
         <aside style={estiloMenuLateralDrawer(menuLateralAbierto)}>
           <div style={{ display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'space-between' }}>
             <div>
-              {/* Encabezado del panel lateral */}
-              <div style={estiloCabeceraSidebar}>
-                <div />
-                <button onClick={cerrarMenuLateral} style={estiloBotonCerrarSidebar}>
-                  <X size={16} />
-                </button>
-              </div>
-
-              {/* Enlace de navegación para móviles o cuando se abre el panel lateral */}
+              {/* Encabezado del panel lateral + botón cerrar en línea */}
               <div className="sidebar-nav-menu" style={{ display: 'block', padding: '1rem 0.5rem' }}>
-                <span style={estiloTituloSeccionSidebar}>Navegación</span>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                  <span style={estiloTituloSeccionSidebar}>Navegación</span>
+                  <button
+                    onClick={cerrarMenuLateral}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.35rem',
+                      background: 'rgba(255,255,255,0.07)',
+                      border: '1px solid rgba(255,255,255,0.1)',
+                      borderRadius: '99px',
+                      color: 'rgba(255,255,255,0.6)',
+                      cursor: 'pointer',
+                      padding: '0.3rem 0.65rem',
+                      fontSize: '0.6875rem',
+                      fontWeight: '700',
+                      letterSpacing: '0.04em',
+                      transition: 'all 0.2s ease',
+                    }}
+                    title="Cerrar panel"
+                  >
+                    <X size={12} />
+                    <span>Cerrar</span>
+                  </button>
+                </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', marginTop: '0.5rem' }}>
                   {opcionesMenuFiltradas.map(opcion => {
                     const Icono = opcion.icono;
