@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAutenticacion } from '../context/ContextoAutenticacion';
 import { getEspacios, guardarEspacio, eliminarEspacio } from '../utils/datosSimulados';
-import { Plus, Edit2, Trash2, Search, X, MapPin, Globe, Layers, HelpCircle } from 'lucide-react';
+import { Plus, Edit2, Trash2, Search, X, MapPin, Globe, Layers, HelpCircle, AlertTriangle } from 'lucide-react';
 
 /**
  * ModuloEspacios
