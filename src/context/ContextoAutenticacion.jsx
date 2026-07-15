@@ -123,6 +123,19 @@ export const ProveedorAutenticacion = ({ children }) => {
         }
       }
     }
+  const actualizarUsuario = (usuarioModificado) => {
+    const usuarios = getUsuarios();
+    const indice = usuarios.findIndex(u => u.id === usuarioModificado.id);
+    if (indice !== -1) {
+      const usuarioActualizado = { ...usuarios[indice], ...usuarioModificado };
+      usuarios[indice] = usuarioActualizado;
+      localStorage.setItem('prre_usuarios', JSON.stringify(usuarios));
+      
+      if (usuarioActual && usuarioActual.id === usuarioModificado.id) {
+        setUsuarioActual(usuarioActualizado);
+        localStorage.setItem('prre_session', JSON.stringify(usuarioActualizado));
+      }
+    }
   };
 
   return (
@@ -133,7 +146,8 @@ export const ProveedorAutenticacion = ({ children }) => {
       iniciarSesion, 
       registrar, 
       cerrarSesion, 
-      actualizarRolYEstadoUsuario 
+      actualizarRolYEstadoUsuario,
+      actualizarUsuario
     }}>
       {children}
     </ContextoAutenticacion.Provider>
