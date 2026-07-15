@@ -254,10 +254,10 @@ export default function DisenoEstructura({ children, pestañaActual, establecerP
               {/* Encabezado del panel lateral */}
               <div style={estiloCabeceraSidebar}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <ImagenLogo tamaño={24} />
+                  <ImagenLogo tamaño={28} />
                   <div>
-                    <h3 style={{ fontSize: '0.875rem', fontWeight: '850' }}>U.E. Germán Busch B</h3>
-                    <span style={{ fontSize: '0.6875rem', color: 'var(--color-brand-cyan-muted)', fontWeight: '700' }}>Panel del Operador</span>
+                    <h3 style={{ fontSize: '0.95rem', fontWeight: '850', color: '#ffffff', letterSpacing: '0.05em' }}>SISTEMA PRRE</h3>
+                    <span style={{ fontSize: '0.625rem', color: 'var(--color-brand-cyan-muted)', fontWeight: '750', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Gestor de Reservas</span>
                   </div>
                 </div>
                 <button onClick={cerrarMenuLateral} style={estiloBotonCerrarSidebar}>
@@ -266,7 +266,7 @@ export default function DisenoEstructura({ children, pestañaActual, establecerP
               </div>
 
               {/* Enlace de navegación para móviles o cuando se abre el panel lateral */}
-              <div className="sidebar-nav-menu" style={{ display: 'block', padding: '1rem 0.5rem', borderBottom: '1px solid rgba(255, 255, 255, 0.08)' }}>
+              <div className="sidebar-nav-menu" style={{ display: 'block', padding: '1rem 0.5rem' }}>
                 <span style={estiloTituloSeccionSidebar}>Navegación</span>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem', marginTop: '0.5rem' }}>
                   {opcionesMenuFiltradas.map(opcion => {
@@ -288,57 +288,15 @@ export default function DisenoEstructura({ children, pestañaActual, establecerP
                   })}
                 </div>
               </div>
-
-              {/* Telemetría y estadísticas de los recursos en la barra lateral */}
-              <div style={{ padding: '1rem' }}>
-                <span style={estiloTituloSeccionSidebar}>Monitoreo del Sistema</span>
-                
-                <div style={estiloTarjetaTelemetria}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
-                    <span style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.6)' }}>Recursos Operativos</span>
-                    <span style={{ fontSize: '0.75rem', color: 'var(--color-brand-cyan)', fontWeight: '700' }}>95%</span>
-                  </div>
-                  <div style={estiloContenedorProgreso}>
-                    <div style={{ ...estiloBarraProgreso, width: '95%', backgroundColor: 'var(--color-brand-cyan)' }} />
-                  </div>
-                </div>
-
-                <div style={estiloTarjetaTelemetria}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.25rem' }}>
-                    <span style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.6)' }}>Espacios Disponibles</span>
-                    <span style={{ fontSize: '0.75rem', color: 'var(--color-brand-gold)', fontWeight: '700' }}>75%</span>
-                  </div>
-                  <div style={estiloContenedorProgreso}>
-                    <div style={{ ...estiloBarraProgreso, width: '75%', backgroundColor: 'var(--color-brand-gold)' }} />
-                  </div>
-                </div>
-
-                {/* Historial de alertas recientes */}
-                <span style={{ ...estiloTituloSeccionSidebar, marginTop: '1.5rem', display: 'block' }}>Alertas Recientes</span>
-                <div style={estiloHistorialAlertas}>
-                  <div style={estiloTarjetaAlertaFeed}>
-                    <AlertCircle size={14} color="var(--color-brand-gold)" style={{ marginTop: '2px', flexShrink: 0 }} />
-                    <p style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.7)' }}>
-                      <b>Kit Robótica 5</b> en mantenimiento hasta el lunes.
-                    </p>
-                  </div>
-                  <div style={estiloTarjetaAlertaFeed}>
-                    <Clock size={14} color="var(--color-brand-cyan)" style={{ marginTop: '2px', flexShrink: 0 }} />
-                    <p style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.7)' }}>
-                      <b>Lab Computación B</b> reservado para exámenes de las 14:00.
-                    </p>
-                  </div>
-                </div>
-              </div>
             </div>
 
             {/* Soporte Técnico en el pie de página de la barra lateral */}
             <div style={estiloPiePaginaSidebar}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'rgba(255,255,255,0.7)', fontSize: '0.75rem' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'rgba(255, 255, 255, 0.7)', fontSize: '0.75rem' }}>
                 <HelpCircle size={16} color="var(--color-brand-cyan)" />
                 <div>
-                  <span style={{ fontWeight: '700', display: 'block' }}>Soporte Técnico</span>
-                  <span style={{ fontSize: '0.6875rem', color: 'var(--text-muted)' }}>Telf: 2-224455 (EPDB)</span>
+                  <span style={{ fontWeight: '700', display: 'block', color: '#ffffff' }}>Soporte Técnico</span>
+                  <span style={{ fontSize: '0.6875rem', color: 'rgba(255, 255, 255, 0.5)' }}>soporte@prre.sistema.edu</span>
                 </div>
               </div>
             </div>
