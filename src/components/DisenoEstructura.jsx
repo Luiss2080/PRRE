@@ -678,8 +678,8 @@ const estiloMenuLateralDrawer = (estaAbierto) => ({
   height: `calc(100vh - var(--header-height))`,
   backgroundColor: 'var(--bg-sidebar)',
   color: 'white',
-  position: 'absolute',
-  top: 0,
+  position: 'fixed',
+  top: 'var(--header-height)',
   left: 0,
   bottom: 0,
   zIndex: 900,
@@ -687,6 +687,7 @@ const estiloMenuLateralDrawer = (estaAbierto) => ({
   padding: '1.25rem 1rem',
   transform: estaAbierto ? 'translateX(0)' : 'translateX(-100%)',
   transition: 'transform 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+  overflowY: 'auto',
 });
 
 const estiloCabeceraSidebar = {
