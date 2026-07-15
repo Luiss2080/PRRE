@@ -48,7 +48,7 @@ function ContenidoAplicacion() {
   const [pestañaAutenticacion, setPestañaAutenticacion] = useState('login');
   
   // Estados para las pestañas de navegación
-  const [pestañaActualPortal, setPestañaActualPortal] = useState('dashboard'); // Pestaña del Portal (Autenticado)
+  const [pestañaActualPortal, setPestañaActualPortal] = useState(() => localStorage.getItem('prre_pestaña_predeterminada') || 'dashboard'); // Pestaña del Portal (Autenticado)
   const [pestañaActualPublico, setPestañaActualPublico] = useState('inicio'); // Pestaña Pública (No Autenticado)
 
   // Estado para la redirección o preselección de recursos
