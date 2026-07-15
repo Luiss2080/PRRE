@@ -474,49 +474,129 @@ export default function DisenoEstructura({ children, pestañaActual, establecerP
       {/* Modal de Mi Perfil */}
       {modalPerfilAbierto && (
         <div style={estiloOverlayModal}>
-          <div className="glass-card" style={estiloTarjetaModal}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.75rem' }}>
-              <h3 style={{ fontSize: '1.25rem', fontWeight: '800', display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0 }}>
+          <div className="glass-card" style={{ ...estiloTarjetaModal, maxWidth: '420px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.25rem', borderBottom: '1px solid var(--border-color)', paddingBottom: '0.75rem' }}>
+              <h3 style={{ fontSize: '1.25rem', fontWeight: '850', display: 'flex', alignItems: 'center', gap: '0.5rem', margin: 0, color: 'var(--text-primary)' }}>
                 <User size={20} color="var(--color-brand-cyan-muted)" />
-                Mi Perfil de Operador
+                {editandoPerfil ? 'Editar mi Perfil' : 'Mi Perfil de Operador'}
               </h3>
-              <button onClick={() => setModalPerfilAbierto(false)} style={estiloBotonCerrarModal}>
+              <button 
+                onClick={() => {
+                  setModalPerfilAbierto(false);
+                  setEditandoPerfil(false);
+                }} 
+                style={estiloBotonCerrarModal}
+              >
                 <X size={18} />
               </button>
             </div>
             
-            <div style={{ display: 'flex', gap: '1.5rem', alignItems: 'center', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
-              <div style={{ width: '60px', height: '60px', borderRadius: '50%', backgroundColor: 'var(--color-brand-cyan-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: 'var(--shadow-glow-cyan)' }}>
-                <User size={30} color="white" />
+            <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginBottom: '1.25rem' }}>
+              <div style={{ width: '56px', height: '56px', borderRadius: '50%', backgroundColor: 'var(--color-brand-cyan-muted)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: 'var(--shadow-glow-cyan)' }}>
+                <User size={26} color="white" />
               </div>
               <div>
-                <h4 style={{ fontSize: '1.15rem', fontWeight: '800', margin: '0 0 0.25rem 0' }}>{usuarioActual?.nombre}</h4>
-                <span className="badge badge-info" style={{ fontSize: '0.75rem', padding: '0.25rem 0.65rem' }}>{usuarioActual?.rol}</span>
+                <h4 style={{ fontSize: '1.1rem', fontWeight: '800', margin: '0 0 0.2rem 0', color: 'var(--text-primary)' }}>{usuarioActual?.nombre}</h4>
+                <span className="badge badge-info" style={{ fontSize: '0.6875rem', padding: '0.2rem 0.55rem' }}>{usuarioActual?.rol}</span>
               </div>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.875rem', marginBottom: '1.5rem' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '0.5rem', borderBottom: '1px solid var(--border-color)' }}>
-                <span style={{ color: 'var(--text-secondary)' }}>Correo Electrónico:</span>
-                <b style={{ color: 'var(--text-primary)' }}>{usuarioActual?.email}</b>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '0.5rem', borderBottom: '1px solid var(--border-color)' }}>
-                <span style={{ color: 'var(--text-secondary)' }}>Estado de Cuenta:</span>
-                <b style={{ color: 'var(--color-success)' }}>Activa / Operativa</b>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '0.5rem', borderBottom: '1px solid var(--border-color)' }}>
-                <span style={{ color: 'var(--text-secondary)' }}>Institución:</span>
-                <b style={{ color: 'var(--text-primary)' }}>U.E. Germán Busch B</b>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span style={{ color: 'var(--text-secondary)' }}>Base de datos:</span>
-                <span style={{ fontSize: '0.75rem', color: 'var(--color-brand-gold)', fontWeight: '700' }}>Local (Simulada / LocalStorage)</span>
-              </div>
-            </div>
+            {editandoPerfil ? (
+              <form onSubmit={alGuardarPerfil} style={{ display: 'flex', flexDirection: 'column', gap: '0.85rem' }}>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.75rem', color: 'var(--text-secondary)', marginBottom: '0.25rem', fontWeight: '600' }}>Nombre Completo</label>
+                  <input 
+                    type="text" 
+                    className="form-control" 
+                    style={{ width: '100%', fontSize: '0.8125rem' }}
+                    value={nombreEdit}
+                    onChange={(e) => setNombreEdit(e.target.value)}
+                    required
+                  />
+                </div>
 
-            <button onClick={() => setModalPerfilAbierto(false)} className="btn btn-secondary w-full" style={{ padding: '0.5rem 1rem' }}>
-              Cerrar Vista
-            </button>
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.75rem', color: 'var(--text-secondary)', marginBottom: '0.25rem', fontWeight: '600' }}>Correo Electrónico</label>
+                  <input 
+                    type="email" 
+                    className="form-control" 
+                    style={{ width: '100%', fontSize: '0.8125rem' }}
+                    value={emailEdit}
+                    onChange={(e) => setEmailEdit(e.target.value)}
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.75rem', color: 'var(--text-secondary)', marginBottom: '0.25rem', fontWeight: '600' }}>Teléfono / Celular</label>
+                  <input 
+                    type="text" 
+                    className="form-control" 
+                    style={{ width: '100%', fontSize: '0.8125rem' }}
+                    value={telefonoEdit}
+                    onChange={(e) => setTelefonoEdit(e.target.value)}
+                  />
+                </div>
+
+                <div>
+                  <label style={{ display: 'block', fontSize: '0.75rem', color: 'var(--text-secondary)', marginBottom: '0.25rem', fontWeight: '600' }}>Cargo / Especialidad</label>
+                  <input 
+                    type="text" 
+                    className="form-control" 
+                    style={{ width: '100%', fontSize: '0.8125rem' }}
+                    value={cargoEdit}
+                    onChange={(e) => setCargoEdit(e.target.value)}
+                  />
+                </div>
+
+                <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem' }}>
+                  <button type="button" onClick={() => setEditandoPerfil(false)} className="btn btn-secondary flex-1" style={{ fontSize: '0.8125rem', padding: '0.5rem' }}>
+                    Cancelar
+                  </button>
+                  <button type="submit" className="btn btn-primary flex-1" style={{ fontSize: '0.8125rem', padding: '0.5rem' }}>
+                    Guardar Cambios
+                  </button>
+                </div>
+              </form>
+            ) : (
+              <div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', fontSize: '0.8125rem', marginBottom: '1.25rem' }}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '0.4rem', borderBottom: '1px solid var(--border-color)' }}>
+                    <span style={{ color: 'var(--text-secondary)' }}>Correo Electrónico:</span>
+                    <b style={{ color: 'var(--text-primary)' }}>{usuarioActual?.email}</b>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '0.4rem', borderBottom: '1px solid var(--border-color)' }}>
+                    <span style={{ color: 'var(--text-secondary)' }}>Teléfono / Celular:</span>
+                    <b style={{ color: 'var(--text-primary)' }}>{usuarioActual?.telefono || 'No especificado'}</b>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '0.4rem', borderBottom: '1px solid var(--border-color)' }}>
+                    <span style={{ color: 'var(--text-secondary)' }}>Especialidad / Cargo:</span>
+                    <b style={{ color: 'var(--text-primary)' }}>{usuarioActual?.cargo || 'Docente de Materia'}</b>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '0.4rem', borderBottom: '1px solid var(--border-color)' }}>
+                    <span style={{ color: 'var(--text-secondary)' }}>Estado de Cuenta:</span>
+                    <b style={{ color: 'var(--color-success)' }}>Activa / Operativa</b>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', paddingBottom: '0.4rem', borderBottom: '1px solid var(--border-color)' }}>
+                    <span style={{ color: 'var(--text-secondary)' }}>Sistema:</span>
+                    <b style={{ color: 'var(--text-primary)' }}>PRRE Portal</b>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span style={{ color: 'var(--text-secondary)' }}>Base de Datos:</span>
+                    <span style={{ fontSize: '0.75rem', color: 'var(--color-brand-gold)', fontWeight: '700' }}>Local (Simulada / LocalStorage)</span>
+                  </div>
+                </div>
+
+                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                  <button onClick={() => setEditandoPerfil(true)} className="btn btn-accent flex-1" style={{ fontSize: '0.8125rem', padding: '0.5rem' }}>
+                    Editar Perfil
+                  </button>
+                  <button onClick={() => setModalPerfilAbierto(false)} className="btn btn-secondary flex-1" style={{ fontSize: '0.8125rem', padding: '0.5rem' }}>
+                    Cerrar Vista
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       )}
