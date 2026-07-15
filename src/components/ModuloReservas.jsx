@@ -17,6 +17,28 @@ import {
   AlertCircle
 } from 'lucide-react';
 
+// Helpers locales para control estricto de fechas y horarios
+const getFechaLocalStr = (fecha = new Date()) => {
+  const anio = fecha.getFullYear();
+  const mes = String(fecha.getMonth() + 1).padStart(2, '0');
+  const dia = String(fecha.getDate()).padStart(2, '0');
+  return `${anio}-${mes}-${dia}`;
+};
+
+const calcularFechaFinMaxima = (inicio) => {
+  if (!inicio) return '';
+  const fecha = new Date(inicio + 'T00:00:00');
+  fecha.setDate(fecha.getDate() + 10);
+  return getFechaLocalStr(fecha);
+};
+
+const calcularHoraFin = (inicio, dur) => {
+  if (!inicio) return '';
+  const [hora, min] = inicio.split(':').map(Number);
+  const nuevaHora = hora + Number(dur);
+  return `${String(nuevaHora).padStart(2, '0')}:${String(min).padStart(2, '0')}`;
+};
+
 /**
  * ModuloReservas
  * Componente que gestiona el sistema de reservas y solicitudes de préstamos de recursos y espacios.
@@ -42,8 +64,9 @@ export default function ModuloReservas({ elementoPreseleccionado, alLimpiarPrese
   const [cantidad, setCantidad] = useState(1);
   const [fechaInicio, setFechaInicio] = useState('');
   const [fechaFin, setFechaFin] = useState('');
-  const [horaInicio, setHoraInicio] = useState('');
-  const [horaFin, setHoraFin] = useState('');
+  const [horaInicio, setHoraInicio] = useState('08:00');
+  const [duracion, setDuracion] = useState('1'); // '1' o '2' horas
+  const [horaFin, setHoraFin] = useState('09:00');
   const [motivo, setMotivo] = useState('');
 
   const cargarDatos = () => {
@@ -69,11 +92,11 @@ export default function ModuloReservas({ elementoPreseleccionado, alLimpiarPrese
       
       const mañana = new Date();
       mañana.setDate(mañana.getDate() + 1);
-      const cadenaFecha = mañana.toISOString().substring(0, 10);
+      const cadenaFecha = getFechaLocalStr(mañana);
       setFechaInicio(cadenaFecha);
       setFechaFin(cadenaFecha);
       setHoraInicio('08:00');
-      setHoraFin('09:30');
+      setDuracion('1');
       setMotivo('');
       setErrorFormulario('');
       
@@ -91,6 +114,22 @@ export default function ModuloReservas({ elementoPreseleccionado, alLimpiarPrese
     }
   }, [tipoRecurso, recursos, espacios, modalAbierto]);
 
+  // Efecto para calcular automáticamente horaFin en base a horaInicio y duracion
+  useEffect(() => {
+    if (horaInicio && duracion) {
+      const horaFinCalculada = calcularHoraFin(horaInicio, duracion);
+      setHoraFin(horaFinCalculada);
+    }
+  }, [horaInicio, duracion]);
+
+  const alCambiarFechaInicio = (nuevaFecha) => {
+    setFechaInicio(nuevaFecha);
+    const maxFecha = calcularFechaFinMaxima(nuevaFecha);
+    if (fechaFin < nuevaFecha || (fechaFin > maxFecha)) {
+      setFechaFin(nuevaFecha);
+    }
+  };
+
   const alAbrirModalAgregar = () => {
     setTipoRecurso('recurso');
     setCantidad(1);
@@ -98,12 +137,12 @@ export default function ModuloReservas({ elementoPreseleccionado, alLimpiarPrese
     // Fecha por defecto: Mañana
     const mañana = new Date();
     mañana.setDate(mañana.getDate() + 1);
-    const cadenaFecha = mañana.toISOString().substring(0, 10);
+    const cadenaFecha = getFechaLocalStr(mañana);
     
     setFechaInicio(cadenaFecha);
     setFechaFin(cadenaFecha);
     setHoraInicio('08:00');
-    setHoraFin('09:30');
+    setDuracion('1');
     setMotivo('');
     setErrorFormulario('');
     setModalAbierto(true);
