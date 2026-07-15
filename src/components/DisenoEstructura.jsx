@@ -815,6 +815,7 @@ const estiloContenedorCuerpo = (estaAbierto) => ({
   display: 'flex',
   flexDirection: 'column',
   width: '100%',
+  minHeight: 'calc(100vh - var(--header-height))',
 });
 
 const estiloItemNavegacionMovil = (estaActivo) => ({
