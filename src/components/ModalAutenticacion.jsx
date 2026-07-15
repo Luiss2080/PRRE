@@ -68,10 +68,10 @@ export default function ModalAutenticacion({ estaAbierto, alCerrar, pestañaInic
   return (
     <div className="modal-overlay">
       <div className="modal-content" style={{ maxWidth: '420px' }}>
-        {/* Banner de marca del LogoPRRE.png dentro del modal */}
+        {/* Banner de marca del LogoInstitucional.png dentro del modal */}
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: '1.5rem', gap: '0.35rem' }}>
           <img 
-            src="/LogoPRRE.png" 
+            src="/LogoInstitucional.png" 
             alt="Logo PRRE" 
             style={{ width: '56px', height: 'auto', display: 'block', filter: 'drop-shadow(0 2px 8px rgba(0, 229, 255, 0.2))' }} 
           />

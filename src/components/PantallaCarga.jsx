@@ -29,7 +29,7 @@ export default function PantallaCarga({ alTerminar }) {
         {/* Contenedor del logotipo U.E. Germán Busch B con efecto de resplandor neón */}
         <div style={estiloEnvolturaLogo}>
           <img 
-            src="/LogoPRRE.png" 
+            src="/LogoInstitucional.png" 
             alt="Logo U.E. Germán Busch B" 
             style={estiloImagenLogo} 
           />
