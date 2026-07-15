@@ -167,9 +167,10 @@ export default function CatalogoRecursos({ alHacerClicReserva, esPublico = false
         ) : (
           <div 
             style={{ 
-              display: 'grid', 
-              gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', 
+              display: 'flex', 
+              flexWrap: 'wrap',
               gap: '1.5rem',
+              justifyContent: 'center',
               animation: 'fadeIn 0.4s ease-out'
             }}
           >
@@ -188,7 +189,9 @@ export default function CatalogoRecursos({ alHacerClicReserva, esPublico = false
                     padding: 0,
                     overflow: 'hidden',
                     transition: 'all 0.3s ease',
-                    minHeight: '340px'
+                    minHeight: '340px',
+                    flex: '1 1 280px',
+                    maxWidth: '320px'
                   }}
                 >
                   {/* Encabezado visual de la tarjeta */}
