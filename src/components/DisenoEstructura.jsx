@@ -150,7 +150,6 @@ export default function DisenoEstructura({ children, pestañaActual, establecerP
           </button>
           
           <div style={estiloContenedorLogo}>
-            <ImagenLogo tamaño={32} />
             <div style={estiloEnvolturaTitulo}>
               <span style={estiloTextoLogo}>PRRE</span>
               <span style={estiloSubtituloLogo}>Portal de Reserva</span>
@@ -315,7 +314,6 @@ export default function DisenoEstructura({ children, pestañaActual, establecerP
               {/* Encabezado del panel lateral */}
               <div style={estiloCabeceraSidebar}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <ImagenLogo tamaño={28} />
                   <div>
                     <h3 style={{ fontSize: '0.95rem', fontWeight: '850', color: '#ffffff', letterSpacing: '0.05em' }}>SISTEMA PRRE</h3>
                     <span style={{ fontSize: '0.625rem', color: 'var(--color-brand-cyan-muted)', fontWeight: '750', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Gestor de Reservas</span>
@@ -401,10 +399,10 @@ export default function DisenoEstructura({ children, pestañaActual, establecerP
 
           {/* Pie de página institucional enriquecido respetando la barra lateral */}
           {/* Pie de página del sistema modernizado */}
-          <footer style={estiloPiePaginaFijo}>
-            <div style={estiloContenidoFooterGrid}>
+          <footer className="main-footer">
+            <div className="footer-grid">
               {/* Columna 1: Branding y Misión */}
-              <div style={estiloColumnaFooter}>
+              <div className="footer-column">
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', marginBottom: '0.75rem' }}>
                   <ImagenLogo tamaño={28} />
                   <b style={{ fontSize: '1.1rem', color: 'var(--text-primary)', letterSpacing: '0.06em', fontWeight: '850' }}>PRRE SYSTEM</b>
@@ -415,7 +413,7 @@ export default function DisenoEstructura({ children, pestañaActual, establecerP
               </div>
 
               {/* Columna 2: Enlaces Rápidos del Sistema */}
-              <div style={estiloColumnaFooter}>
+              <div className="footer-column">
                 <h4 style={{ fontSize: '0.8125rem', fontWeight: '850', color: 'var(--text-primary)', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                   Navegación
                 </h4>
@@ -435,11 +433,11 @@ export default function DisenoEstructura({ children, pestañaActual, establecerP
               </div>
 
               {/* Columna 3: Telemetría Técnica del Sistema */}
-              <div style={estiloColumnaFooter}>
+              <div className="footer-column">
                 <h4 style={{ fontSize: '0.8125rem', fontWeight: '850', color: 'var(--text-primary)', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                   Estado del Servidor
                 </h4>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', fontSize: '0.75rem', color: 'var(--text-secondary)' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', fontSize: '0.75rem', color: 'var(--text-secondary)', alignItems: 'center' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
                     <div style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: 'var(--color-success)', boxShadow: '0 0 8px var(--color-success)' }} />
                     <span>Servicios: <b>Operacionales</b></span>
@@ -451,7 +449,7 @@ export default function DisenoEstructura({ children, pestañaActual, establecerP
               </div>
 
               {/* Columna 4: Canales de Soporte */}
-              <div style={estiloColumnaFooter}>
+              <div className="footer-column">
                 <h4 style={{ fontSize: '0.8125rem', fontWeight: '850', color: 'var(--text-primary)', marginBottom: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                   Soporte Técnico
                 </h4>
