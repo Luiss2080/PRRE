@@ -29,8 +29,7 @@ import {
   Send, 
   CheckCircle, 
   Menu,
-  X,
-  AlertTriangle
+  X
 } from 'lucide-react';
 
 /**
