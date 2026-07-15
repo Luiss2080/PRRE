@@ -123,6 +123,7 @@ export const ProveedorAutenticacion = ({ children }) => {
         }
       }
     }
+  };
   const actualizarUsuario = (usuarioModificado) => {
     const usuarios = getUsuarios();
     const indice = usuarios.findIndex(u => u.id === usuarioModificado.id);
