@@ -784,12 +784,6 @@ export default function ModuloReservas({ elementoPreseleccionado, alLimpiarPrese
           </div>
         </div>
       )}
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
