@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAutenticacion } from '../context/ContextoAutenticacion';
 import { getRecursos, saveRecurso, deleteRecurso } from '../utils/datosSimulados';
 import CatalogoRecursos from './CatalogoRecursos';
-import { Plus, Edit2, Trash2, Search, X, Laptop, BookOpen, Eye, Table, Layers } from 'lucide-react';
+import { Plus, Edit2, Trash2, Search, X, Laptop, BookOpen, Eye, Table, Layers, AlertTriangle } from 'lucide-react';
 
 /**
  * ModuloRecursos

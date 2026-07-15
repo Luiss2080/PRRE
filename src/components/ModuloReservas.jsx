@@ -14,7 +14,8 @@ import {
   Clock, 
   Info, 
   Search,
-  AlertCircle
+  AlertCircle,
+  AlertTriangle
 } from 'lucide-react';
 
 // Helpers locales para control estricto de fechas y horarios

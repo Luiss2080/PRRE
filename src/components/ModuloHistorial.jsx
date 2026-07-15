@@ -14,7 +14,8 @@ import {
   MapPin,
   Info,
   Layers,
-  User
+  User,
+  AlertTriangle
 } from 'lucide-react';
 
 /**
