@@ -160,8 +160,18 @@ export default function ModuloReservas({ elementoPreseleccionado, alLimpiarPrese
       setErrorFormulario('Por favor complete todas las fechas y horarios.');
       return;
     }
+    const hoyStr = getFechaLocalStr(new Date());
+    if (fechaInicio < hoyStr) {
+      setErrorFormulario('La fecha de inicio no puede ser anterior a la fecha de hoy.');
+      return;
+    }
     if (fechaInicio > fechaFin) {
       setErrorFormulario('La fecha de inicio no puede ser posterior a la fecha de fin.');
+      return;
+    }
+    const maxFechaFinStr = calcularFechaFinMaxima(fechaInicio);
+    if (fechaFin > maxFechaFinStr) {
+      setErrorFormulario('La fecha de cierre no puede superar los 10 días desde la fecha de inicio.');
       return;
     }
     if (fechaInicio === fechaFin && horaInicio >= horaFin) {
