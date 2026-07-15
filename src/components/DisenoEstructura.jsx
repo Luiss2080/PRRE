@@ -87,7 +87,7 @@ export default function DisenoEstructura({ children, pestañaActual, establecerP
   // Componente interno para renderizar el logo institucional
   const ImagenLogo = ({ tamaño = 32 }) => (
     <img 
-      src="/LogoPRRE.png" 
+      src="/LogoInstitucional.png" 
       alt="Logo PRRE U.E. Germán Busch B" 
       style={{ 
         width: `${tamaño}px`, 

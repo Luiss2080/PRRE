@@ -113,7 +113,7 @@ function ContenidoAplicacion() {
   // Componente interno para el logo institucional
   const Logo = ({ tamaño = 32 }) => (
     <img 
-      src="/LogoPRRE.png" 
+      src="/LogoInstitucional.png" 
       alt="Logo PRRE U.E. Germán Busch B" 
       style={{ 
         width: `${tamaño}px`, 
