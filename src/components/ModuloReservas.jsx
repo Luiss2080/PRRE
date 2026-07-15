@@ -623,7 +623,7 @@ export default function ModuloReservas({ elementoPreseleccionado, alLimpiarPrese
                     style={{ 
                       padding: '0.5rem 0.75rem', 
                       borderRadius: 'var(--border-radius-sm)', 
-                      backgroundColor: 'rgba(255, 255, 255, 0.02)', 
+                      backgroundColor: 'var(--bg-primary)', 
                       border: '1px solid var(--border-color)',
                       fontSize: '0.75rem',
                       display: 'flex',
