@@ -6,7 +6,8 @@ const CLAVE_ESPACIOS = 'prre_espacios';
 const CLAVE_RESERVAS = 'prre_reservas';
 const CLAVE_USUARIOS = 'prre_usuarios';
 
-// Datos iniciales por defecto para el sistema en su primer iniciconst RECURSOS_INICIALES = [
+// Datos iniciales por defecto para el sistema en su primer inicio
+const RECURSOS_INICIALES = [
   { id: 'rec_1', nombre: 'Proyector Epson PowerLite', tipo: 'Dispositivo', cantidadTotal: 5, cantidadDisponible: 5, estado: 'Excelente', descripcion: 'Proyector multimedia con entrada HDMI y control remoto.' },
   { id: 'rec_2', nombre: 'Laptop HP ProBook 440', tipo: 'Dispositivo', cantidadTotal: 25, cantidadDisponible: 25, estado: 'Excelente', descripcion: 'Laptops para clases prácticas, Intel Core i5, 8GB RAM.' },
   { id: 'rec_3', nombre: 'Tablet Lenovo K10', tipo: 'Dispositivo', cantidadTotal: 15, cantidadDisponible: 15, estado: 'Bueno', descripcion: 'Tabletas para lectura y cuestionarios dinámicos.' },
@@ -572,6 +573,7 @@ export const inicializarBD = () => {
   const usuariosExistentes = JSON.parse(localStorage.getItem(CLAVE_USUARIOS)) || [];
   if (usuariosExistentes.length < USUARIOS_INICIALES.length) {
     localStorage.setItem(CLAVE_USUARIOS, JSON.stringify(USUARIOS_INICIALES));
+  }
 };
 
 // Métodos auxiliares de serialización genéricos para LocalStorage

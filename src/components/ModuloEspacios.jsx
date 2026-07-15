@@ -199,11 +199,51 @@ export default function ModuloEspacios({ alRedireccionarReserva }) {
           )}
         </div>
 
+        {/* Info y Contador de Búsqueda de Espacios */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.8125rem', color: 'var(--text-secondary)', marginBottom: '0.5rem', padding: '0 0.25rem' }}>
+          <span>
+            {terminoBusqueda || filtroTipo !== 'Todos' ? (
+              <>Se encontraron <b>{espaciosFiltrados.length}</b> espacios de <b>{espacios.length}</b> en el inventario.</>
+            ) : (
+              <>Total: <b>{espacios.length}</b> espacios registrados.</>
+            )}
+          </span>
+          {(terminoBusqueda || filtroTipo !== 'Todos') && (
+            <button 
+              onClick={() => {
+                setTerminoBusqueda('');
+                setFiltroTipo('Todos');
+              }} 
+              style={{ background: 'none', border: 'none', color: 'var(--color-brand-cyan-muted)', cursor: 'pointer', fontWeight: '750', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}
+            >
+              Limpiar Filtros
+            </button>
+          )}
+        </div>
+
         {/* Tabla de registros */}
         <div className="table-container">
           {espaciosFiltrados.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '3rem 1rem', color: 'var(--text-muted)' }}>
-              No se encontraron espacios que coincidan con los filtros aplicados.
+            <div style={{ padding: '3rem 2rem', textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.25rem' }}>
+              <div style={{ width: '48px', height: '48px', borderRadius: '50%', backgroundColor: 'var(--color-warning-bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--color-brand-gold)' }}>
+                <AlertTriangle size={24} />
+              </div>
+              <div>
+                <h4 style={{ fontSize: '1.05rem', fontWeight: '800', marginBottom: '0.25rem', color: 'var(--text-primary)' }}>No se encontraron espacios</h4>
+                <p style={{ fontSize: '0.8125rem', color: 'var(--text-muted)', maxWidth: '360px', margin: '0 auto', lineHeight: '1.4' }}>
+                  No hay aulas ni auditorios que coincidan con la búsqueda y filtros actuales.
+                </p>
+              </div>
+              <button 
+                onClick={() => {
+                  setTerminoBusqueda('');
+                  setFiltroTipo('Todos');
+                }} 
+                className="btn btn-secondary" 
+                style={{ padding: '0.5rem 1rem', fontSize: '0.75rem' }}
+              >
+                Restablecer Filtros
+              </button>
             </div>
           ) : (
             <table className="custom-table">
