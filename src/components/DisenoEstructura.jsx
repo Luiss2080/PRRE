@@ -150,6 +150,7 @@ export default function DisenoEstructura({ children, pestañaActual, establecerP
           </button>
           
           <div style={estiloContenedorLogo}>
+            <ImagenLogo tamaño={32} />
             <div style={estiloEnvolturaTitulo}>
               <span style={estiloTextoLogo}>PRRE</span>
               <span style={estiloSubtituloLogo}>Portal de Reserva</span>
@@ -313,12 +314,7 @@ export default function DisenoEstructura({ children, pestañaActual, establecerP
             <div>
               {/* Encabezado del panel lateral */}
               <div style={estiloCabeceraSidebar}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                  <div>
-                    <h3 style={{ fontSize: '0.95rem', fontWeight: '850', color: '#ffffff', letterSpacing: '0.05em' }}>SISTEMA PRRE</h3>
-                    <span style={{ fontSize: '0.625rem', color: 'var(--color-brand-cyan-muted)', fontWeight: '750', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Gestor de Reservas</span>
-                  </div>
-                </div>
+                <div />
                 <button onClick={cerrarMenuLateral} style={estiloBotonCerrarSidebar}>
                   <X size={16} />
                 </button>
