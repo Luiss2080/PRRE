@@ -107,7 +107,8 @@ export default function ModuloRecursos({ alRedireccionarReserva }) {
       cantidadTotal: parseInt(cantidadTotal),
       cantidadDisponible: parseInt(cantidadDisponible),
       estado,
-      descripcion
+      descripcion,
+      imagenUrl
     };
 
     saveRecurso(datosRecurso);
