@@ -16,6 +16,7 @@ export default function ModalAutenticacion({ estaAbierto, alCerrar, pestañaInic
   const [rol, setRol] = useState('Docente');
   const [error, setError] = useState('');
   const [cargando, setCargando] = useState(false);
+  const [mostrarMensajeBusch, setMostrarMensajeBusch] = useState(true);
 
   // Sincroniza y limpia los campos del formulario cada vez que el modal se abre/cierra
   useEffect(() => {
@@ -27,6 +28,7 @@ export default function ModalAutenticacion({ estaAbierto, alCerrar, pestañaInic
       setConfirmarPassword('');
       setNombre('');
       setRol('Docente');
+      setMostrarMensajeBusch(true);
     }
   }, [estaAbierto, pestañaInicial]);
 
@@ -241,9 +243,23 @@ export default function ModalAutenticacion({ estaAbierto, alCerrar, pestañaInic
           </div>
         </form>
 
-        <div style={{ backgroundColor: 'var(--bg-primary)', padding: '1rem', textAlign: 'center', borderTop: '1px solid var(--border-color)', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-          Acceso exclusivo para personal y estudiantes de la <b>U.E. Germán Busch B</b>.
-        </div>
+        {mostrarMensajeBusch && (
+          <div 
+            onMouseEnter={() => setMostrarMensajeBusch(false)}
+            style={{ 
+              backgroundColor: 'var(--bg-primary)', 
+              padding: '1rem', 
+              textAlign: 'center', 
+              borderTop: '1px solid var(--border-color)', 
+              fontSize: '0.75rem', 
+              color: 'var(--text-muted)',
+              cursor: 'pointer',
+              transition: 'opacity 0.3s ease'
+            }}
+          >
+            Acceso exclusivo para personal y estudiantes de la <b>U.E. Germán Busch B</b>.
+          </div>
+        )}
       </div>
     </div>
   );

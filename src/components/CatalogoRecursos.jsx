@@ -51,12 +51,57 @@ export default function CatalogoRecursos({ alHacerClicReserva, esPublico = false
   const recursosPaginados = recursosFiltrados.slice((paginaActual - 1) * itemsPorPagina, paginaActual * itemsPorPagina);
 
   // Retorna el icono Lucide correspondiente al tipo de recurso
-  const obtenerIconoTipo = (tipo) => {
+  const obtenerIconoTipo = (tipo, size = 28) => {
     switch (tipo) {
-      case 'Dispositivo': return <Laptop size={28} color="white" />;
-      case 'Libro': return <BookOpen size={28} color="white" />;
-      default: return <Layers size={28} color="white" />;
+      case 'Dispositivo': return <Laptop size={size} color="white" />;
+      case 'Libro': return <BookOpen size={size} color="white" />;
+      default: return <Layers size={size} color="white" />;
     }
+  };
+
+  // Retorna una URL de imagen ilustrativa y de alta calidad para cada tipo de recurso
+  const obtenerImagenRecurso = (id, nombre, tipo) => {
+    const mapaImagenes = {
+      'rec_1': 'https://images.unsplash.com/photo-1601987177651-8edfe6c20009?auto=format&fit=crop&w=400&q=80', // Proyector Epson (moderno blanco)
+      'rec_2': 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&w=400&q=80', // Laptop HP (limpia en mesa)
+      'rec_3': 'https://images.unsplash.com/photo-1589256469067-ea99122bbec4?auto=format&fit=crop&w=400&q=80', // Tablet Lenovo (lápiz y tableta)
+      'rec_4': 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=400&q=80', // Física Cuántica (ciencia/cuántica)
+      'rec_5': 'https://images.unsplash.com/photo-1561736778-92e52a77cf94?auto=format&fit=crop&w=400&q=80', // Arduino Kit (cables y placas)
+      'rec_6': 'https://images.unsplash.com/photo-1576086213369-97a306d36557?auto=format&fit=crop&w=400&q=80', // Microscopio (laboratorio médico)
+      'rec_7': 'https://images.unsplash.com/photo-1532187863486-abf9d39d66e8?auto=format&fit=crop&w=400&q=80', // Sensores Vernier (matraces y química)
+      'rec_8': 'https://images.unsplash.com/photo-1593508512255-86ab42a8e620?auto=format&fit=crop&w=400&q=80', // VR Casco (Meta Quest)
+      'rec_9': 'https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=400&q=80', // Diccionario Química (biblioteca científica)
+      'rec_10': 'https://images.unsplash.com/photo-1559757175-5700dde675bc?auto=format&fit=crop&w=400&q=80', // Torso Humano (modelo anatómico)
+      'rec_11': 'https://images.unsplash.com/photo-1517055720413-6e5a807d8b58?auto=format&fit=crop&w=400&q=80', // Experimento Eléctrico (placas de circuito)
+      'rec_12': 'https://images.unsplash.com/photo-1614064641938-3bbee52942c7?auto=format&fit=crop&w=400&q=80', // Calculadora Casio (financiera/oficina)
+      'rec_13': 'https://images.unsplash.com/photo-1496181130204-7552cc14ac1a?auto=format&fit=crop&w=400&q=80', // Laptop Dell (computadora abierta)
+      'rec_14': 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&w=400&q=80', // Tablet Samsung (pantalla encendida)
+      'rec_15': 'https://images.unsplash.com/photo-1530210120070-ad161e4116db?auto=format&fit=crop&w=400&q=80', // Anatomía Ósea (esqueleto)
+      'rec_16': 'https://images.unsplash.com/photo-1509228468518-180dd4864904?auto=format&fit=crop&w=400&q=80', // Grossman Álgebra (pizarra/matemáticas)
+      'rec_17': 'https://images.unsplash.com/photo-1605810230434-7631ac76ec81?auto=format&fit=crop&w=400&q=80', // Termodinámica (sensores físicos)
+      'rec_18': 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=400&q=80', // Proyector Optoma (luz de lente/proyección)
+      'rec_19': 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=400&q=80', // Química Chang (manual/cuaderno de química)
+      'rec_20': 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=400&q=80', // Cristalería (tubos de ensayo)
+    };
+
+    if (mapaImagenes[id]) {
+      return mapaImagenes[id];
+    }
+
+    // Fallback para recursos agregados en caliente por el administrador
+    const nomLower = nombre.toLowerCase();
+    if (nomLower.includes('proyector')) return 'https://images.unsplash.com/photo-1601987177651-8edfe6c20009?auto=format&fit=crop&w=400&q=80';
+    if (nomLower.includes('laptop') || nomLower.includes('computadora')) return 'https://images.unsplash.com/photo-1496181130204-7552cc14ac1a?auto=format&fit=crop&w=400&q=80';
+    if (nomLower.includes('tablet') || nomLower.includes('ipad')) return 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&w=400&q=80';
+    if (nomLower.includes('libro') || nomLower.includes('álgebra') || nomLower.includes('química') || nomLower.includes('física')) return 'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=400&q=80';
+    
+    if (tipo === 'Dispositivo') {
+      return 'https://images.unsplash.com/photo-1498049794561-7780e7231661?auto=format&fit=crop&w=400&q=80';
+    }
+    if (tipo === 'Libro') {
+      return 'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&w=400&q=80';
+    }
+    return 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=400&q=80';
   };
 
 
@@ -185,64 +230,78 @@ export default function CatalogoRecursos({ alHacerClicReserva, esPublico = false
                   className={`glass-card ${rec.tipo === 'Dispositivo' ? 'glow-card-cyan' : 'glow-card-gold'}`}
                   style={{ 
                     display: 'flex', 
-                    flexDirection: 'column', 
+                    flexDirection: 'row', 
                     padding: 0,
                     overflow: 'hidden',
                     transition: 'all 0.3s ease',
-                    minHeight: '340px',
-                    flex: '1 1 280px',
-                    maxWidth: '320px'
+                    minHeight: '200px',
+                    width: '100%',
+                    maxWidth: '540px',
+                    flex: '1 1 480px'
                   }}
                 >
-                  {/* Encabezado visual de la tarjeta */}
-                  <div style={estiloCabeceraTarjeta(rec.tipo)}>
+                  {/* Lado izquierdo: Imagen representativa */}
+                  <div style={{ width: '160px', minWidth: '160px', height: '100%', position: 'relative', overflow: 'hidden' }}>
+                    <img 
+                      src={obtenerImagenRecurso(rec.id, rec.nombre, rec.tipo)} 
+                      alt={rec.nombre} 
+                      style={{ 
+                        width: '100%', 
+                        height: '100%', 
+                        objectFit: 'cover',
+                        display: 'block'
+                      }} 
+                    />
+                    {/* Badge tipo flotante */}
                     <div 
                       style={{ 
-                        width: '52px', 
-                        height: '52px', 
-                        borderRadius: '50%', 
-                        backgroundColor: rec.tipo === 'Dispositivo' ? 'var(--color-brand-cyan-muted)' : 'var(--color-brand-gold)',
+                        position: 'absolute', 
+                        top: '10px', 
+                        left: '10px', 
+                        backgroundColor: 'rgba(15, 23, 42, 0.75)', 
+                        backdropFilter: 'blur(4px)',
+                        borderRadius: '6px', 
+                        padding: '0.2rem 0.4rem', 
                         display: 'flex', 
                         alignItems: 'center', 
-                        justifyContent: 'center',
-                        boxShadow: 'var(--shadow-sm)',
-                        marginBottom: '0.5rem'
+                        gap: '0.3rem',
+                        border: '1px solid rgba(255,255,255,0.1)'
                       }}
                     >
-                      {obtenerIconoTipo(rec.tipo)}
+                      {obtenerIconoTipo(rec.tipo, 12)}
+                      <span style={{ fontSize: '0.625rem', fontWeight: '800', textTransform: 'uppercase', color: 'white' }}>
+                        {rec.tipo}
+                      </span>
                     </div>
-                    <span style={{ fontSize: '0.625rem', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--text-secondary)' }}>
-                      {rec.tipo}
-                    </span>
                   </div>
 
-                  {/* Cuerpo de la tarjeta */}
-                  <div style={{ padding: '1.25rem', flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+                  {/* Lado derecho: Descripción e información */}
+                  <div style={{ padding: '1.25rem', flexGrow: 1, display: 'flex', flexDirection: 'column', justifyContent: 'space-between', minWidth: 0 }}>
                     <div>
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '0.5rem', marginBottom: '0.5rem' }}>
-                        <h3 style={{ fontSize: '1.1rem', fontWeight: '800', margin: 0, color: 'var(--text-primary)' }}>
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '0.5rem', marginBottom: '0.35rem' }}>
+                        <h3 style={{ fontSize: '1rem', fontWeight: '800', margin: 0, color: 'var(--text-primary)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                           {rec.nombre}
                         </h3>
                         {obtenerInsigniaEstado(rec.estado)}
                       </div>
                       
-                      <p style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)', lineHeight: '1.5', marginBottom: '1.25rem' }}>
+                      <p style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)', lineHeight: '1.4', marginBottom: 0, display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                         {rec.descripcion || 'Sin descripción adicional.'}
                       </p>
                     </div>
 
                     <div>
                       {/* Barra de progreso de stock */}
-                      <div style={{ marginBottom: '1rem' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', fontWeight: '700', marginBottom: '0.25rem' }}>
-                          <span style={{ color: 'var(--text-muted)' }}>Stock Disponible</span>
+                      <div style={{ marginBottom: '0.75rem' }}>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.7rem', fontWeight: '700', marginBottom: '0.2rem' }}>
+                          <span style={{ color: 'var(--text-muted)' }}>Stock</span>
                           <span style={{ color: sinStock ? 'var(--color-danger)' : 'var(--color-success)' }}>
                             {rec.cantidadDisponible} / {rec.cantidadTotal} uds.
                           </span>
                         </div>
                         <div 
                           style={{ 
-                            height: '6px', 
+                            height: '5px', 
                             backgroundColor: 'var(--border-color)', 
                             borderRadius: '3px',
                             overflow: 'hidden'
@@ -264,7 +323,7 @@ export default function CatalogoRecursos({ alHacerClicReserva, esPublico = false
                       {esPublico ? (
                         <button 
                           className="btn btn-secondary w-full"
-                          style={{ fontSize: '0.8125rem' }}
+                          style={{ fontSize: '0.75rem', padding: '0.45rem' }}
                           disabled={true}
                         >
                           Inicie sesión para reservar
@@ -273,10 +332,10 @@ export default function CatalogoRecursos({ alHacerClicReserva, esPublico = false
                         <button 
                           onClick={() => alHacerClicReserva && alHacerClicReserva(rec)}
                           className={`btn w-full ${rec.tipo === 'Dispositivo' ? 'btn-primary' : 'btn-accent'}`}
-                          style={{ fontSize: '0.8125rem' }}
+                          style={{ fontSize: '0.75rem', padding: '0.45rem' }}
                           disabled={deshabilitarReserva}
                         >
-                          {enMantenimiento ? 'En Mantenimiento' : (sinStock ? 'Sin Stock Disponible' : 'Reservar Ahora')}
+                          {enMantenimiento ? 'En Mantenimiento' : (sinStock ? 'Sin Stock' : 'Reservar Ahora')}
                         </button>
                       )}
                     </div>
