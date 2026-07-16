@@ -243,7 +243,7 @@ export default function CatalogoRecursos({ alHacerClicReserva, esPublico = false
                   {/* Lado izquierdo: Imagen representativa */}
                   <div style={{ width: '160px', minWidth: '160px', height: '100%', position: 'relative', overflow: 'hidden' }}>
                     <img 
-                      src={obtenerImagenRecurso(rec.id, rec.nombre, rec.tipo)} 
+                      src={rec.imagenUrl || obtenerImagenRecurso(rec.id, rec.nombre, rec.tipo)} 
                       alt={rec.nombre} 
                       style={{ 
                         width: '100%', 
