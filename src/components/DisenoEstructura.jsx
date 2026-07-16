@@ -45,6 +45,7 @@ export default function DisenoEstructura({ children, pestañaActual, establecerP
   const [emailEdit, setEmailEdit] = useState('');
   const [telefonoEdit, setTelefonoEdit] = useState('');
   const [cargoEdit, setCargoEdit] = useState('');
+  const [rolEdit, setRolEdit] = useState('');
 
   // Estados para configuración adicional
   const [pestañaPredeterminada, setPestañaPredeterminada] = useState(localStorage.getItem('prre_pestaña_predeterminada') || 'dashboard');
@@ -57,6 +58,7 @@ export default function DisenoEstructura({ children, pestañaActual, establecerP
       setEmailEdit(usuarioActual.email || '');
       setTelefonoEdit(usuarioActual.telefono || 'No especificado');
       setCargoEdit(usuarioActual.cargo || 'Docente de Materia');
+      setRolEdit(usuarioActual.rol || '');
     }
   }, [usuarioActual, modalPerfilAbierto]);
 
@@ -72,6 +74,7 @@ export default function DisenoEstructura({ children, pestañaActual, establecerP
       email: emailEdit,
       telefono: telefonoEdit,
       cargo: cargoEdit,
+      rol: rolEdit,
     });
     alert('¡Su perfil ha sido actualizado con éxito!');
     setEditandoPerfil(false);
@@ -111,7 +114,7 @@ export default function DisenoEstructura({ children, pestañaActual, establecerP
     { id: 'recursos', etiqueta: 'Recursos', descripcion: 'Inventario de equipos y stock', icono: Package, roles: ['Administrador', 'Docente', 'Estudiante'] },
     { id: 'espacios', etiqueta: 'Espacios', descripcion: 'Aulas y laboratorios', icono: MapPin, roles: ['Administrador', 'Docente', 'Estudiante'] },
     { id: 'reservas', etiqueta: 'Reservar', descripcion: 'Nueva solicitud de préstamo', icono: CalendarCheck, roles: ['Administrador', 'Docente', 'Estudiante'] },
-    { id: 'historial', etiqueta: 'Historial', descripcion: 'Bitácora general de registros', icono: History, roles: ['Administrador', 'Docente'] },
+    { id: 'historial', etiqueta: 'Historial', descripcion: 'Bitácora general de registros', icono: History, roles: ['Administrador', 'Docente', 'Estudiante'] },
     { id: 'reportes', etiqueta: 'Reportes', descripcion: 'Estadísticas e informes', icono: BarChart3, roles: ['Administrador', 'Docente'] },
     { id: 'roles', etiqueta: 'Usuarios & Roles', descripcion: 'Privilegios y cuentas', icono: Users, roles: ['Administrador'] },
     { id: 'ayuda', etiqueta: 'Ayuda', descripcion: 'Centro de soporte y FAQs', icono: HelpCircle, roles: ['Administrador', 'Docente', 'Estudiante'] },
@@ -558,6 +561,21 @@ export default function DisenoEstructura({ children, pestañaActual, establecerP
                     onChange={(e) => setCargoEdit(e.target.value)}
                   />
                 </div>
+
+                {usuarioActual?.rol !== 'Administrador' && (
+                  <div>
+                    <label style={{ display: 'block', fontSize: '0.75rem', color: 'var(--text-secondary)', marginBottom: '0.25rem', fontWeight: '600' }}>Tipo de Cuenta (Rol)</label>
+                    <select 
+                      className="form-control" 
+                      style={{ width: '100%', fontSize: '0.8125rem', padding: '0.4rem 0.5rem' }}
+                      value={rolEdit}
+                      onChange={(e) => setRolEdit(e.target.value)}
+                    >
+                      <option value="Docente">Docente</option>
+                      <option value="Estudiante">Estudiante</option>
+                    </select>
+                  </div>
+                )}
 
                 <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem' }}>
                   <button type="button" onClick={() => setEditandoPerfil(false)} className="btn btn-secondary flex-1" style={{ fontSize: '0.8125rem', padding: '0.5rem' }}>

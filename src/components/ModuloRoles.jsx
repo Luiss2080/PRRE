@@ -224,6 +224,7 @@ export default function ModuloRoles() {
                   <th>Operación</th>
                   <th style={{ textAlign: 'center', width: '50px' }}>Admin</th>
                   <th style={{ textAlign: 'center', width: '50px' }}>Docente</th>
+                  <th style={{ textAlign: 'center', width: '50px' }}>Estudiante</th>
                 </tr>
               </thead>
               <tbody>
@@ -236,6 +237,13 @@ export default function ModuloRoles() {
                     </td>
                     <td style={{ textAlign: 'center' }}>
                       {p.docente ? (
+                        <Check size={16} color="var(--color-success)" style={{ margin: '0 auto', display: 'block' }} />
+                      ) : (
+                        <X size={16} color="var(--color-danger)" style={{ margin: '0 auto', display: 'block' }} />
+                      )}
+                    </td>
+                    <td style={{ textAlign: 'center' }}>
+                      {p.estudiante ? (
                         <Check size={16} color="var(--color-success)" style={{ margin: '0 auto', display: 'block' }} />
                       ) : (
                         <X size={16} color="var(--color-danger)" style={{ margin: '0 auto', display: 'block' }} />
