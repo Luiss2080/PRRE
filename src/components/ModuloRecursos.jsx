@@ -483,8 +483,60 @@ export default function ModuloRecursos({ alRedireccionarReserva }) {
                     placeholder="Detalles sobre marca, modelo, accesorios incluidos, ubicación, etc..." 
                     value={descripcion} 
                     onChange={(e) => setDescripcion(e.target.value)}
-                    rows="3"
+                    rows="2"
                   />
+                </div>
+
+                <div className="form-group">
+                  <label className="form-label">Imagen de la Card (URL de Unsplash o Personalizada)</label>
+                  <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem' }}>
+                    <input 
+                      type="text" 
+                      className="form-input" 
+                      placeholder="Ingrese URL de imagen..." 
+                      value={imagenUrl} 
+                      onChange={(e) => setImagenUrl(e.target.value)}
+                      style={{ flexGrow: 1 }}
+                    />
+                    <select
+                      className="form-select"
+                      style={{ width: '130px', fontSize: '0.75rem', padding: '0 0.5rem' }}
+                      onChange={(e) => {
+                        if (e.target.value) {
+                          setImagenUrl(e.target.value);
+                        }
+                      }}
+                      value=""
+                    >
+                      <option value="" disabled>Predefinidas</option>
+                      <option value="https://images.unsplash.com/photo-1593642632823-8f785ba67e45?auto=format&fit=crop&w=400&q=80">Laptop Dell</option>
+                      <option value="https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&w=400&q=80">Laptop HP</option>
+                      <option value="https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&w=400&q=80">Tablet Samsung</option>
+                      <option value="https://images.unsplash.com/photo-1585776245991-cf89dd7fc73a?auto=format&fit=crop&w=400&q=80">Tablet Lenovo</option>
+                      <option value="https://images.unsplash.com/photo-1601987177651-8edfe6c20009?auto=format&fit=crop&w=400&q=80">Proyector Epson</option>
+                      <option value="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=400&q=80">Proyector Cine</option>
+                      <option value="https://images.unsplash.com/photo-1608564697071-ddf911d81370?auto=format&fit=crop&w=400&q=80">Kit Arduino</option>
+                      <option value="https://images.unsplash.com/photo-1603126857599-f6e157fa2fe6?auto=format&fit=crop&w=400&q=80">Sensores Química</option>
+                      <option value="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=400&q=80">Experimento Eléctrico</option>
+                      <option value="https://images.unsplash.com/photo-1579722820308-d74e571900a9?auto=format&fit=crop&w=400&q=80">Anatomía Ósea</option>
+                      <option value="https://images.unsplash.com/photo-1559757175-5700dde675bc?auto=format&fit=crop&w=400&q=80">Torso Humano</option>
+                      <option value="https://images.unsplash.com/photo-1576086213369-97a306d36557?auto=format&fit=crop&w=400&q=80">Microscopio</option>
+                      <option value="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=400&q=80">Cristalería</option>
+                      <option value="https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=400&q=80">Libros / Biblioteca</option>
+                    </select>
+                  </div>
+                  {imagenUrl && (
+                    <div style={{ marginTop: '0.5rem', textAlign: 'center', border: '1px solid var(--border-color)', borderRadius: '8px', overflow: 'hidden', height: '110px' }}>
+                      <img 
+                        src={imagenUrl} 
+                        alt="Vista previa" 
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        onError={(e) => {
+                          e.target.src = 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=400&q=80';
+                        }}
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
 
