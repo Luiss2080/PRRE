@@ -63,16 +63,16 @@ export default function ModuloRoles() {
 
   // Matriz de permisos del sistema PRRE
   const matrizPermisos = [
-    { modulo: 'Recursos', operacion: 'Crear / Editar / Eliminar', admin: true, docente: false },
-    { modulo: 'Recursos', operacion: 'Visualizar Disponibilidad', admin: true, docente: true },
-    { modulo: 'Espacios', operacion: 'Crear / Editar / Eliminar', admin: true, docente: false },
-    { modulo: 'Espacios', operacion: 'Visualizar Disponibilidad', admin: true, docente: true },
-    { modulo: 'Reservas', operacion: 'Aprobar / Rechazar Solicitudes', admin: true, docente: false },
-    { modulo: 'Reservas', operacion: 'Solicitar Reservas', admin: true, docente: true },
-    { modulo: 'Reservas', operacion: 'Cancelar Propias Reservas', admin: true, docente: true },
-    { modulo: 'Historial', operacion: 'Ver Registro Completo (Global)', admin: true, docente: false },
-    { modulo: 'Historial', operacion: 'Ver Historial Propio', admin: true, docente: true },
-    { modulo: 'Roles y Permisos', operacion: 'Gestionar Usuarios y Cuentas', admin: true, docente: false },
+    { modulo: 'Recursos', operacion: 'Crear / Editar / Eliminar', admin: true, docente: false, estudiante: false },
+    { modulo: 'Recursos', operacion: 'Visualizar Disponibilidad', admin: true, docente: true, estudiante: true },
+    { modulo: 'Espacios', operacion: 'Crear / Editar / Eliminar', admin: true, docente: false, estudiante: false },
+    { modulo: 'Espacios', operacion: 'Visualizar Disponibilidad', admin: true, docente: true, estudiante: true },
+    { modulo: 'Reservas', operacion: 'Aprobar / Rechazar Solicitudes', admin: true, docente: false, estudiante: false },
+    { modulo: 'Reservas', operacion: 'Solicitar Reservas', admin: true, docente: true, estudiante: true },
+    { modulo: 'Reservas', operacion: 'Cancelar Propias Reservas', admin: true, docente: true, estudiante: true },
+    { modulo: 'Historial', operacion: 'Ver Registro Completo (Global)', admin: true, docente: false, estudiante: false },
+    { modulo: 'Historial', operacion: 'Ver Historial Propio', admin: true, docente: true, estudiante: true },
+    { modulo: 'Roles y Permisos', operacion: 'Gestionar Usuarios y Cuentas', admin: true, docente: false, estudiante: false },
   ];
 
   const itemsPorPagina = 5;
