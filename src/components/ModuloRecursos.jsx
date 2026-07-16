@@ -38,6 +38,7 @@ export default function ModuloRecursos({ alRedireccionarReserva }) {
   const [cantidadTotal, setCantidadTotal] = useState(1);
   const [estado, setEstado] = useState('Excelente');
   const [descripcion, setDescripcion] = useState('');
+  const [imagenUrl, setImagenUrl] = useState('');
   const [errorFormulario, setErrorFormulario] = useState('');
 
   // Carga los recursos del sistema
@@ -57,6 +58,7 @@ export default function ModuloRecursos({ alRedireccionarReserva }) {
     setCantidadTotal(1);
     setEstado('Excelente');
     setDescripcion('');
+    setImagenUrl('');
     setErrorFormulario('');
     setModalAbierto(true);
   };
@@ -69,6 +71,7 @@ export default function ModuloRecursos({ alRedireccionarReserva }) {
     setCantidadTotal(recurso.cantidadTotal);
     setEstado(recurso.estado);
     setDescripcion(recurso.descripcion || '');
+    setImagenUrl(recurso.imagenUrl || '');
     setErrorFormulario('');
     setModalAbierto(true);
   };
