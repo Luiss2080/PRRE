@@ -120,24 +120,39 @@ export default function ModalAutenticacion({ estaAbierto, alCerrar, pestañaInic
           )}
 
           {pestaña === 'register' && (
-            <div className="form-group">
-              <label className="form-label">Nombre Completo</label>
-              <div style={{ position: 'relative' }}>
-                <User 
-                  size={16} 
-                  style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} 
-                />
-                <input 
-                  type="text" 
-                  className="form-input" 
-                  placeholder="Ej. Juan Pérez" 
-                  value={nombre} 
-                  onChange={(e) => setNombre(e.target.value)}
-                  style={{ paddingLeft: '2.5rem' }}
-                  required
-                />
+            <>
+              <div className="form-group">
+                <label className="form-label">Nombre Completo</label>
+                <div style={{ position: 'relative' }}>
+                  <User 
+                    size={16} 
+                    style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} 
+                  />
+                  <input 
+                    type="text" 
+                    className="form-input" 
+                    placeholder="Ej. Juan Pérez" 
+                    value={nombre} 
+                    onChange={(e) => setNombre(e.target.value)}
+                    style={{ paddingLeft: '2.5rem' }}
+                    required
+                  />
+                </div>
               </div>
-            </div>
+
+              <div className="form-group">
+                <label className="form-label">Tipo de Cuenta (Rol)</label>
+                <select 
+                  className="form-select" 
+                  value={rol} 
+                  onChange={(e) => setRol(e.target.value)}
+                  style={{ width: '100%' }}
+                >
+                  <option value="Docente">Docente</option>
+                  <option value="Estudiante">Estudiante</option>
+                </select>
+              </div>
+            </>
           )}
 
           <div className="form-group">
