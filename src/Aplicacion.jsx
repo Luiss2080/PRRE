@@ -312,6 +312,26 @@ function ContenidoAplicacion() {
                 ))}
               </div>
 
+              {/* Imágenes de Valores */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem', marginBottom: '1.5rem' }}>
+                <div className="glass-card" style={{ padding: '0.75rem', overflow: 'hidden', borderRadius: 'var(--border-radius)' }}>
+                  <img
+                    src="/img/ValoresFundamentales.jpeg"
+                    alt="Valores Fundamentales"
+                    style={{ width: '100%', height: 'auto', borderRadius: 'var(--border-radius-sm)', display: 'block', objectFit: 'cover' }}
+                  />
+                  <p style={{ textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: '700', marginTop: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Valores Fundamentales</p>
+                </div>
+                <div className="glass-card" style={{ padding: '0.75rem', overflow: 'hidden', borderRadius: 'var(--border-radius)' }}>
+                  <img
+                    src="/img/ValoresInstitucionales.jpeg"
+                    alt="Valores Institucionales"
+                    style={{ width: '100%', height: 'auto', borderRadius: 'var(--border-radius-sm)', display: 'block', objectFit: 'cover' }}
+                  />
+                  <p style={{ textAlign: 'center', color: 'var(--text-muted)', fontSize: '0.75rem', fontWeight: '700', marginTop: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Valores Institucionales</p>
+                </div>
+              </div>
+
               {/* Cooperación EPDB */}
               <div className="glass-card" style={{ padding: '2rem' }}>
                 <h3 style={{ fontSize: '1.125rem', marginBottom: '0.75rem', color: 'var(--color-brand-cyan-muted)' }}>Cooperación con Escuelas Populares Don Bosco</h3>
@@ -473,11 +493,12 @@ function ContenidoAplicacion() {
                     ))}
                   </div>
 
-                  <div style={{ marginTop: '1.5rem', padding: '1rem', backgroundColor: 'rgba(0,229,255,0.04)', borderRadius: 'var(--border-radius-sm)', border: '1px solid var(--border-color)' }}>
-                    <p style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)', lineHeight: '1.65' }}>
-                      <b style={{ color: 'var(--color-brand-cyan-muted)' }}>Primera promoción:</b> Graduados en 1994 con 9 estudiantes bachilleres.<br />
-                      <b style={{ color: 'var(--color-brand-gold)' }}>XXIX aniversario</b> de vida institucional celebrado con reconocimiento legislativo departamental.
-                    </p>
+                  <div style={{ marginTop: '1.5rem', borderRadius: 'var(--border-radius-sm)', overflow: 'hidden' }}>
+                    <img
+                      src="/img/PlantelAdministrativo.jpeg"
+                      alt="Plantel Administrativo"
+                      style={{ width: '100%', height: 'auto', display: 'block', borderRadius: 'var(--border-radius-sm)', objectFit: 'cover' }}
+                    />
                   </div>
                 </div>
               </div>
