@@ -71,19 +71,19 @@ export default function ModalAutenticacion({ estaAbierto, alCerrar, pestañaInic
     <div className="modal-overlay">
       <div className="modal-content" style={{ maxWidth: '420px' }}>
         {/* Banner de marca del LogoInstitucional.png dentro del modal */}
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: '1.5rem', gap: '0.35rem' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: '0.75rem', gap: '0.2rem' }}>
           <img 
             src="/LogoInstitucional.png" 
             alt="Logo PRRE" 
-            style={{ width: '56px', height: 'auto', display: 'block', filter: 'drop-shadow(0 2px 8px rgba(0, 229, 255, 0.2))' }} 
+            style={{ width: '40px', height: 'auto', display: 'block', filter: 'drop-shadow(0 2px 8px rgba(0, 229, 255, 0.2))' }} 
           />
-          <span style={{ fontSize: '0.625rem', fontWeight: '800', color: 'var(--color-brand-cyan-muted)', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+          <span style={{ fontSize: '0.565rem', fontWeight: '800', color: 'var(--color-brand-cyan-muted)', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
             Portal de Reserva • U.E. Germán Busch B
           </span>
         </div>
 
-        <div className="modal-header" style={{ borderBottom: 'none', paddingBottom: 0, paddingTop: '0.5rem' }}>
-          <h2 className="gradient-text" style={{ fontSize: '1.35rem' }}>
+        <div className="modal-header" style={{ borderBottom: 'none', paddingBottom: 0, paddingTop: '0.35rem', paddingLeft: '1.25rem', paddingRight: '1.25rem' }}>
+          <h2 className="gradient-text" style={{ fontSize: '1.25rem' }}>
             {pestaña === 'login' ? 'Iniciar Sesión' : 'Crear Cuenta'}
           </h2>
           <button 
@@ -101,7 +101,7 @@ export default function ModalAutenticacion({ estaAbierto, alCerrar, pestañaInic
           </button>
         </div>
 
-        <form onSubmit={alEnviar} className="modal-body" style={{ paddingTop: '1rem' }}>
+        <form onSubmit={alEnviar} className="modal-body" style={{ paddingTop: '0.6rem', paddingLeft: '1.25rem', paddingRight: '1.25rem', paddingBottom: '0.75rem' }}>
           {error && (
             <div 
               style={{ 
@@ -121,11 +121,11 @@ export default function ModalAutenticacion({ estaAbierto, alCerrar, pestañaInic
 
           {pestaña === 'register' && (
             <>
-              <div className="form-group">
-                <label className="form-label">Nombre Completo</label>
+              <div className="form-group" style={{ marginBottom: '0.6rem' }}>
+                <label className="form-label" style={{ marginBottom: '0.25rem', fontSize: '0.7rem' }}>Nombre Completo</label>
                 <div style={{ position: 'relative' }}>
                   <User 
-                    size={16} 
+                    size={14} 
                     style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} 
                   />
                   <input 
@@ -134,19 +134,19 @@ export default function ModalAutenticacion({ estaAbierto, alCerrar, pestañaInic
                     placeholder="Ej. Juan Pérez" 
                     value={nombre} 
                     onChange={(e) => setNombre(e.target.value)}
-                    style={{ paddingLeft: '2.5rem' }}
+                    style={{ paddingLeft: '2.5rem', height: '38px', fontSize: '0.875rem' }}
                     required
                   />
                 </div>
               </div>
 
-              <div className="form-group">
-                <label className="form-label">Tipo de Cuenta (Rol)</label>
+              <div className="form-group" style={{ marginBottom: '0.6rem' }}>
+                <label className="form-label" style={{ marginBottom: '0.25rem', fontSize: '0.7rem' }}>Tipo de Cuenta (Rol)</label>
                 <select 
                   className="form-select" 
                   value={rol} 
                   onChange={(e) => setRol(e.target.value)}
-                  style={{ width: '100%' }}
+                  style={{ width: '100%', height: '38px', fontSize: '0.875rem' }}
                 >
                   <option value="Docente">Docente</option>
                   <option value="Estudiante">Estudiante</option>
@@ -155,11 +155,11 @@ export default function ModalAutenticacion({ estaAbierto, alCerrar, pestañaInic
             </>
           )}
 
-          <div className="form-group">
-            <label className="form-label">Correo Institucional</label>
+          <div className="form-group" style={{ marginBottom: '0.6rem' }}>
+            <label className="form-label" style={{ marginBottom: '0.25rem', fontSize: pestaña === 'register' ? '0.7rem' : undefined }}>Correo Institucional</label>
             <div style={{ position: 'relative' }}>
               <Mail 
-                size={16} 
+                size={14} 
                 style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} 
               />
               <input 
@@ -168,17 +168,17 @@ export default function ModalAutenticacion({ estaAbierto, alCerrar, pestañaInic
                 placeholder="ejemplo@colegio.edu.bo" 
                 value={email} 
                 onChange={(e) => setEmail(e.target.value)}
-                style={{ paddingLeft: '2.5rem' }}
+                style={{ paddingLeft: '2.5rem', height: pestaña === 'register' ? '38px' : undefined, fontSize: pestaña === 'register' ? '0.875rem' : undefined }}
                 required
               />
             </div>
           </div>
 
-          <div className="form-group">
-            <label className="form-label">Contraseña</label>
+          <div className="form-group" style={{ marginBottom: '0.6rem' }}>
+            <label className="form-label" style={{ marginBottom: '0.25rem', fontSize: pestaña === 'register' ? '0.7rem' : undefined }}>Contraseña</label>
             <div style={{ position: 'relative' }}>
               <Lock 
-                size={16} 
+                size={14} 
                 style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} 
               />
               <input 
@@ -187,7 +187,7 @@ export default function ModalAutenticacion({ estaAbierto, alCerrar, pestañaInic
                 placeholder="••••••••" 
                 value={password} 
                 onChange={(e) => setPassword(e.target.value)}
-                style={{ paddingLeft: '2.5rem' }}
+                style={{ paddingLeft: '2.5rem', height: pestaña === 'register' ? '38px' : undefined, fontSize: pestaña === 'register' ? '0.875rem' : undefined }}
                 required
               />
             </div>
@@ -195,11 +195,11 @@ export default function ModalAutenticacion({ estaAbierto, alCerrar, pestañaInic
 
           {pestaña === 'register' && (
             <>
-              <div className="form-group">
-                <label className="form-label">Confirmar Contraseña</label>
+              <div className="form-group" style={{ marginBottom: '0.6rem' }}>
+                <label className="form-label" style={{ marginBottom: '0.25rem', fontSize: '0.7rem' }}>Confirmar Contraseña</label>
                 <div style={{ position: 'relative' }}>
                   <Lock 
-                    size={16} 
+                    size={14} 
                     style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', color: 'var(--text-muted)' }} 
                   />
                   <input 
@@ -208,7 +208,7 @@ export default function ModalAutenticacion({ estaAbierto, alCerrar, pestañaInic
                     placeholder="••••••••" 
                     value={confirmarPassword} 
                     onChange={(e) => setConfirmarPassword(e.target.value)}
-                    style={{ paddingLeft: '2.5rem' }}
+                    style={{ paddingLeft: '2.5rem', height: '38px', fontSize: '0.875rem' }}
                     required
                   />
                 </div>
@@ -218,7 +218,8 @@ export default function ModalAutenticacion({ estaAbierto, alCerrar, pestañaInic
 
           <button 
             type="submit" 
-            className="btn btn-primary w-full mt-4" 
+            className="btn btn-primary w-full" 
+            style={{ marginTop: pestaña === 'register' ? '0.5rem' : '1rem' }}
             disabled={cargando}
           >
             {cargando ? (
@@ -231,7 +232,7 @@ export default function ModalAutenticacion({ estaAbierto, alCerrar, pestañaInic
             )}
           </button>
 
-          <div style={{ textAlign: 'center', marginTop: '1.5rem', fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
+          <div style={{ textAlign: 'center', marginTop: pestaña === 'register' ? '0.5rem' : '1rem', fontSize: '0.8125rem', color: 'var(--text-secondary)' }}>
             {pestaña === 'login' ? (
               <>
                 ¿No tienes cuenta institucional?{' '}
@@ -263,10 +264,10 @@ export default function ModalAutenticacion({ estaAbierto, alCerrar, pestañaInic
             onMouseEnter={() => setMostrarMensajeBusch(false)}
             style={{ 
               backgroundColor: 'var(--bg-primary)', 
-              padding: '1rem', 
+              padding: '0.6rem 1rem', 
               textAlign: 'center', 
               borderTop: '1px solid var(--border-color)', 
-              fontSize: '0.75rem', 
+              fontSize: '0.7rem', 
               color: 'var(--text-muted)',
               cursor: 'pointer',
               transition: 'opacity 0.3s ease'
