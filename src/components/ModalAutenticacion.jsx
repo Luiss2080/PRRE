@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAutenticacion } from '../context/ContextoAutenticacion';
-import { X, Mail, Lock, User } from 'lucide-react';
+import { X, Mail, Lock, User, GraduationCap, BookOpen } from 'lucide-react';
 
 /**
  * ModalAutenticacion
@@ -141,16 +141,60 @@ export default function ModalAutenticacion({ estaAbierto, alCerrar, pestañaInic
               </div>
 
               <div className="form-group" style={{ marginBottom: '0.6rem' }}>
-                <label className="form-label" style={{ marginBottom: '0.25rem', fontSize: '0.7rem' }}>Tipo de Cuenta (Rol)</label>
-                <select 
-                  className="form-select" 
-                  value={rol} 
-                  onChange={(e) => setRol(e.target.value)}
-                  style={{ width: '100%', height: '38px', fontSize: '0.875rem' }}
-                >
-                  <option value="Docente">Docente</option>
-                  <option value="Estudiante">Estudiante</option>
-                </select>
+                <label className="form-label" style={{ marginBottom: '0.35rem', fontSize: '0.7rem' }}>Tipo de Cuenta (Rol)</label>
+                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                  {[
+                    { valor: 'Docente', etiqueta: 'Docente', Icono: BookOpen },
+                    { valor: 'Estudiante', etiqueta: 'Estudiante', Icono: GraduationCap }
+                  ].map(({ valor, etiqueta, Icono }) => {
+                    const seleccionado = rol === valor;
+                    return (
+                      <button
+                        key={valor}
+                        type="button"
+                        onClick={() => setRol(valor)}
+                        style={{
+                          flex: 1,
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '0.3rem',
+                          padding: '0.6rem 0.5rem',
+                          borderRadius: 'var(--border-radius-sm)',
+                          border: seleccionado
+                            ? '2px solid var(--color-brand-cyan)'
+                            : '2px solid var(--border-color)',
+                          background: seleccionado
+                            ? 'rgba(34, 211, 238, 0.1)'
+                            : 'var(--bg-secondary)',
+                          color: seleccionado ? 'var(--color-brand-cyan)' : 'var(--text-secondary)',
+                          cursor: 'pointer',
+                          transition: 'all 0.2s ease',
+                          boxShadow: seleccionado ? '0 0 12px rgba(34,211,238,0.18)' : 'none',
+                          fontSize: '0.8rem',
+                          fontWeight: seleccionado ? '700' : '500',
+                          letterSpacing: '0.01em'
+                        }}
+                        onMouseEnter={(e) => {
+                          if (!seleccionado) {
+                            e.currentTarget.style.borderColor = 'rgba(34,211,238,0.4)';
+                            e.currentTarget.style.color = 'var(--text-primary)';
+                          }
+                        }}
+                        onMouseLeave={(e) => {
+                          if (!seleccionado) {
+                            e.currentTarget.style.borderColor = 'var(--border-color)';
+                            e.currentTarget.style.color = 'var(--text-secondary)';
+                          }
+                        }}
+                      >
+                        <Icono size={18} />
+                        {etiqueta}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
             </>
           )}
