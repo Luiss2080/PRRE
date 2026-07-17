@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useAutenticacion } from '../context/ContextoAutenticacion';
 import { getRecursos, saveRecurso, deleteRecurso } from '../utils/datosSimulados';
 import CatalogoRecursos from './CatalogoRecursos';
-import { Plus, Edit2, Trash2, Search, X, Laptop, BookOpen, Eye, Table, Layers, AlertTriangle } from 'lucide-react';
+import { Plus, Edit2, Trash2, Search, X, Laptop, BookOpen, Eye, Table, Layers, AlertTriangle, Upload, Link } from 'lucide-react';
 
 /**
  * ModuloRecursos
@@ -39,6 +39,8 @@ export default function ModuloRecursos({ alRedireccionarReserva }) {
   const [estado, setEstado] = useState('Excelente');
   const [descripcion, setDescripcion] = useState('');
   const [imagenUrl, setImagenUrl] = useState('');
+  const [modoImagen, setModoImagen] = useState('url'); // 'url' | 'file'
+  const [cargandoImagen, setCargandoImagen] = useState(false);
   const [errorFormulario, setErrorFormulario] = useState('');
 
   // Carga los recursos del sistema
@@ -59,6 +61,7 @@ export default function ModuloRecursos({ alRedireccionarReserva }) {
     setEstado('Excelente');
     setDescripcion('');
     setImagenUrl('');
+    setModoImagen('url');
     setErrorFormulario('');
     setModalAbierto(true);
   };
@@ -72,8 +75,36 @@ export default function ModuloRecursos({ alRedireccionarReserva }) {
     setEstado(recurso.estado);
     setDescripcion(recurso.descripcion || '');
     setImagenUrl(recurso.imagenUrl || '');
+    // Si la imagen guardada es base64 o una URL normal, detectar modo
+    setModoImagen(recurso.imagenUrl?.startsWith('data:') ? 'file' : 'url');
     setErrorFormulario('');
     setModalAbierto(true);
+  };
+
+  // Maneja la selección de un archivo de imagen local, convirtiéndolo a base64
+  const alSeleccionarArchivo = (e) => {
+    const archivo = e.target.files[0];
+    if (!archivo) return;
+    if (!archivo.type.startsWith('image/')) {
+      setErrorFormulario('Por favor seleccione un archivo de imagen válido (JPG, PNG, WebP, etc.).');
+      return;
+    }
+    if (archivo.size > 5 * 1024 * 1024) {
+      setErrorFormulario('La imagen no puede superar los 5 MB.');
+      return;
+    }
+    setCargandoImagen(true);
+    setErrorFormulario('');
+    const lector = new FileReader();
+    lector.onload = (ev) => {
+      setImagenUrl(ev.target.result);
+      setCargandoImagen(false);
+    };
+    lector.onerror = () => {
+      setErrorFormulario('Error al leer el archivo. Intente nuevamente.');
+      setCargandoImagen(false);
+    };
+    lector.readAsDataURL(archivo);
   };
 
   // Guarda la información del recurso validando el stock
@@ -488,53 +519,132 @@ export default function ModuloRecursos({ alRedireccionarReserva }) {
                 </div>
 
                 <div className="form-group">
-                  <label className="form-label">Imagen de la Card (URL de Unsplash o Personalizada)</label>
-                  <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem' }}>
-                    <input 
-                      type="text" 
-                      className="form-input" 
-                      placeholder="Ingrese URL de imagen..." 
-                      value={imagenUrl} 
-                      onChange={(e) => setImagenUrl(e.target.value)}
-                      style={{ flexGrow: 1 }}
-                    />
-                    <select
-                      className="form-select"
-                      style={{ width: '130px', fontSize: '0.75rem', padding: '0 0.5rem' }}
-                      onChange={(e) => {
-                        if (e.target.value) {
-                          setImagenUrl(e.target.value);
-                        }
+                  <label className="form-label">Imagen de la Card</label>
+
+                  {/* Selector de modo: URL o Archivo local */}
+                  <div style={{ display: 'flex', gap: '0.25rem', backgroundColor: 'var(--bg-secondary)', border: '1px solid var(--border-color)', borderRadius: 'var(--border-radius-sm)', padding: '0.2rem', marginBottom: '0.75rem' }}>
+                    <button
+                      type="button"
+                      onClick={() => { setModoImagen('url'); setImagenUrl(''); }}
+                      style={{
+                        flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem',
+                        padding: '0.4rem', fontSize: '0.75rem', fontWeight: '600', borderRadius: '4px',
+                        border: 'none', cursor: 'pointer', transition: 'all 0.2s',
+                        backgroundColor: modoImagen === 'url' ? 'var(--color-brand-cyan-muted)' : 'transparent',
+                        color: modoImagen === 'url' ? 'white' : 'var(--text-secondary)',
+                        boxShadow: modoImagen === 'url' ? 'var(--shadow-glow-cyan)' : 'none'
                       }}
-                      value=""
                     >
-                      <option value="" disabled>Predefinidas</option>
-                      <option value="https://images.unsplash.com/photo-1593642632823-8f785ba67e45?auto=format&fit=crop&w=400&q=80">Laptop Dell</option>
-                      <option value="https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&w=400&q=80">Laptop HP</option>
-                      <option value="https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&w=400&q=80">Tablet Samsung</option>
-                      <option value="https://images.unsplash.com/photo-1585776245991-cf89dd7fc73a?auto=format&fit=crop&w=400&q=80">Tablet Lenovo</option>
-                      <option value="https://images.unsplash.com/photo-1601987177651-8edfe6c20009?auto=format&fit=crop&w=400&q=80">Proyector Epson</option>
-                      <option value="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=400&q=80">Proyector Cine</option>
-                      <option value="https://images.unsplash.com/photo-1608564697071-ddf911d81370?auto=format&fit=crop&w=400&q=80">Kit Arduino</option>
-                      <option value="https://images.unsplash.com/photo-1603126857599-f6e157fa2fe6?auto=format&fit=crop&w=400&q=80">Sensores Química</option>
-                      <option value="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=400&q=80">Experimento Eléctrico</option>
-                      <option value="https://images.unsplash.com/photo-1579722820308-d74e571900a9?auto=format&fit=crop&w=400&q=80">Anatomía Ósea</option>
-                      <option value="https://images.unsplash.com/photo-1559757175-5700dde675bc?auto=format&fit=crop&w=400&q=80">Torso Humano</option>
-                      <option value="https://images.unsplash.com/photo-1576086213369-97a306d36557?auto=format&fit=crop&w=400&q=80">Microscopio</option>
-                      <option value="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=400&q=80">Cristalería</option>
-                      <option value="https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=400&q=80">Libros / Biblioteca</option>
-                    </select>
+                      <Link size={13} /> URL / Predefinidas
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => { setModoImagen('file'); setImagenUrl(''); }}
+                      style={{
+                        flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.4rem',
+                        padding: '0.4rem', fontSize: '0.75rem', fontWeight: '600', borderRadius: '4px',
+                        border: 'none', cursor: 'pointer', transition: 'all 0.2s',
+                        backgroundColor: modoImagen === 'file' ? 'var(--color-brand-cyan-muted)' : 'transparent',
+                        color: modoImagen === 'file' ? 'white' : 'var(--text-secondary)',
+                        boxShadow: modoImagen === 'file' ? 'var(--shadow-glow-cyan)' : 'none'
+                      }}
+                    >
+                      <Upload size={13} /> Subir desde PC
+                    </button>
                   </div>
+
+                  {modoImagen === 'url' ? (
+                    /* --- Modo URL --- */
+                    <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.5rem' }}>
+                      <input
+                        type="text"
+                        className="form-input"
+                        placeholder="Ingrese URL de imagen..."
+                        value={imagenUrl}
+                        onChange={(e) => setImagenUrl(e.target.value)}
+                        style={{ flexGrow: 1 }}
+                      />
+                      <select
+                        className="form-select"
+                        style={{ width: '130px', fontSize: '0.75rem', padding: '0 0.5rem' }}
+                        onChange={(e) => { if (e.target.value) setImagenUrl(e.target.value); }}
+                        value=""
+                      >
+                        <option value="" disabled>Predefinidas</option>
+                        <option value="https://images.unsplash.com/photo-1593642632823-8f785ba67e45?auto=format&fit=crop&w=400&q=80">Laptop Dell</option>
+                        <option value="https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?auto=format&fit=crop&w=400&q=80">Laptop HP</option>
+                        <option value="https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?auto=format&fit=crop&w=400&q=80">Tablet Samsung</option>
+                        <option value="https://images.unsplash.com/photo-1585776245991-cf89dd7fc73a?auto=format&fit=crop&w=400&q=80">Tablet Lenovo</option>
+                        <option value="https://images.unsplash.com/photo-1601987177651-8edfe6c20009?auto=format&fit=crop&w=400&q=80">Proyector Epson</option>
+                        <option value="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=400&q=80">Proyector Cine</option>
+                        <option value="https://images.unsplash.com/photo-1608564697071-ddf911d81370?auto=format&fit=crop&w=400&q=80">Kit Arduino</option>
+                        <option value="https://images.unsplash.com/photo-1603126857599-f6e157fa2fe6?auto=format&fit=crop&w=400&q=80">Sensores Química</option>
+                        <option value="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=400&q=80">Experimento Eléctrico</option>
+                        <option value="https://images.unsplash.com/photo-1579722820308-d74e571900a9?auto=format&fit=crop&w=400&q=80">Anatomía Ósea</option>
+                        <option value="https://images.unsplash.com/photo-1559757175-5700dde675bc?auto=format&fit=crop&w=400&q=80">Torso Humano</option>
+                        <option value="https://images.unsplash.com/photo-1576086213369-97a306d36557?auto=format&fit=crop&w=400&q=80">Microscopio</option>
+                        <option value="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=400&q=80">Cristalería</option>
+                        <option value="https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=400&q=80">Libros / Biblioteca</option>
+                      </select>
+                    </div>
+                  ) : (
+                    /* --- Modo Archivo local --- */
+                    <label
+                      htmlFor="input-imagen-local"
+                      style={{
+                        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                        gap: '0.5rem', padding: '1.25rem', marginBottom: '0.5rem',
+                        border: '2px dashed var(--border-color)', borderRadius: '8px',
+                        cursor: 'pointer', transition: 'border-color 0.2s, background 0.2s',
+                        backgroundColor: 'var(--bg-secondary)',
+                        color: 'var(--text-secondary)', fontSize: '0.8125rem', textAlign: 'center'
+                      }}
+                      onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'var(--color-brand-cyan)'; e.currentTarget.style.backgroundColor = 'rgba(34,211,238,0.05)'; }}
+                      onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--border-color)'; e.currentTarget.style.backgroundColor = 'var(--bg-secondary)'; }}
+                    >
+                      {cargandoImagen ? (
+                        <span style={{ color: 'var(--color-brand-cyan)' }}>Cargando imagen...</span>
+                      ) : (
+                        <>
+                          <Upload size={22} style={{ color: 'var(--color-brand-cyan)' }} />
+                          <span><strong style={{ color: 'var(--text-primary)' }}>Haz clic para seleccionar</strong> o arrastra una imagen</span>
+                          <span style={{ fontSize: '0.7rem', color: 'var(--text-muted)' }}>JPG, PNG, WebP — máx. 5 MB</span>
+                        </>
+                      )}
+                      <input
+                        id="input-imagen-local"
+                        type="file"
+                        accept="image/*"
+                        style={{ display: 'none' }}
+                        onChange={alSeleccionarArchivo}
+                      />
+                    </label>
+                  )}
+
+                  {/* Vista previa unificada */}
                   {imagenUrl && (
-                    <div style={{ marginTop: '0.5rem', textAlign: 'center', border: '1px solid var(--border-color)', borderRadius: '8px', overflow: 'hidden', height: '110px' }}>
-                      <img 
-                        src={imagenUrl} 
-                        alt="Vista previa" 
+                    <div style={{ position: 'relative', marginTop: '0.5rem', border: '1px solid var(--border-color)', borderRadius: '8px', overflow: 'hidden', height: '110px' }}>
+                      <img
+                        src={imagenUrl}
+                        alt="Vista previa"
                         style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                         onError={(e) => {
                           e.target.src = 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&w=400&q=80';
                         }}
                       />
+                      <button
+                        type="button"
+                        onClick={() => setImagenUrl('')}
+                        style={{
+                          position: 'absolute', top: '6px', right: '6px',
+                          background: 'rgba(0,0,0,0.6)', border: 'none', borderRadius: '50%',
+                          width: '24px', height: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          cursor: 'pointer', color: 'white'
+                        }}
+                        title="Quitar imagen"
+                      >
+                        <X size={13} />
+                      </button>
                     </div>
                   )}
                 </div>
