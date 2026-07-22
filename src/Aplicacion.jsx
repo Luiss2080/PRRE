@@ -433,7 +433,6 @@ function ContenidoAplicacion() {
                   Fundada oficialmente el <b>26 de abril de 1993</b>, la Unidad Educativa Germán Busch “B” es una institución dependiente de las
                   Escuelas Populares Don Bosco, con filosofía orientada a la madurez de niños y jóvenes en Cristo y la Iglesia, enseñando el
                   evangelio mediante la educación y la evangelización. Actualmente cuenta con <b>591 estudiantes</b> en los tres niveles.
-                  En 2019 fue reconocida por la Asamblea Legislativa Departamental de Cochabamba mediante la <b>Ley N° 147/2018-2019</b>.
                 </p>
               </div>
 
@@ -472,7 +471,7 @@ function ContenidoAplicacion() {
                 {/* Plantilla docente */}
                 <div className="glass-card" style={{ padding: '1.5rem' }}>
                   <h3 style={{ fontSize: '1rem', fontWeight: '800', marginBottom: '1rem', color: 'var(--color-brand-gold)', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-                    Plantilla Docente 2024
+                    Plantilla Docente 
                   </h3>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
                     {[
