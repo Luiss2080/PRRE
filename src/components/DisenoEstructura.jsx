@@ -145,8 +145,8 @@ export default function DisenoEstructura({ children, pestañaActual, establecerP
   return (
     <div className="app-container">
       {/* Barra de Navegación Superior */}
-      <header style={estiloEncabezado}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+      <header className="app-shell-header" style={estiloEncabezado}>
+        <div className="app-header-group" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', minWidth: 0 }}>
           {/* Botón de alternancia de la barra lateral (Desktop/Móvil) */}
           <button onClick={alternarMenuLateral} style={estiloBotonAlternarSidebar(menuLateralAbierto)} title="Información y Soporte">
             {menuLateralAbierto ? <ChevronLeft size={20} /> : <Menu size={20} />}
@@ -180,7 +180,7 @@ export default function DisenoEstructura({ children, pestañaActual, establecerP
         </div>
 
         {/* Controles de la parte derecha del encabezado */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+        <div className="app-header-actions" style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', minWidth: 0 }}>
           {/* Botón para cambiar el Tema visual */}
           <button 
             onClick={alternarTema} 
@@ -191,7 +191,7 @@ export default function DisenoEstructura({ children, pestañaActual, establecerP
           </button>
 
           {/* Icono de Campana de Notificaciones */}
-          <div style={estiloContenedorCampanaNotificacion}>
+          <div className="desktop-hide-on-tablet" style={estiloContenedorCampanaNotificacion}>
             <button style={estiloBotonIconoEncabezado}>
               <Bell size={18} />
             </button>
@@ -202,6 +202,7 @@ export default function DisenoEstructura({ children, pestañaActual, establecerP
           <div style={{ position: 'relative' }}>
             <button 
               onClick={() => setMostrarMenuPerfil(!mostrarMenuPerfil)}
+              className="app-profile-trigger"
               style={estiloBotonPerfilEncabezado}
             >
               <div style={estiloAvatarEncabezado}>
@@ -311,8 +312,9 @@ export default function DisenoEstructura({ children, pestañaActual, establecerP
 
       {/* Contenedor del Cuerpo Principal con la barra lateral colapsable */}
       <div style={{ display: 'flex', flexGrow: 1, position: 'relative', minHeight: `calc(100vh - var(--header-height))` }}>
+        {menuLateralAbierto && <div className="app-sidebar-overlay mobile-only" onClick={cerrarMenuLateral} />}
         {/* Barra lateral colapsable (Panel Drawer) */}
-        <aside style={estiloMenuLateralDrawer(menuLateralAbierto)}>
+        <aside className="app-sidebar" style={estiloMenuLateralDrawer(menuLateralAbierto)}>
           <div style={{ display: 'flex', flexDirection: 'column', height: '100%', justifyContent: 'space-between' }}>
             <div>
               {/* Encabezado del panel lateral + botón cerrar en línea */}
@@ -577,7 +579,7 @@ export default function DisenoEstructura({ children, pestañaActual, establecerP
                   </div>
                 )}
 
-                <div style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem' }}>
+                <div className="modal-actions-responsive" style={{ display: 'flex', gap: '0.5rem', marginTop: '1rem' }}>
                   <button type="button" onClick={() => setEditandoPerfil(false)} className="btn btn-secondary flex-1" style={{ fontSize: '0.8125rem', padding: '0.5rem' }}>
                     Cancelar
                   </button>
@@ -615,7 +617,7 @@ export default function DisenoEstructura({ children, pestañaActual, establecerP
                   </div>
                 </div>
 
-                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                <div className="modal-actions-responsive" style={{ display: 'flex', gap: '0.5rem' }}>
                   <button onClick={() => setEditandoPerfil(true)} className="btn btn-accent flex-1" style={{ fontSize: '0.8125rem', padding: '0.5rem' }}>
                     Editar Perfil
                   </button>
@@ -723,7 +725,7 @@ export default function DisenoEstructura({ children, pestañaActual, establecerP
                 </div>
               </div>
 
-              <div style={{ display: 'flex', gap: '0.75rem', marginTop: '1.5rem' }}>
+              <div className="modal-actions-responsive" style={{ display: 'flex', gap: '0.75rem', marginTop: '1.5rem' }}>
                 <button type="button" onClick={() => setModalConfigAbierto(false)} className="btn btn-secondary flex-1" style={{ fontSize: '0.8125rem', padding: '0.5rem' }}>
                   Cancelar
                 </button>

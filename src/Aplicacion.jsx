@@ -138,13 +138,13 @@ function ContenidoAplicacion() {
                   <div style={estiloEtiquetaHero}>
                     PORTAL DE RESERVAS • U. E. GERMÁN BUSCH B
                   </div>
-                  <h1 style={estiloTituloHero}>
+                  <h1 className="public-hero-title" style={estiloTituloHero}>
                     PRRE: <span className="gradient-text">Portal de Reserva</span> de Recursos Educativos
                   </h1>
-                  <p style={estiloSubtituloHero}>
+                  <p className="public-hero-subtitle" style={estiloSubtituloHero}>
                     Un entorno tecnológico estandarizado diseñado en cooperación con las Escuelas Populares Don Bosco (EPDB) para optimizar el préstamo de laptops, proyectores, laboratorios y aulas virtuales.
                   </p>
-                  <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap', marginBottom: '2.5rem' }}>
+                  <div className="public-cta-group">
                     <button 
                       onClick={() => { setPestañaAutenticacion('login'); setModalAutenticacionAbierto(true); }}
                       className="btn btn-primary"
@@ -724,8 +724,8 @@ function ContenidoAplicacion() {
     return (
       <div style={estiloEnvolturaLanding}>
         {/* Encabezado Público */}
-        <header style={estiloEncabezadoLanding}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+        <header className="public-header" style={estiloEncabezadoLanding}>
+          <div className="app-header-group" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', minWidth: 0 }}>
             {/* Botón menú móvil */}
             <button 
               onClick={() => setMenuMovilAbierto(true)}
@@ -757,7 +757,7 @@ function ContenidoAplicacion() {
           </nav>
 
           {/* Controles de autenticación y tema */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+          <div className="public-header-actions" style={{ display: 'flex', alignItems: 'center', gap: '1rem', minWidth: 0 }}>
             <button 
               onClick={alternarTema} 
               style={estiloAlternarTemaLanding} 
