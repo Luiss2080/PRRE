@@ -397,13 +397,7 @@ export default function PanelControl({ establecerPestañaActiva }) {
                 <UserCheck size={20} color="var(--color-brand-cyan-muted)" />
                 Consola del Administrador
               </h3>
-              <div 
-                style={{ 
-                  display: 'grid', 
-                  gridTemplateColumns: 'repeat(2, 1fr)', 
-                  gap: '0.75rem' 
-                }}
-              >
+              <div className="responsive-admin-grid" style={{ gap: '0.75rem' }}>
                 <div style={estiloMiniDatoAdmin}>
                   <span style={{ fontSize: '0.75rem', color: 'var(--text-secondary)' }}>Usuarios Registrados</span>
                   <span style={{ fontSize: '1.125rem', fontWeight: '800' }}>{estadisticas.cantidadUsuarios} cuentas</span>

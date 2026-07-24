@@ -675,7 +675,7 @@ export default function ModuloReservas({ elementoPreseleccionado, alLimpiarPrese
                 )}
 
                 {/* Cantidad y Fechas en una sola fila compacta adaptable */}
-                <div style={{ display: 'grid', gridTemplateColumns: tipoRecurso === 'recurso' ? '1fr 1.5fr 1.5fr' : '1fr 1fr', gap: '0.75rem' }}>
+                <div className="responsive-form-grid" data-columns={tipoRecurso === 'recurso' ? '3' : '2'} style={{ gap: '0.75rem' }}>
                   {tipoRecurso === 'recurso' && (
                     <div className="form-group" style={{ marginBottom: 0 }}>
                       <label className="form-label" style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-secondary)', marginBottom: '0.25rem', display: 'block' }}>Cantidad</label>
@@ -724,7 +724,7 @@ export default function ModuloReservas({ elementoPreseleccionado, alLimpiarPrese
                 </div>
 
                 {/* Hora de Inicio y Duración en una fila compacta */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+                <div className="responsive-form-grid" data-columns="2" style={{ gap: '0.75rem' }}>
                   <div className="form-group" style={{ marginBottom: 0 }}>
                     <label className="form-label" style={{ fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-secondary)', marginBottom: '0.25rem', display: 'block' }}>Hora Inicio</label>
                     <select 

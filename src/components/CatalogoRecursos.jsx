@@ -165,7 +165,7 @@ export default function CatalogoRecursos({ alHacerClicReserva, esPublico = false
         </div>
 
         {/* Info y Contador de Búsqueda de Catálogo */}
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.8125rem', color: 'var(--text-secondary)', marginBottom: '0.75rem', padding: '0 0.25rem' }}>
+        <div className="responsive-summary-bar" style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)', marginBottom: '0.75rem', padding: '0 0.25rem' }}>
           <span>
             {terminoBusqueda || filtroTipo !== 'Todos' ? (
               <>Se encontraron <b>{recursosFiltrados.length}</b> recursos en el catálogo de <b>{recursos.length}</b> en total.</>
@@ -210,15 +210,7 @@ export default function CatalogoRecursos({ alHacerClicReserva, esPublico = false
             </button>
           </div>
         ) : (
-          <div 
-            style={{ 
-              display: 'flex', 
-              flexWrap: 'wrap',
-              gap: '1.5rem',
-              justifyContent: 'center',
-              animation: 'fadeIn 0.4s ease-out'
-            }}
-          >
+          <div className="responsive-catalog-grid" style={{ animation: 'fadeIn 0.4s ease-out' }}>
             {recursosPaginados.map(rec => {
               const sinStock = rec.cantidadDisponible === 0;
               const enMantenimiento = rec.estado === 'Mantenimiento';
@@ -229,8 +221,6 @@ export default function CatalogoRecursos({ alHacerClicReserva, esPublico = false
                   key={rec.id} 
                   className={`glass-card ${rec.tipo === 'Dispositivo' ? 'glow-card-cyan' : 'glow-card-gold'}`}
                   style={{ 
-                    display: 'flex', 
-                    flexDirection: 'row', 
                     padding: 0,
                     overflow: 'hidden',
                     transition: 'all 0.3s ease',
@@ -239,9 +229,10 @@ export default function CatalogoRecursos({ alHacerClicReserva, esPublico = false
                     maxWidth: '540px',
                     flex: '1 1 480px'
                   }}
+                  className={`glass-card ${rec.tipo === 'Dispositivo' ? 'glow-card-cyan' : 'glow-card-gold'} responsive-catalog-card`}
                 >
                   {/* Lado izquierdo: Imagen representativa */}
-                  <div style={{ width: '160px', minWidth: '160px', height: '100%', position: 'relative', overflow: 'hidden' }}>
+                  <div className="responsive-catalog-media" style={{ height: '100%', position: 'relative', overflow: 'hidden' }}>
                     <img 
                       src={rec.imagenUrl || obtenerImagenRecurso(rec.id, rec.nombre, rec.tipo)} 
                       alt={rec.nombre} 

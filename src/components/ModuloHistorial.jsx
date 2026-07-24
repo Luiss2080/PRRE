@@ -224,14 +224,7 @@ export default function ModuloHistorial() {
           gap: '1rem'
         }}
       >
-        <div 
-          style={{ 
-            display: 'grid', 
-            gridTemplateColumns: '2fr 1fr 1fr 1fr', 
-            gap: '1rem' 
-          }}
-          className="grid-cols-4"
-        >
+        <div className="responsive-filter-grid">
           {/* Barra de búsqueda */}
           <div className="search-container" style={{ maxWidth: 'none' }}>
             <Search size={16} className="search-icon" />
@@ -288,7 +281,7 @@ export default function ModuloHistorial() {
       </div>
 
       {/* Contador de Búsqueda de Historial */}
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', fontSize: '0.8125rem', color: 'var(--text-secondary)', marginBottom: '0.75rem', padding: '0 0.25rem' }}>
+      <div className="responsive-summary-bar" style={{ fontSize: '0.8125rem', color: 'var(--text-secondary)', marginBottom: '0.75rem', padding: '0 0.25rem' }}>
         <span>
           {terminoBusqueda || filtroEstado !== 'Todos' || filtroTipo !== 'Todos' || fechaFiltro ? (
             <>Se encontraron <b>{reservasFiltradas.length}</b> registros de <b>{reservas.length}</b> en el historial.</>
@@ -398,14 +391,7 @@ export default function ModuloHistorial() {
               No hay reservas activas en el cronograma escolar para los filtros seleccionados.
             </div>
           ) : (
-            <div 
-              style={{ 
-                display: 'grid', 
-                gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', 
-                gap: '1.25rem',
-                animation: 'fadeIn 0.3s ease-out'
-              }}
-            >
+            <div className="responsive-card-grid" style={{ gap: '1.25rem', animation: 'fadeIn 0.3s ease-out' }}>
               {reservasFiltradas
                 .filter(r => r.estado === 'Aprobada' || r.estado === 'Finalizada')
                 .slice((paginaActual - 1) * itemsPorPagina, paginaActual * itemsPorPagina)

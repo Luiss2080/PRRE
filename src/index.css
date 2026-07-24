@@ -696,6 +696,55 @@ select option {
   min-width: 0;
 }
 
+.responsive-filter-grid,
+.responsive-form-grid,
+.responsive-admin-grid,
+.responsive-card-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.responsive-filter-grid {
+  grid-template-columns: minmax(0, 2fr) repeat(3, minmax(0, 1fr));
+}
+
+.responsive-form-grid[data-columns="3"] {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr) minmax(0, 1.5fr);
+}
+
+.responsive-form-grid[data-columns="2"],
+.responsive-admin-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.responsive-card-grid {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.responsive-catalog-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: center;
+}
+
+.responsive-catalog-card {
+  display: flex;
+  flex-direction: row;
+}
+
+.responsive-catalog-media {
+  width: 160px;
+  min-width: 160px;
+}
+
+.responsive-summary-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+}
+
 .search-container {
   position: relative;
   max-width: 400px;
@@ -947,6 +996,22 @@ select option {
   .responsive-inline {
     flex-direction: column;
   }
+
+  .responsive-filter-grid,
+  .responsive-form-grid[data-columns="3"],
+  .responsive-form-grid[data-columns="2"],
+  .responsive-admin-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .responsive-summary-bar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .responsive-summary-bar > button {
+    align-self: stretch;
+  }
 }
 
 @media (max-width: 640px) {
@@ -966,6 +1031,20 @@ select option {
   .app-sidebar-overlay {
     inset: 0;
     z-index: 1199;
+  }
+
+  .responsive-catalog-card {
+    flex-direction: column !important;
+  }
+
+  .responsive-catalog-media {
+    width: 100% !important;
+    min-width: 100% !important;
+    height: 180px !important;
+  }
+
+  .responsive-card-grid {
+    grid-template-columns: 1fr;
   }
 }
 
