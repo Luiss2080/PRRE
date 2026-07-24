@@ -947,6 +947,41 @@ select option {
   min-width: 0;
 }
 
+.public-section {
+  width: min(100%, 1060px);
+  margin: 0 auto;
+  padding: 2.5rem 1rem;
+}
+
+.public-section-header {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.public-section-grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.public-logo-lockup {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+.public-logo-lockup-text {
+  min-width: 0;
+}
+
+.public-theme-toggle {
+  flex: 0 0 auto;
+}
+
 @media (max-width: 1024px) {
   .public-mobile-toggle,
   .mobile-only {
@@ -960,6 +995,18 @@ select option {
     padding: 0.85rem var(--page-gutter) !important;
   }
 
+  .public-header {
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    justify-content: space-between;
+  }
+
+  .public-header-actions {
+    width: auto !important;
+    justify-content: flex-end !important;
+    flex: 0 0 auto;
+  }
+
   .public-header-actions .btn,
   .app-header-actions .desktop-hide-on-tablet {
     display: none;
@@ -967,17 +1014,28 @@ select option {
 }
 
 @media (max-width: 768px) {
-  .app-shell-header,
-  .public-header {
+  .app-shell-header {
     flex-wrap: wrap;
     align-items: flex-start !important;
   }
 
   .app-header-group,
-  .app-header-actions,
-  .public-header-actions {
+  .app-header-actions {
     width: 100%;
     justify-content: space-between;
+  }
+
+  .public-logo-lockup {
+    gap: 0.6rem;
+  }
+
+  .public-section-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .public-section-grid-2 {
+    grid-template-columns: 1fr;
   }
 
   .app-profile-trigger {
@@ -1018,6 +1076,35 @@ select option {
   .app-header-actions,
   .public-header-actions {
     gap: 0.75rem !important;
+  }
+
+  .public-header {
+    padding-inline: 0.75rem !important;
+  }
+
+  .public-logo-lockup img {
+    width: 30px !important;
+  }
+
+  .public-logo-lockup-text {
+    overflow: hidden;
+  }
+
+  .public-logo-lockup-text > span:first-child {
+    font-size: 1rem !important;
+  }
+
+  .public-logo-lockup-text > span:last-child {
+    font-size: 0.55rem !important;
+    letter-spacing: 0.03em !important;
+  }
+
+  .public-theme-toggle {
+    padding: 0.45rem !important;
+  }
+
+  .public-section {
+    padding: 1.5rem 0.75rem;
   }
 
   .app-profile-trigger {

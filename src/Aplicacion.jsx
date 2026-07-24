@@ -279,10 +279,10 @@ function ContenidoAplicacion() {
         // --- VISTA SOBRE EL PORTAL ---
         case 'nosotros':
           return (
-            <div style={{ maxWidth: '960px', margin: '0 auto', padding: '2.5rem 1rem' }}>
+            <div className="public-section" style={{ maxWidth: '960px' }}>
               {/* Cabecera */}
               <div className="glass-card" style={{ padding: '2.5rem', marginBottom: '1.5rem' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', marginBottom: '1.5rem' }}>
+                <div className="public-section-header">
                   <Logo tamaño={64} />
                   <div>
                     <h2 className="gradient-text" style={{ fontSize: '1.75rem', marginBottom: '0.35rem' }}>Sobre el Portal PRRE</h2>
@@ -313,7 +313,7 @@ function ContenidoAplicacion() {
               </div>
 
               {/* Imágenes de Valores */}
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1rem', marginBottom: '1.5rem' }}>
+              <div className="public-section-grid-2" style={{ marginBottom: '1.5rem' }}>
                 <div className="glass-card" style={{ padding: '0.75rem', overflow: 'hidden', borderRadius: 'var(--border-radius)' }}>
                   <img
                     src="/img/ValoresFundamentales.jpeg"
@@ -411,7 +411,7 @@ function ContenidoAplicacion() {
         // --- VISTA INSTITUCIÓN ---
         case 'institucion':
           return (
-            <div style={{ maxWidth: '1060px', margin: '0 auto', padding: '2.5rem 1rem' }}>
+            <div className="public-section" style={{ maxWidth: '1060px' }}>
               {/* Encabezado institucional */}
               <div className="glass-card" style={{ padding: '2.5rem', marginBottom: '1.5rem', borderTop: '3px solid var(--color-brand-cyan-muted)' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
@@ -725,7 +725,7 @@ function ContenidoAplicacion() {
       <div style={estiloEnvolturaLanding}>
         {/* Encabezado Público */}
         <header className="public-header" style={estiloEncabezadoLanding}>
-          <div className="app-header-group" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', minWidth: 0 }}>
+          <div className="app-header-group public-logo-lockup" style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', minWidth: 0 }}>
             {/* Botón menú móvil */}
             <button 
               onClick={() => setMenuMovilAbierto(true)}
@@ -737,7 +737,7 @@ function ContenidoAplicacion() {
             </button>
 
             <Logo size={36} />
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <div className="public-logo-lockup-text" style={{ display: 'flex', flexDirection: 'column' }}>
               <span style={estiloTextoLogoLanding}>PRRE</span>
               <span style={{ fontSize: '0.625rem', color: 'var(--text-muted)', fontWeight: '800', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                 U.E. GERMAN BUSCH B
@@ -760,6 +760,7 @@ function ContenidoAplicacion() {
           <div className="public-header-actions" style={{ display: 'flex', alignItems: 'center', gap: '1rem', minWidth: 0 }}>
             <button 
               onClick={alternarTema} 
+              className="public-theme-toggle"
               style={estiloAlternarTemaLanding} 
               title="Cambiar Tema"
             >
